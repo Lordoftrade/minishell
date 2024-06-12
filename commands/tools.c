@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -10,6 +11,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+=======
+>>>>>>> 5543feee82172faab02e3bef593b84669fe843d9
 #include "minishell.h"
 
 //удалить и добавить либфт!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -36,8 +39,13 @@ int	add_env(const char *value, t_env *env)
 	t_env	*new;
 	t_env	*cur;
 
+<<<<<<< HEAD
 	if (!value || !env)
 		return (FAILURE);
+=======
+	if (!value || !env) // нужно ли?
+        return FAILURE;
+>>>>>>> 5543feee82172faab02e3bef593b84669fe843d9
 	if (env && env->value == NULL)
 	{
 		env->value = strdup(value); // надо ли добавлять код если функция не выделила память?
@@ -78,9 +86,15 @@ int	is_in_env(t_env *env, char *args)
 
 	getenv_name(var_name, args);
 	var_name_len = strlen(var_name);
+<<<<<<< HEAD
 	while (env)
 	{
 		if (strncmp(env->value, var_name, var_name_len) == 0
+=======
+	while (env) // надо добавить && env->next ??
+	{
+		if (strncmp(env->value, var_name, var_name_len) == 0 
+>>>>>>> 5543feee82172faab02e3bef593b84669fe843d9
 			&& env->value[var_name_len] == '=')
 		{
 			ft_free_chr(env->value);
@@ -90,4 +104,8 @@ int	is_in_env(t_env *env, char *args)
 		env = env->next;
 	}
 	return (FAILURE);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 5543feee82172faab02e3bef593b84669fe843d9

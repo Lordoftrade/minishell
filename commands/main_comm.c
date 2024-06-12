@@ -25,8 +25,12 @@ void display_prompt(t_env *env) {
             args[1] = strtok(NULL, " "); // Получаем второе слово из ввода
             args[2] = NULL;
             if (args[0] && strcmp(args[0], "cd") == 0) {
+<<<<<<< HEAD
                 if (shell_cd(args, env) == FAILURE) // но может возвращен быть и - 1 елси чдир не откроет (0 и 1 )
 				{
+=======
+                if (shell_cd(args, env) == FAILURE) {
+>>>>>>> 5543feee82172faab02e3bef593b84669fe843d9
                     fprintf(stderr, "cd command failed\n");
                 }
             } else if (args[0] && strcmp(args[0], "pwd") == 0) {
@@ -34,8 +38,12 @@ void display_prompt(t_env *env) {
                     fprintf(stderr, "pwd command failed\n");
                 }
             } else {
+<<<<<<< HEAD
                 printf("minishell: command not found: %s\n", args[0]);
 				// или другое использование вывода ошибки
+=======
+                fprintf(stderr, "Unknown command: %s\n", args[0]);
+>>>>>>> 5543feee82172faab02e3bef593b84669fe843d9
             }
 
 //
