@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heder.h                                            :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/04 19:05:55 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/28 18:35:32 by lelichik         ###   ########.fr       */
+/*   Created: 2024/06/30 01:09:06 by lelichik          #+#    #+#             */
+/*   Updated: 2024/07/01 12:30:04 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEDER_H
-# define HEDER_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 # include "../Libft/libft.h"
 # include <stdio.h>
@@ -24,6 +24,9 @@
 # include <fcntl.h>
 # include <limits.h> // PATH_MAX
 # include <stddef.h>
+# include <dirent.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 # define FAILURE 1
 # define SUCCESS 0
@@ -74,192 +77,61 @@ typedef struct s_minishell
 	t_env			*env;
 	t_lexer			*lexer;
 	t_command		*commands;
-	//char			**export;
+	char			**export;
+	char			*args[1024];
 }					t_minishell;
 
 
-/*
-echo     hi
-echo hi
-echo hi'bye'
+void		change_lvl(t_env *env);
 
-echo hi
-STRING(echo) STRING(hi)
-'echo' hi S_QUOTE(echo) STRING(hi)
-echo '1 2' STRING(echo) S_QUOTE(1 2)
-
-$ DOLLAR()
-| PIPE()
-<
-
-STRING($)
-
-"$USER $USER"
-
-$home DOLLAR(home)
-$home DOLLAR(/users/)
-
-export a='1 2'
-export b='4 5'
-
-printf '%s\n' $a' 3'$b
-
-STRING(printf) SPACE STRING(%s\n) SPACE DOLLAR(a) STRING( 3) DOLLAR(b)
-
-STRING(printf) SPACE STRING(%s\n) SPACE STRING(1) SPACE STRING(2) STRING( 3) STRING(4) SPACE STRING(5)
-
-STRING(printf) STRING(%s\n) STRING(1) STRING(2 34) STRING(5)
-
-['printf', '%s\n', '1', '2 34', '5']
-
-printf '%s\n' "$a' 3'$b"
-
-STRING(printf) STRING(%s\n) D_QUOTE($a' 3'$b)
-STRING(printf) STRING(%s\n) STRING(1 2' 3'4 5)
-
-echo > $a
-
-STRING(echo) SPACE GT(>) SPACE DOLLAR(a)
--- dollar
-STRING(echo) SPACE GT(>) SPACE STRING(1) SPACE STRING(2)
--- double quote
--- glue
-STRING(echo) SPACE GT(>) SPACE STRING(1) SPACE STRING(2)
--- remove spaces
-STRING(echo) GT(>) STRING(1) STRING(2)
--- pipes
+size_t		count_env(t_env *env);
+void		add_env_node(t_env **env, char *value);
+int			is_in_env(t_env *env, char *args);
+int			is_in_env_array(char ***export, char *args);
+char		*get_env_value(char *arg, t_env *env);
+char		*env_value(char *value);
+int			len_env_value(const char *env);
+char		*getenv_name(char *dest, const char *src);
+int			add_env(const char *value, t_env *env);
+void		bubble_sort_env(char **env_array, size_t env_count);
+int 		is_valid_identifier(const char *str);
+int			ft_unsetenv(const char *name, t_env **env);
+char		**env_list_to_array(t_env *env_list);
 
 
-STRING(echo) GT(>) STRING(1) STRING(2) PIPE STRING(cat)
--- pipes
-[STRING(echo) GT(>) STRING(1) STRING(2), STRING(cat)]
--- turn into command structs
-[struct command { .name = echo, .arguments = [1] }, struct command { .name = cat }]
+int			shell_cd(char **args, t_minishell *shell);
+int			shell_pwd(void);
+int			shell_echo(char **args);
+int			shell_export(char **args, t_minishell *shell);
+int			shell_unset(char **args, t_minishell *shell);
+int			shell_env(t_env *env);
+void		shell_exit(char **args);
 
-STRING(echo) GT(>) PIPE STRING(cat)
--- pipes
-[STRING(echo) GT(>), STRING(cat)]
--- turn into command structs
-[struct command { .name = echo, .arguments = [1] }, struct command { .name = cat }]
+int			execute_command(t_minishell *shell);
 
-> 1 echo hi
-.type != STRING
-*/
+void		*ft_free_chr(void *ptr);
+void		free_string_array(char **array);
+void		free_export(char **export);
+void		free_env_list(t_env *env);
 
-// echo hi
-// echo hi > a
-// echo hi >> a
+void		add_to_export(char ***export, char *value);
+char		*add_quotes_to_value(const char *name, const char *value);
+int			count_elements(char **array);
+void		copy_array(char **dest, char **src);
 
-// typedef enum {
-// 	output_stdout,
-// 	output_append_to_file,
-// 	output_rewrite_file,
-// } t_output_type;
-
-// typedef struct {
-// 	t_output_type type;
-// 	char *content;
-// } t_output;
-
-// // cat < a
-// // cat << heredoc
-// // cat
-
-// typedef enum {
-// 	input_stdin,
-// 	input_file,
-// 	input_here_document,
-// } t_input_type;
-
-// typedef struct {
-// 	t_input_type type;
-// 	char *content;
-// } t_input;
-
-// >> a >> a < b echo c
-// D_GT STRING(a) LT STRING(b) STRING(echo) STRING(c)
-/*
-t_command c;
-c.input.type = input_stdin;
-c.input.content = 0;
-c.output.type = input_stdout;
-c.output.content = 0;
-
-while (tokens != 0)
-
-token = D_GT
-tokens = tokens->next
-if tokens == 0 or token.type != string then error
-D_GT is for output
-string = a
-if (c.output.content != 0) { free(c.output.content) }
-c.output.type = output_append_to_file
-c.output.content = strdup(a)
-tokens = tokens->next
-
-token = LT
-tokens = tokens->next
-if tokens == 0 or token.type != string then error
-string = b
-c.input.type = input_file
-if (c.input.content != 0) { free(c.input.content) }
-c.input.content = strdup(b)
-tokens = tokens->next
-
-tokens = STRING
-
-*/
-
-/*
-a < b | c d | e > f
-
-a < b
-c d
-e > f
-
-*/
-
-// typedef struct s_command
-// {
-// 	char				*type;
-// 	char				**argv;
-// 	struct s_command	*next;
-// } t_command;
-
-// typedef struct s_tokens_by_command {
-// 	t_lexer *command;
-// 	struct s_tokens_by_command *next;
-// } t_tokens_by_command;
-
-// t_command *tokens_to_command(t_lexer *command) {
-// }
-
-// typedef struct s_command
-// {
-// 	t_input input;
-// 	t_output output;
-// 	char **argv;
-// } t_command;
-
-int		len_env_value(const char *env);
-char	*env_value(char *value);
-char	*getenv_name(char *dest, const char *src);
-char	*get_env_value(char *arg, t_env *env);
-void	free_env_list(t_env *env);
 t_env *create_env_node(char *value);
-void	add_env_node(t_env **env, char *value);
-void	init_env(t_minishell *shell, char **env);
+void	init_minishell(t_minishell *shell, char **env);
+void	init_data(t_minishell *shell);
 
-void free_env(t_env *env);
-void free_lexer(t_lexer *lexer);
-void free_minishell(t_minishell *shell);
+void	free_env(t_env *env); // ?? наверное то же самое что и фри енв лист
+void	free_lexer(t_lexer *lexer);
+void	free_minishell(t_minishell *shell);
 void	ft_error(char *error_message);
 
 char	*ft_readline(void);
 void	to_array(char *str, t_minishell *info);
 void	ft_lexer(char *line, t_minishell **shell);
 void	init_minishell(t_minishell *shell);
-int	ft_strlen(const char *str);
 int	check_pipe(char *str);
 int	check_quote(char *str);
 int	check_symbol(char *str);

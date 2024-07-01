@@ -6,24 +6,40 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/28 18:49:18 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 12:29:11 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
-void	init_env(t_minishell *shell, char **env)
-{	
-	int	i;
+void	init_minishell(t_minishell *shell, char **env)
+{
+	int		i;
+	t_env	*tmp;
 
+	if (!shell || !env_in)
+		return ;
 	i = 0;
 	shell->env = NULL;
+	shell->export = NULL;
 
-	while (env[i] != NULL)
-		add_env_node(&(shell->env), env[i++]);
+	while (env_in[i] != NULL)
+	{
+		add_env_node(&(shell->env), env_in[i]);
+		i++;
+	}
+	ft_unsetenv("OLDPWD", &shell->env);
+	change_lvl(shell->env);
+	tmp = shell->env;
+	while (tmp)
+	{
+		add_to_export(&(shell->export), tmp->value);
+		tmp = tmp->next;
+	}
+	add_to_export(&(shell->export), "OLDPWD");
 }
 
-void	init_minishell(t_minishell *shell)
+void	init_data(t_minishell *shell)
 {
 	shell->lexer = NULL;
 }
@@ -71,8 +87,10 @@ void	minishell(t_minishell *shell)
 	if(check_redirect(shell->commands))
 	{
 		res = handling_redir(shell);
+		execute_command(shell);
 	}
-	printf("%d\n", res);
+	else
+		execute_command(shell);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -90,14 +108,9 @@ int	main(int argc, char **argv, char **env)
 		if(!shell)
 		ft_error("Memory allocation error");
 	init_env(shell, env);
-	// t_env *temp = shell->env;
-    // while (temp != NULL) {
-    //     printf("%s\n", temp->value);
-    //     temp = temp->next;
-    // }
 	while(1)
 	{
-		init_minishell(shell);
+		init_data(shell);
 		line = ft_readline();
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
@@ -114,4 +127,6 @@ int	main(int argc, char **argv, char **env)
 		free_command_list(shell->commands);
 		system("leaks minishell");
 	}
+	// free_env_list(shell.env);
+	// free_export(shell.export);
 }
