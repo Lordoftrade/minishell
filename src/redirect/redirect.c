@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:33:17 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/01 12:56:41 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:03:04 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 // void	previous(t_command **previous, t_command **command)
 // {
@@ -101,7 +101,6 @@ int	handling_redir(t_minishell **shell) // потом добавить t_command
 		if (res)
 			break ;
 	}
-	printf("%d\n", res);
 	return (res);
 }
 

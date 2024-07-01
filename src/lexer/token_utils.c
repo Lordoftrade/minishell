@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 19:01:06 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/17 18:54:17 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:26:13 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 t_lexer	*create_new_token(enum token_type type, char *content)
 {

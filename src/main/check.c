@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:10:42 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/14 15:18:32 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:26:21 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 int	check_pipe(char *str)
 {

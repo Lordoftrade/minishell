@@ -6,29 +6,45 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/01 14:05:10 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:02:33 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
-void	init_env(t_minishell *shell, char **env)
-{	
-	int	i;
+void	init_minishell(t_minishell *shell, char **env_in)
+{
+	int		i;
+	t_env	*tmp;
 
+	if (!shell || !env_in)
+		return ;
 	i = 0;
 	shell->env = NULL;
+	shell->export = NULL;
 
-	while (env[i] != NULL)
-		add_env_node(&(shell->env), env[i++]);
+	while (env_in[i] != NULL)
+	{
+		add_env_node(&(shell->env), env_in[i]);
+		i++;
+	}
+	ft_unsetenv("OLDPWD", &shell->env);
+	change_lvl(shell->env);
+	tmp = shell->env;
+	while (tmp)
+	{
+		add_to_export(&(shell->export), tmp->value);
+		tmp = tmp->next;
+	}
+	add_to_export(&(shell->export), "OLDPWD");
 }
 
-void	init_minishell(t_minishell *shell)
+void	init_data(t_minishell *shell)
 {
 	shell->lexer = NULL;
 	shell->stdin = dup(STDIN_FILENO);
 	shell->stdout = dup(STDOUT_FILENO); 
-}	
+}
 
 char	*ft_readline(void)
 {
@@ -65,18 +81,20 @@ void print_commands(t_minishell *shell)
     }
 }
 
-void	minishell(t_minishell **shell)
+void	minishell(t_minishell *shell)
 {
-	int	res;
+	// int	res;
 
-	res = 0;
-	if(check_redirect((*shell)->commands))
+	// res = 0;
+	if(check_redirect(shell->commands))
 	{
-		res = handling_redir(shell);
-		dup2((*shell)->stdout, STDOUT_FILENO);
-		dup2((*shell)->stdin, STDIN_FILENO);
+		handling_redir(&shell);
+		execute_command(shell);
+		dup2(shell->stdout, STDOUT_FILENO);
+		dup2(shell->stdin, STDIN_FILENO);
 	}
-	printf("%d\n", res);
+	else
+		execute_command(shell);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -93,31 +111,26 @@ int	main(int argc, char **argv, char **env)
 	shell = (t_minishell *)malloc(sizeof(t_minishell));
 		if(!shell)
 		ft_error("Memory allocation error");
-	init_env(shell, env);
-	// t_env *temp = shell->env;
-    // while (temp != NULL) {
-    //     printf("%s\n", temp->value);
-    //     temp = temp->next;
-    // }
+	init_minishell(shell, env);
 	while(1)
 	{
-		init_minishell(shell);
+		init_data(shell);
 		line = ft_readline();
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
-	t_lexer *tem = shell->lexer;
-    while (tem) {
-        printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
-        tem = tem->next;
-    }
+	// t_lexer *tem = shell->lexer;
+    // while (tem) {
+    //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
+    //     tem = tem->next;
+    // }
 		create_commands_from_tokens(&shell);
-		print_commands(shell);
-		minishell(&shell);
-		print_commands(shell);
+		// print_commands(shell);
+		minishell(shell);
+		// print_commands(shell);
 		free_lexer(shell->lexer);
 		free_command_list(shell->commands);
-		system("leaks minishell");
+		// system("leaks minishell");
 	}
+	// free_env_list(shell.env);
+	// free_export(shell.export);
 }
-
-//test 

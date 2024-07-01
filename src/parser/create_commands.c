@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:58:06 by lelichik          #+#    #+#             */
-/*   Updated: 2024/06/28 18:45:19 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:26:39 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 void add_command_to_list(t_command **cmd_list, t_command **last_cmd, t_command *new_cmd)
 {

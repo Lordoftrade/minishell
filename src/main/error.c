@@ -6,24 +6,24 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/06/28 18:41:27 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:36:21 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
-void free_env(t_env *env)
-{
-	t_env *tmp;
+// void free_env(t_env *env)
+// {
+// 	t_env *tmp;
 
-	while (env)
-	{
-		tmp = env;
-		env = env->next;
-		free(tmp->value);
-		free(tmp);
-	}
-}
+// 	while (env)
+// 	{
+// 		tmp = env;
+// 		env = env->next;
+// 		free(tmp->value);
+// 		free(tmp);
+// 	}
+// }
 
 // Очистка памяти для структуры t_lexer
 void free_lexer(t_lexer *lexer)
@@ -47,7 +47,7 @@ void free_minishell(t_minishell *shell)
 	if (shell == NULL)
 		return;
 	if(shell->env)
-		free_env(shell->env);
+		free_env_list(shell->env);
 	if(shell->lexer)
 		free_lexer(shell->lexer);
 	if(shell->commands)
@@ -99,16 +99,16 @@ void free_command_list(t_command *command_list)
 	}
 }
 
-void	free_env_list(t_env *env)
-{
-	t_env *cur;
+// void	free_env_list(t_env *env)
+// {
+// 	t_env *cur;
 
-	while (env != NULL)
-	{
-		cur = env;
-		env = env->next;
-		free(cur->value);
-		free(cur);
-	}
-}
+// 	while (env != NULL)
+// 	{
+// 		cur = env;
+// 		env = env->next;
+// 		free(cur->value);
+// 		free(cur);
+// 	}
+// }
 

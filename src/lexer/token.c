@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:00 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/20 15:59:59 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:49:32 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 void	to_list_lexer(char *str, t_minishell *shell)
 {
@@ -46,11 +46,11 @@ void	ft_lexer(char *line, t_minishell **shell)
 			// free_minishell(shell);
 	}
 	to_list_lexer(line, *shell);
-	t_lexer *temp = (*shell)->lexer;
-    while (temp) {
-        printf("Token type: %d, content: %s\n", temp->type, temp->content);
-        temp = temp->next;
-    }
+	// t_lexer *temp = (*shell)->lexer;
+    // while (temp) {
+    //     printf("Token type: %d, content: %s\n", temp->type, temp->content);
+    //     temp = temp->next;
+    // }
 	free(line); // не знаю нужно ли чистить строку в которую ридлайн читал
 	// parser((&(*shell)->lexer), shell);
 	// t_lexer *tem = (*shell)->lexer;

@@ -115,19 +115,19 @@ int	execute_implemented(char **args, t_minishell *shell)
 
 	result = 0;
 	if (strcmp(args[0], "cd") == 0)
-		result = shell_cd(shell->args, shell); // но может возвращен быть и - 1 елси чдир не откроет (0 и 1 )
+		result = shell_cd(shell->commands->argv, shell); // но может возвращен быть и - 1 елси чдир не откроет (0 и 1 )
 	if (strcmp(args[0], "pwd") == 0)
 		result = shell_pwd();
 	if (strcmp(args[0], "echo") == 0)
-		result = shell_echo(shell->args);
+		result = shell_echo(shell->commands->argv);
 	if (strcmp(args[0], "export") == 0)
-		result = shell_export(shell->args, shell);
+		result = shell_export(shell->commands->argv, shell);
 	if (strcmp(args[0], "unset") == 0)
-		result = shell_unset(shell->args, shell);
+		result = shell_unset(shell->commands->argv, shell);
 	if (strcmp(args[0], "env") == 0)
 		result = shell_env(shell->env);
 	if (strcmp(args[0], "exit") == 0)
-		shell_exit(shell->args); // она ничего не возвращает
+		shell_exit(shell->commands->argv); // она ничего не возвращает
 	/*else {
 		printf("minishell: %s: command not found\n", shell->args[0]);
 		// или другое использование вывода ошибки
@@ -157,9 +157,9 @@ int	is_command_implemented(char *cmd)
 int	execute_command(t_minishell *shell)
 {
 
-	if (shell->args[0] && is_command_implemented(shell->args[0]))
-		execute_implemented(shell->args, shell); // что вернуть должно
+	if (shell->commands->argv[0] && is_command_implemented(shell->commands->argv[0]))
+		execute_implemented(shell->commands->argv, shell); // что вернуть должно
 	else
-		execute_bin(shell->args, shell);
+		execute_bin(shell->commands->argv, shell);
 	return (0);
 }
