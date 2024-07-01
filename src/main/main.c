@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/01 13:01:23 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:05:10 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,3 +119,5 @@ int	main(int argc, char **argv, char **env)
 		system("leaks minishell");
 	}
 }
+
+//test 
