@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/28 18:49:18 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:01:23 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ void	init_env(t_minishell *shell, char **env)
 void	init_minishell(t_minishell *shell)
 {
 	shell->lexer = NULL;
-}
+	shell->stdin = dup(STDIN_FILENO);
+	shell->stdout = dup(STDOUT_FILENO); 
+}	
 
 char	*ft_readline(void)
 {
@@ -63,14 +65,16 @@ void print_commands(t_minishell *shell)
     }
 }
 
-void	minishell(t_minishell *shell)
+void	minishell(t_minishell **shell)
 {
 	int	res;
 
 	res = 0;
-	if(check_redirect(shell->commands))
+	if(check_redirect((*shell)->commands))
 	{
 		res = handling_redir(shell);
+		dup2((*shell)->stdout, STDOUT_FILENO);
+		dup2((*shell)->stdin, STDIN_FILENO);
 	}
 	printf("%d\n", res);
 }
@@ -108,7 +112,7 @@ int	main(int argc, char **argv, char **env)
     }
 		create_commands_from_tokens(&shell);
 		print_commands(shell);
-		minishell(shell);
+		minishell(&shell);
 		print_commands(shell);
 		free_lexer(shell->lexer);
 		free_command_list(shell->commands);

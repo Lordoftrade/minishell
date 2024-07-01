@@ -1,31 +1,44 @@
 NAME = minishell
+
 SRCDIR = src
 OBJDIR = obj
-SRCS = $(addprefix $(SRCDIR)/, main.c token_group.c token_group_2.c token.c token_utils.c check.c parser.c env.c error.c connection.c create_commands.c redirect.c)
+
+SRCS = $(addprefix $(SRCDIR)/env/, env.c) \
+		$(addprefix $(SRCDIR)/lexer/, token.c token_group.c token_group_2.c token_utils.c) \
+		$(addprefix $(SRCDIR)/main/, check.c error.c main.c) \
+		$(addprefix $(SRCDIR)/parser/, connection.c create_commands.c parser.c) \
+		$(addprefix $(SRCDIR)/redirect/, redirect.c redirect_utils.c) \
+
 OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
-CC = cc
-RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+
+
+HEADER = $(SRCDIR)/include/heder.h
 LIBFT = ./Libft
 LIBFTA = $(LIBFT)/libft.a
-LIBS = -L$(LIBFT) -lft
-HEADER = $(SRCDIR)/heder.h
+LIBS = -L$(LIBFT) -lft -lreadline
+INCLUDES = -I$(SRCDIR)/include -I$(LIBFT)
+
+
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g
+RM = rm -rf
+
 
 all: $(NAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADER)
-	mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFTA)
-	$(CC) $(CFLAGS) -lreadline $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 
 $(LIBFTA):
 	@$(MAKE) -C $(LIBFT)
 
 clean:
 	$(RM) $(OBJS)
-	$(RM) $(OBJDIR) $(OBJBDIR)
+	$(RM) $(OBJDIR)
 	@$(MAKE) -C $(LIBFT) clean
 
 fclean: clean

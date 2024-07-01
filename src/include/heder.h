@@ -6,14 +6,14 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:05:55 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/28 18:35:32 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:01:01 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HEDER_H
 # define HEDER_H
 
-# include "../Libft/libft.h"
+# include "libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
@@ -70,176 +70,14 @@ typedef struct s_command
 
 typedef struct s_minishell
 {
-	//t_token			*array;
+	int				stdin;
+	int				stdout;
 	t_env			*env;
 	t_lexer			*lexer;
 	t_command		*commands;
-	//char			**export;
 }					t_minishell;
 
 
-/*
-echo     hi
-echo hi
-echo hi'bye'
-
-echo hi
-STRING(echo) STRING(hi)
-'echo' hi S_QUOTE(echo) STRING(hi)
-echo '1 2' STRING(echo) S_QUOTE(1 2)
-
-$ DOLLAR()
-| PIPE()
-<
-
-STRING($)
-
-"$USER $USER"
-
-$home DOLLAR(home)
-$home DOLLAR(/users/)
-
-export a='1 2'
-export b='4 5'
-
-printf '%s\n' $a' 3'$b
-
-STRING(printf) SPACE STRING(%s\n) SPACE DOLLAR(a) STRING( 3) DOLLAR(b)
-
-STRING(printf) SPACE STRING(%s\n) SPACE STRING(1) SPACE STRING(2) STRING( 3) STRING(4) SPACE STRING(5)
-
-STRING(printf) STRING(%s\n) STRING(1) STRING(2 34) STRING(5)
-
-['printf', '%s\n', '1', '2 34', '5']
-
-printf '%s\n' "$a' 3'$b"
-
-STRING(printf) STRING(%s\n) D_QUOTE($a' 3'$b)
-STRING(printf) STRING(%s\n) STRING(1 2' 3'4 5)
-
-echo > $a
-
-STRING(echo) SPACE GT(>) SPACE DOLLAR(a)
--- dollar
-STRING(echo) SPACE GT(>) SPACE STRING(1) SPACE STRING(2)
--- double quote
--- glue
-STRING(echo) SPACE GT(>) SPACE STRING(1) SPACE STRING(2)
--- remove spaces
-STRING(echo) GT(>) STRING(1) STRING(2)
--- pipes
-
-
-STRING(echo) GT(>) STRING(1) STRING(2) PIPE STRING(cat)
--- pipes
-[STRING(echo) GT(>) STRING(1) STRING(2), STRING(cat)]
--- turn into command structs
-[struct command { .name = echo, .arguments = [1] }, struct command { .name = cat }]
-
-STRING(echo) GT(>) PIPE STRING(cat)
--- pipes
-[STRING(echo) GT(>), STRING(cat)]
--- turn into command structs
-[struct command { .name = echo, .arguments = [1] }, struct command { .name = cat }]
-
-> 1 echo hi
-.type != STRING
-*/
-
-// echo hi
-// echo hi > a
-// echo hi >> a
-
-// typedef enum {
-// 	output_stdout,
-// 	output_append_to_file,
-// 	output_rewrite_file,
-// } t_output_type;
-
-// typedef struct {
-// 	t_output_type type;
-// 	char *content;
-// } t_output;
-
-// // cat < a
-// // cat << heredoc
-// // cat
-
-// typedef enum {
-// 	input_stdin,
-// 	input_file,
-// 	input_here_document,
-// } t_input_type;
-
-// typedef struct {
-// 	t_input_type type;
-// 	char *content;
-// } t_input;
-
-// >> a >> a < b echo c
-// D_GT STRING(a) LT STRING(b) STRING(echo) STRING(c)
-/*
-t_command c;
-c.input.type = input_stdin;
-c.input.content = 0;
-c.output.type = input_stdout;
-c.output.content = 0;
-
-while (tokens != 0)
-
-token = D_GT
-tokens = tokens->next
-if tokens == 0 or token.type != string then error
-D_GT is for output
-string = a
-if (c.output.content != 0) { free(c.output.content) }
-c.output.type = output_append_to_file
-c.output.content = strdup(a)
-tokens = tokens->next
-
-token = LT
-tokens = tokens->next
-if tokens == 0 or token.type != string then error
-string = b
-c.input.type = input_file
-if (c.input.content != 0) { free(c.input.content) }
-c.input.content = strdup(b)
-tokens = tokens->next
-
-tokens = STRING
-
-*/
-
-/*
-a < b | c d | e > f
-
-a < b
-c d
-e > f
-
-*/
-
-// typedef struct s_command
-// {
-// 	char				*type;
-// 	char				**argv;
-// 	struct s_command	*next;
-// } t_command;
-
-// typedef struct s_tokens_by_command {
-// 	t_lexer *command;
-// 	struct s_tokens_by_command *next;
-// } t_tokens_by_command;
-
-// t_command *tokens_to_command(t_lexer *command) {
-// }
-
-// typedef struct s_command
-// {
-// 	t_input input;
-// 	t_output output;
-// 	char **argv;
-// } t_command;
 
 int		len_env_value(const char *env);
 char	*env_value(char *value);
@@ -297,16 +135,16 @@ t_command *create_new_command();
 void free_command(t_command *cmd);
 void free_command_list(t_command *cmd_list);
 int	check_redirect(t_command *command);
-void	minishell(t_minishell *shell);
-int	handling_redir(t_minishell *shell);
-int	run_redirect(t_command **command, t_command **previous);
-int	do_redir(t_command **c, t_command **p, t_command **s);
+void	minishell(t_minishell **shell);
+int	handling_redir(t_minishell **shell);
+int	run_redirect(t_command **current);
+int	do_redir(t_command **c);
 int	execute_redirects(t_command **command);
 int lt(t_command **command);
 int	d_gt(t_command **command);
 int	gt(t_command **command);
-void	start(t_command **s, t_command **c, t_command **prev, t_minishell **sh);
-void	previous(t_command **previous, t_command **command);
-void delete_redirect(t_command **cmd, t_command **head, t_command **prev);
+// void	start(t_command **s, t_command **c, t_command **prev, t_minishell **sh);
+// void	previous(t_command **previous, t_command **command);
+void	delete_redirect(t_command **command);
 
 #endif
