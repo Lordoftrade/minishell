@@ -48,3 +48,7 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+SRCS = $(addprefix $(SRCDIR)/env/, env_tools_2.c env_tools.c env_tools3.c) \
+		$(addprefix $(SRCDIR)/commands/, shell_cd.c shell_echo.c shell_env.c shell_exit.c shell_export.c shell_export_tools.c shell_pwd.c shell_unset.c) \
+		$(addprefix $(SRCDIR)/main/, free.c level_shell.c  main_comm.c) \
+		$(addprefix $(SRCDIR)/execution/, execution.c) \
