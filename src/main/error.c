@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/01 14:36:21 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/02 15:04:53 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,17 +98,4 @@ void free_command_list(t_command *command_list)
 		free_command(tmp);
 	}
 }
-
-// void	free_env_list(t_env *env)
-// {
-// 	t_env *cur;
-
-// 	while (env != NULL)
-// 	{
-// 		cur = env;
-// 		env = env->next;
-// 		free(cur->value);
-// 		free(cur);
-// 	}
-// }
 

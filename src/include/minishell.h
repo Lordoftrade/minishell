@@ -62,13 +62,18 @@ typedef struct s_token_lexer
 
 typedef struct s_command
 {
-    enum				token_type	type;    // Тип команды или оператора (например, "command", ">", ">>", "|")
+    //enum				token_type	type;    // Тип команды или оператора (например, "command", ">", ">>", "|")
     char                **argv;   // Аргументы команды
     char                *input;   // Файл для перенаправления ввода (если есть)
     char                *output;  // Файл для перенаправления вывода (если есть)
 	char				*delimiter;
-    int                 append;   // Флаг для добавления в файл (если 1 - добавление, если 0 - перезапись)
-    struct s_command    *next;    // Указатель на следующую команду в пайпе
+	char				*heredoc;
+	int					LT;
+	int					GT;
+	int					D_GT;
+	int					D_LT;
+	int					pipe;
+	struct s_command	*next;    // Указатель на следующую команду в пайпе
 } t_command;
 
 typedef struct s_minishell
@@ -78,9 +83,11 @@ typedef struct s_minishell
 	t_lexer			*lexer;
 	t_command		*commands;
 	char			**export;
-	char			*args[1024];
+	// char			*args[1024];
 	int				stdin;
 	int				stdout;
+	int				len;
+	int				exit_code;
 }					t_minishell;
 
 
@@ -133,7 +140,7 @@ void	ft_error(char *error_message);
 char	*ft_readline(void);
 void	to_array(char *str, t_minishell *info);
 void	ft_lexer(char *line, t_minishell **shell);
-int	check_pipe(char *str);
+// int	check_pipe(char *str);
 int	check_quote(char *str);
 int	check_symbol(char *str);
 t_lexer	*create_new_token(enum token_type type, char *content);
@@ -181,5 +188,21 @@ int	gt(t_command **command);
 // void	start(t_command **s, t_command **c, t_command **prev, t_minishell **sh);
 // void	previous(t_command **previous, t_command **command);
 void	delete_redirect(t_command **command);
+void	execute_heredoc(int i, char *delimiter);
+int redir_heredoc(t_command **command);
+void	delete_heredoc(t_command *command);
+int	list_size(t_command *cmd);
+int	check_argv(t_command *cmd);
+int	check_pipe(t_minishell *shell);
+void execute_pipeline_one_by_one(t_minishell *shell);
+int	create_pipe(int fd[2]);
+int	create_and_execute_child(t_command *curr, int prev_fd, int fd[2], t_minishell *shell);
+void	setup_child_pipes(int prev_fd, int fd[2], t_command *curr);
+void	handle_parent_process(int *prev_fd, int fd[2], t_command **curr);
+int	execute_redirect_pipe(t_command *curr);
+int	execute_command_for_pipe(t_command *curr, t_minishell *shell);
+int	is_command_implemented(char *cmd);
+int	execute_implemented(char **args, t_minishell *shell);
+int	execute_bin(char **args, t_minishell *shell);
 
 #endif

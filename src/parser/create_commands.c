@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:58:06 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/01 14:26:39 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/04 23:25:38 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,6 @@ void add_command_to_list(t_command **cmd_list, t_command **last_cmd, t_command *
 	*last_cmd = new_cmd;
 }
 
-// void read_here_document(char *delimiter)
-// {
-//     char *input_data = NULL;
-//     size_t input_size = 0;
-//     ssize_t read_bytes;
-
-//     while ((read_bytes = getline(&input_data, &input_size, stdin)) != -1)
-//     {
-//         if (strcmp(input_data, delimiter) == 0)
-//         {
-//             free(input_data);
-//             break;
-//         }
-//         printf("Read data: %s", input_data);
-//     }
-//     free(input_data);
-// }
-
 void handle_redirections_and_here_document(t_command *new_cmd, t_lexer **current)
 {
     while (*current && (*current)->type != STRING)
@@ -52,7 +34,8 @@ void handle_redirections_and_here_document(t_command *new_cmd, t_lexer **current
             *current = (*current)->next;
             if (*current && (*current)->type == STRING)
             {
-                new_cmd->type = LT;
+                // new_cmd->type = LT;
+                new_cmd->LT = 1;
                 new_cmd->input = ft_strdup((*current)->content);
                 *current = (*current)->next;
             }
@@ -62,9 +45,9 @@ void handle_redirections_and_here_document(t_command *new_cmd, t_lexer **current
             *current = (*current)->next;
             if (*current && (*current)->type == STRING)
             {
-                new_cmd->type = GT;
+                // new_cmd->type = GT;
+                new_cmd->GT = 1;
                 new_cmd->output = ft_strdup((*current)->content);
-                new_cmd->append = 0;
                 *current = (*current)->next;
             }
         }
@@ -73,9 +56,9 @@ void handle_redirections_and_here_document(t_command *new_cmd, t_lexer **current
             *current = (*current)->next;
             if (*current && (*current)->type == STRING)
             {
-                new_cmd->type = D_GT;
+                // new_cmd->type = D_GT;
+                new_cmd->D_GT = 1;
                 new_cmd->output = ft_strdup((*current)->content);
-                new_cmd->append = 1;
                 *current = (*current)->next;
             }
         }
@@ -84,7 +67,8 @@ void handle_redirections_and_here_document(t_command *new_cmd, t_lexer **current
             *current = (*current)->next;
             if (*current && (*current)->type == STRING)
             {
-                new_cmd->type = D_LT;
+                // new_cmd->type = D_LT;
+                new_cmd->D_LT = 1;
                 new_cmd->delimiter = ft_strdup((*current)->content);
                 *current = (*current)->next;
             }
@@ -106,7 +90,7 @@ void fill_command_argv(t_command *cmd, t_lexer **current)
 
 	argc = 0;
 	temp = *current;
-	while (temp && temp->type == STRING)
+	while (temp && (temp->type == STRING || temp->type == S_QUOTE))
 	{
 		argc++;
 		temp = temp->next;
@@ -118,7 +102,7 @@ void fill_command_argv(t_command *cmd, t_lexer **current)
         exit(EXIT_FAILURE);
     }
 	i = 0;
-	while (*current && (*current)->type == STRING)
+	while (*current && ((*current)->type == STRING || (*current)->type == S_QUOTE))
 	{
 		cmd->argv[i++] = ft_strdup((*current)->content);
 		*current = (*current)->next;
@@ -136,12 +120,17 @@ t_command *create_new_command()
         perror("Failed to allocate memory for new command"); //написать функцию очистки
         exit(EXIT_FAILURE);
     }
-    new_cmd->type = 0;
+    // new_cmd->type = 0;
     new_cmd->argv = NULL;
 	new_cmd->input = NULL;
 	new_cmd->output = NULL;
     new_cmd->delimiter = NULL;
-	new_cmd->append = 0;
+    new_cmd->heredoc = NULL;
+    new_cmd->D_GT = 0;
+    new_cmd->D_LT = 0;
+    new_cmd->GT = 0;
+    new_cmd->LT = 0;
+    new_cmd->pipe = 0;
 	new_cmd->next = NULL;
 	return new_cmd;
 }
@@ -164,4 +153,6 @@ void create_commands_from_tokens(t_minishell **shell)
 		add_command_to_list(&cmd_list, &last_cmd, new_cmd);
 	}
 	(*shell)->commands = cmd_list;
+    (*shell)->len = list_size((*shell)->commands);
+    printf("LEN = %d\n", (*shell)->len);
 }

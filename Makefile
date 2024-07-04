@@ -10,6 +10,7 @@ SRCS = $(addprefix $(SRCDIR)/env/, env_tools_2.c env_tools.c env_tools3.c) \
 		$(addprefix $(SRCDIR)/redirect/, redirect.c redirect_utils.c) \
 		$(addprefix $(SRCDIR)/commands/, shell_cd.c shell_echo.c shell_env.c shell_exit.c shell_export.c shell_export_tools.c shell_pwd.c shell_unset.c) \
 		$(addprefix $(SRCDIR)/execution/, execution.c) \
+		$(addprefix $(SRCDIR)/pipe/, pipe.c) \
 
 OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 
@@ -22,7 +23,7 @@ INCLUDES = -I$(SRCDIR)/include -I$(LIBFT)
 
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 RM = rm -rf
 
 

@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/01 15:02:33 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/04 23:53:21 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	init_minishell(t_minishell *shell, char **env_in)
 void	init_data(t_minishell *shell)
 {
 	shell->lexer = NULL;
+	shell->exit_code = 0;
 	shell->stdin = dup(STDIN_FILENO);
 	shell->stdout = dup(STDOUT_FILENO); 
 }
@@ -61,7 +62,7 @@ void print_commands(t_minishell *shell)
     t_command *cmd = shell->commands;
     while (cmd)
     {
-        printf("Command: %d\n", cmd->type);
+        // printf("Command: %d\n", cmd->type);
         printf("Arguments:\n");
         char **arg = cmd->argv;
         while (*arg)
@@ -72,9 +73,17 @@ void print_commands(t_minishell *shell)
         if (cmd->input)
             printf("Input redirection: %s\n", cmd->input);
         if (cmd->output)
-            printf("Output redirection: %s (append: %d)\n", cmd->output, cmd->append);
+            printf("Output redirection: %s\n", cmd->output);
 		if (cmd->delimiter)
             printf("Delimetr: %s\n", cmd->delimiter);
+		if (cmd->LT)
+			printf("LT: %d\n", cmd->LT);
+		if (cmd->GT)
+			printf("GT: %d\n", cmd->GT);
+		if (cmd->D_LT)
+			printf("D_LT: %d\n", cmd->D_LT);
+		if (cmd->D_GT)
+			printf("D_GT: %d\n", cmd->D_GT);
         printf("\n");
 
         cmd = cmd->next;
@@ -83,13 +92,20 @@ void print_commands(t_minishell *shell)
 
 void	minishell(t_minishell *shell)
 {
-	// int	res;
+	int	res;
 
-	// res = 0;
-	if(check_redirect(shell->commands))
+	res = 0;
+	if(check_redirect(shell->commands) && shell->len == 1) // добавить проверку что нет пайпов 
 	{
-		handling_redir(&shell);
-		execute_command(shell);
+		res = handling_redir(&shell);
+		if (check_argv(shell->commands) && list_size(shell->commands) && !res)
+			execute_command(shell);
+		dup2(shell->stdout, STDOUT_FILENO);
+		dup2(shell->stdin, STDIN_FILENO);
+	}
+	else if (check_pipe(shell))
+	{
+		execute_pipeline_one_by_one(shell);
 		dup2(shell->stdout, STDOUT_FILENO);
 		dup2(shell->stdin, STDIN_FILENO);
 	}

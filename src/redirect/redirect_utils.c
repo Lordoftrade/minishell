@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 16:02:03 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/01 15:27:44 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/04 23:40:01 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,13 @@ int	gt(t_command **command)
 {
 	int	fd;
 
+	int i = 0;
+	
 	fd = open((*command)->output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-	{
-		// printf("Failed to open output file\n");
 		return(1);
-	}
-	if (dup2(fd, STDOUT_FILENO) < 0)
-	{
-		// perror("Failed to redirect stdout");
+	if ((i = dup2(fd, STDOUT_FILENO)) < 0)
 		return(1);
-	}
 	return (0);
 }
 
@@ -55,7 +51,7 @@ int lt(t_command **command)
 	fd = open((*command)->input, O_RDONLY);
 	if (fd < 0)
 	{
-		// perror("Failed to open input file"); //скорее всего заменить на принтф
+		perror((*command)->input);
 		return (1);
 	}
 	if (dup2(fd, STDIN_FILENO) < 0)
@@ -75,11 +71,17 @@ void	delete_redirect(t_command **command)
 		{
 			free((*command)->input);
 			(*command)->input = NULL;
+			if((*command)->LT)
+				(*command)->LT = 0;
 		}
 		if ((*command)->output)
 		{
 			free((*command)->output);
 			(*command)->output = NULL;
+			if((*command)->GT)
+				(*command)->GT = 0;
+			else if((*command)->D_GT)
+				(*command)->D_GT = 0;
 		}
 	}
 }
