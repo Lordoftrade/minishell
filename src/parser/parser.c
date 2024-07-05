@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:54:23 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/20 15:34:57 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:26:42 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 char	*open_dollar(char *str, int *i, t_minishell *shell)
 {

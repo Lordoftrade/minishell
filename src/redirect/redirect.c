@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:33:17 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/01 12:56:41 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/04 23:28:44 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 // void	previous(t_command **previous, t_command **command)
 // {
@@ -27,20 +27,42 @@
 // 		previous(prev, c);
 // }
 
+int	check_argv(t_command *cmd)
+{
+	if(cmd->argv[0] == NULL)
+		return(0);
+	return(1);
+}
+
+int	list_size(t_command *cmd)
+{
+	int		i;
+
+	i = 0;
+	if (!cmd)
+		return (0);
+	while (cmd)
+	{
+		i++;
+		cmd = cmd->next;
+	}
+	return (i);
+}
+
 int	execute_redirects(t_command **command)
 {
-	if ((*command)->type == GT)
+	if ((*command)->GT)
 		return (gt(command));
-	else if ((*command)->type == D_GT)
+	else if ((*command)->D_GT)
 		return (d_gt(command));
-	else if ((*command)->type == LT)
+	else if ((*command)->LT)
 		return (lt(command));
 	return (0);
 }
 
 int	do_redir(t_command **c)
 {
-	if ((*c) && ((*c)->type == GT || (*c)->type == LT || (*c)->type == D_GT))
+	if ((*c) && ((*c)->GT || (*c)->LT || (*c)->D_GT))
 	{
 		if (execute_redirects(c))
 		{
@@ -52,36 +74,74 @@ int	do_redir(t_command **c)
 	}
 	return (0);
 }
-
-
-int	run_redirect(t_command **current) // потом добавить t_minishell **shell
+void	delete_heredoc(t_command *command)
 {
-	// t_command	*start;
+		free(command->delimiter);
+		command->D_LT = 0;
+		command->delimiter = NULL;
+		command->heredoc = NULL;
+}
 
-	// start = NULL;
-	// if (check_heredoc((*shell)->commands))
-	// {
-	// 	set_start(&start, command, previous, shell);
-	// 	if ((*command)->type == D_LT)
-	// 	{
-	// 		do_here_doc((*t)->next->data, *mh);
-	// 		if (do_dups(t, mh))
-	// 			return (1);
-	// 		delete_redirs(t, mh, previous, &start);    заняться это частью когда подойду к пайпам
-	// 		if (start)
-	// 		{
-	// 			(*mh)->token = start;
-	// 			*t = start;
-	// 			*previous = start;
-	// 		}
-	// 		return (0);
-	// 	}
-	// }
-	if (do_redir(current))
+void	execute_heredoc(int i, char *delimiter)
+{
+	char	*input;
+
+	input = NULL;
+	while (1)
+	{
+		input = readline("> ");
+		if (input == NULL) // Проверка на случай, если readline возвращает NULL
+        {
+            // perror("readline");
+            break ;
+        }
+		if (strcmp(input, delimiter) == 0) //написать функцию 
+			break ;
+		write(i, input, ft_strlen(input));
+		write(i, "\n", 1);
+		free(input);
+	}
+	free(input);
+}
+
+
+int redir_heredoc(t_command **command)
+{
+	int fd;
+	t_command *cmd = *command;
+
+	cmd->heredoc = "here_doc";
+	fd = open(cmd->heredoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		// error(": No such file or directory\n", shell, 2); //
 		return (1);
+	}
+	execute_heredoc(fd, cmd->delimiter);
+	close(fd);
+	fd = open(cmd->heredoc, O_RDONLY);
+	if (fd < 0)
+	{
+		// error(": No such file or directory\n", shell, 2);
+		return (1);
+	}
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	delete_heredoc(cmd);
 	return (0);
 }
 
+int	run_redirect(t_command **current) // потом добавить t_minishell **shell
+{
+	if ((*current)->D_LT)
+	{
+		if (redir_heredoc(current) != 0)
+			return (1);
+	}
+	else if (do_redir(current) != 0)
+		return (1);
+	return (0);
+}
 
 int	handling_redir(t_minishell **shell) // потом добавить t_command *commands,
 {
@@ -101,7 +161,6 @@ int	handling_redir(t_minishell **shell) // потом добавить t_command
 		if (res)
 			break ;
 	}
-	printf("%d\n", res);
 	return (res);
 }
 
@@ -111,11 +170,11 @@ int	check_redirect(t_command *command)
 		return (0);
 	while (command->next)
 	{
-		if (command->type == GT || command->type == LT || command->type == D_GT || command->type == D_LT)
+		if (command->GT || command->LT || command->D_GT || command->D_LT)
 			return (1);
 		command = command->next;
 	}
-	if (command->type == GT || command->type == LT || command->type == D_GT || command->type == D_LT)
+	if (command->GT || command->LT || command->D_GT || command->D_LT)
 		return (1);
 	return (0);
 }

@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:32:36 by lelichik          #+#    #+#             */
-/*   Updated: 2024/06/21 13:42:33 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:26:34 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 void	copy_over(t_lexer *current, t_lexer *new)
 {

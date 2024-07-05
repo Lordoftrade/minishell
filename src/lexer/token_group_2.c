@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:52:50 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/24 13:45:31 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:26:01 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 void	double_quote_token(char *str, int *i, t_minishell *shell)
 {

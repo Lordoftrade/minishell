@@ -6,11 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:44:21 by opanikov          #+#    #+#             */
-/*   Updated: 2024/06/24 14:48:05 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:26:10 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heder.h"
+#include "minishell.h"
 
 void	lt_token(char *str, int *i, t_minishell *shell)
 {
