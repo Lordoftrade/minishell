@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:39:32 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/04 23:33:51 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/05 13:12:07 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,10 @@ int	execute_redirect_pipe(t_command *curr)
 		if(execute_redirects(&curr) == 0)
 			return(1);
 	return(0);
-	// else if (curr && curr->D_LT)
-	// 	redir_heredoc(&curr);
 }
 
 void	handle_parent_process(int *prev_fd, int fd[2], t_command **curr)
 {
-	// waitpid(pid, &(shell->exit_code), 0);
-	// shell->exit_code = WEXITSTATUS(shell->exit_code);
 	if (*prev_fd != -1)
 		close(*prev_fd);
 	*prev_fd = fd[0];
@@ -67,12 +63,11 @@ int	create_and_execute_child(t_command *curr, int prev_fd, int fd[2], t_minishel
 	if (pid == 0)
 	{
 		setup_child_pipes(prev_fd, fd, curr);
-		if (check_redirect(curr))
-		{
+		// if (check_redirect(curr))
+		if(curr->GT || curr->LT || curr->D_GT || curr->D_LT)
 			execute_redirect_pipe(curr);
-		}
 		execute_command_for_pipe(curr, shell); //добавить проверку что команда выполнилась
-		exit(0);
+		exit(0); 
 	}
 	return (pid);
 }
@@ -93,31 +88,38 @@ void execute_pipeline_one_by_one(t_minishell *shell)
 	t_command	*curr;
 	int			fd[2];
 	int			prev_fd;
-	// int			pid;
+	int			pid;
+	int			status;
 	int			i;
+	int			last_pid;
 
 	i = 0;
 	curr = shell->commands;
 	prev_fd = -1;
+	last_pid = -1;
 	while (curr)
 	{
-		// if (check_redirect(curr))
-		// {
-		// 	res = execute_redirect_pipe(curr);
-		// 	printf("%d\n", res);
-		// }
+		if (curr->D_LT)
+			redir_heredoc(&curr);
 		if(curr->next)
 		{
 			if (create_pipe(fd) == -1)
 				exit(EXIT_FAILURE); //подумать как должно выходить 
 		}
-		create_and_execute_child(curr, prev_fd, fd, shell);
+		last_pid = create_and_execute_child(curr, prev_fd, fd, shell);
 		handle_parent_process(&prev_fd, fd, &curr);
 	}
-	while(i < shell->len)
+	// while(i < shell->len)
+	// {
+	// 	wait(&(shell->exit_code));
+	// 	shell->exit_code = WEXITSTATUS(shell->exit_code);
+	// 	i++;
+	// }
+	while (i < shell->len)
 	{
-		wait(&(shell->exit_code));
-		shell->exit_code = WEXITSTATUS(shell->exit_code);
+		pid = wait(&status);
+		if (pid == last_pid)
+			shell->exit_code = WEXITSTATUS(status);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/04 23:53:21 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/05 13:02:47 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	main(int argc, char **argv, char **env)
     //     tem = tem->next;
     // }
 		create_commands_from_tokens(&shell);
-		// print_commands(shell);
+		print_commands(shell);
 		minishell(shell);
 		// print_commands(shell);
 		free_lexer(shell->lexer);

@@ -205,4 +205,7 @@ int	is_command_implemented(char *cmd);
 int	execute_implemented(char **args, t_minishell *shell);
 int	execute_bin(char **args, t_minishell *shell);
 
+
+void print_commands(t_minishell *shell);
+
 #endif
