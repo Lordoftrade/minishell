@@ -25,14 +25,20 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+# include <signal.h>
 
-# include <string.h> // !!!!
+
+# include <string.h> // убрать!
 
 
 # define FAILURE 1
 # define SUCCESS 0
 # define PATH_SIZE 1024
 # define BUFF_SIZE 2048
+
+# define GREEN "\033[1;32m"
+# define RED "\033[1;31m"
+# define RESET "\033[0m"
 
 typedef struct s_env
 {
@@ -49,7 +55,10 @@ typedef struct	s_minishell
 	char		*args[1024];
 }				t_minishell;
 
+extern int	g_error;
 
+void		handle_sigint(int sig);
+void		do_sigint_fork(int signal);
 
 void		change_lvl(t_env *env);
 
@@ -77,6 +86,12 @@ int			shell_env(t_env *env);
 void		shell_exit(char **args);
 
 int			execute_command(t_minishell *shell);
+int			start_execve(char *path_bin, char **args, t_env *env_list);
+char		*check_path_bin(char *bin, char *command);
+char		*join_path_com(const char *bin, const char *com);
+int			execute_bin(char **args, t_minishell *shell);
+int			fork_and_execute(char *path_bin, char **args, char **env);
+void		run_execve(char *path_bin, char **args, char **env);
 
 void		*ft_free_chr(void *ptr);
 void		free_string_array(char **array);
@@ -87,10 +102,16 @@ void		add_to_export(char ***export, char *value);
 char		*add_quotes_to_value(const char *name, const char *value);
 int			count_elements(char **array);
 void		copy_array(char **dest, char **src);
+int			update_export_var(char ***export, char *env_name, char *quoted_value, char *env_value_str);
+
+void		do_exit(long value);
 
 
-char *ft_strjoin(char const *s1, char const *s2);
-int	ft_isalnum(int c);
-int	ft_isdigit(int c);
+int			ft_strcmp(const char *s1, const char *s2);
+
+// убрать
+//char *ft_strjoin(char const *s1, char const *s2);
+//int	ft_isalnum(int c);
+//int	ft_isdigit(int c);
 
 #endif

@@ -37,9 +37,9 @@ static char	*get_env_path(t_env *env, const char *var, size_t len)
 
 	while (env)
 	{
-		if (strncmp(env->value, var, len) == 0)
+		if (ft_strncmp(env->value, var, len) == 0)
 		{
-			len_alloc = strlen(env->value) - len;
+			len_alloc = ft_strlen(env->value) - len;
 			prevpwd = malloc(sizeof(char) * len_alloc + 1);
 			if (!prevpwd)
 				return (NULL); // что делать если по памяти пошел сбой
@@ -68,7 +68,6 @@ static int	change_oldpwd(t_minishell *shell)
 	if (is_in_env(shell->env, oldpwd) == 1)
 		add_env(oldpwd, shell->env);
 	is_in_env_array(&(shell->export), oldpwd);
-	//	add_to_export(&(shell->export), oldpwd);
 	ft_free_chr(oldpwd);
 	return (SUCCESS);
 }
@@ -81,7 +80,6 @@ static int	follow_path(int choice, t_minishell *shell)
 	env_path = NULL;
 	if (choice == 0)
 	{
-		change_oldpwd(shell);
 		env_path = get_env_path(shell->env, "HOME", 4);
 		if (!env_path)
 		{
@@ -95,10 +93,10 @@ static int	follow_path(int choice, t_minishell *shell)
 		if (!env_path)
 		{
 			printf("minishell : cd: OLDPWD not set\n");
-			return (0);
+			return (FAILURE);
 		}
-		change_oldpwd(shell);
 	}
+	change_oldpwd(shell);
 	res = chdir(env_path);
 	change_pwd(shell);
 	return (ft_free_chr(env_path), res);
@@ -106,15 +104,15 @@ static int	follow_path(int choice, t_minishell *shell)
 
 int	shell_cd(char **args, t_minishell *shell)
 {
-	if (args[1] == NULL  || strcmp(args[1], "~") == 0)
+	if (args[1] == NULL  || ft_strncmp(args[1], "~", 2) == 0)
 		return (follow_path(0, shell));
-	if (strcmp(args[1], "-") == 0) // libft
+	if (ft_strncmp(args[1], "-", 2) == 0)
 		return (follow_path(1, shell)); // 0 если ок, и -1 если не успешно
 	else
 	{
 		if (change_oldpwd(shell) == FAILURE)
 			return (FAILURE);
-		if (chdir(args[1]) == -1) // 0 - ok  и -1 если фейл
+		if (chdir(args[1]) == -1)
 		{
 			//print_error(args); ???????
 			printf("cd: no such file or directory: %s\n", args[1]);

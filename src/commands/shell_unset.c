@@ -12,49 +12,68 @@
 
 #include "minishell.h"
 
+char	**create_new_array_without_element(char **array, int remove_index, int count)
+{
+	char	**new_array;
+	int		j;
+	int		k;
+
+	j = 0;
+	k = 0;
+	new_array = (char **)malloc(sizeof(char *) * count);
+	if (!new_array)
+		return NULL; // какую ошибку возвращать*??? perror?
+	while (array[j])
+	{
+		if (j != remove_index)
+		{
+			new_array[k] = array[j];
+			k++;
+		}
+		/*else
+			free(array[j]);*/ //надо или нет???
+		j++;
+	}
+	new_array[count - 1] = NULL;
+	return (new_array);
+}
+
+int	find_element_index(char **array, const char *name)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = ft_strlen(name);
+	while (array[i])
+	{
+		if (ft_strncmp(array[i], name, len) == 0 && (array[i][len] == '=' || array[i][len] == '\0'))
+			return (i);
+		i++;
+	}
+	return (-1); // Элемент не найден
+}
+
 
 int	remove_from_export(char ***export, const char *name)
 {
 	int i;
-	int k;
-	int j;
-	int len;
 	char **new_export;
 	int count;
 
-	i = 0;
+	i = find_element_index(*export, name);
+	if (i == -1)
+		return (FAILURE);
 	count = count_elements(*export);
-	len = strlen(name);
-	while ((*export)[i])
-	{
-		if (strncmp((*export)[i], name, len) == 0 && ((*export)[i][len] == '=' || (*export)[i][len] == '\0'))
-			break;
-		i++;
-	}
 	if (!(*export)[i])
 		return (FAILURE);
-	new_export = (char **)malloc(sizeof(char *) * count);
+	new_export = create_new_array_without_element(*export, i, count);
 	if (!new_export)
 		return (FAILURE);
-	j = 0;
-	k = 0;
-	while ((*export)[j])
-	{
-		if (j != i)
-		{
-			new_export[k] = (*export)[j];
-			k++;
-		}
-		else
-			free((*export)[j]);
-		j++;
-	}
-	new_export[count - 1] = NULL;
-	free(*export);
+	free(*export); // не будет ли освобождаться то что уже освобождено??????
 	*export = new_export;
 	return (SUCCESS);
 }
-
 
 int	ft_unsetenv(const char *name, t_env **env)
 {
@@ -62,12 +81,12 @@ int	ft_unsetenv(const char *name, t_env **env)
 	t_env	*current;
 	int	len;
 
-	len = strlen(name);
+	len = ft_strlen(name);
 	prev = NULL;
 	current = *env;
 	while (current)
 	{
-		if (strncmp(current->value, name, len) == 0
+		if (ft_strncmp(current->value, name, len) == 0
 			&& (current->value[len] == '=' || current->value[len] == '\0'))
 		{
 			if (prev)

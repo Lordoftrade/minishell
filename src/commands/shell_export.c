@@ -12,103 +12,6 @@
 
 #include "minishell.h"
 
-int	is_in_env_array(char ***export, char *args)
-{
-	char var_name[PATH_SIZE];
-	size_t len;
-	int i;
-
-	i = 0;
-	getenv_name(var_name, args);
-	len = strlen(var_name); // linbft
-	while ((*export)[i])
-	{
-		if (strncmp((*export)[i], var_name, len) == 0 &&
-			((*export)[i][len] == '=' || (*export)[i][len] == '\0'))
-		{
-			///free((*export)[i]);
-			add_to_export(export, args);
-			return (SUCCESS);
-		}
-		i++;
-	}
-	return (FAILURE);
-}
-
-
-int	update_export_var(char ***export, char *env_name, char *quoted_value, char *env_value_str)
-{
-	int i;
-	size_t len;
-
-	if (export == NULL || *export == NULL)
-		return (0);
-	i = 0;
-	len = strlen(env_name); // либофт
-	while ((*export)[i])
-	{
-		if (strncmp((*export)[i], env_name, len) == 0 &&
-			((*export)[i][len] == '=' ||
-				(*export)[i][len] == '\0'))
-		{
-			free((*export)[i]);
-			if (quoted_value)
-				(*export)[i] = strdup(quoted_value); // может не надо снова выделять память
-            else
-				(*export)[i] = strdup(env_name);
-			free(env_value_str);
-			free(quoted_value);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-void	add_to_export(char ***export, char *value)
-{
-	int		i;
-	char	**new_export;
-	char	env_name[BUFF_SIZE];
-	char	*env_value_str;
-	char	*quoted_value;
-
-	i = 0;
-	env_value_str = NULL;
-	quoted_value = NULL;
-	getenv_name(env_name, value);
-	if (strchr(value, '='))
-	{
-		env_value_str = env_value(value); // надо ли проверку на выделение
-		if (env_value_str == NULL)
-			return ;
-		quoted_value = add_quotes_to_value(env_name, env_value_str);
-		if (quoted_value == NULL)
-		{
-			free(env_value_str);
-			return ;
-        }
-	}
-	if (update_export_var(export, env_name, quoted_value, env_value_str))
-		return ;
-	i = count_elements(*export);
-	new_export = (char **)malloc(sizeof(char *) * (i + 2));
-	if (!new_export)
-	{
-		free(env_value_str); // решить что делать тут
-		free(quoted_value);
-		return ;
-	}
-	copy_array(new_export, *export);
-	if (quoted_value) 
-		new_export[i] = quoted_value;
-	else
-		new_export[i] = strdup(env_name);
-	new_export[i + 1] = NULL;
-	free_string_array(*export);
-	*export = new_export;
-	free(env_value_str);
-}
 
 void	bubble_sort_env(char **env_array, size_t env_count)
 {
@@ -124,7 +27,7 @@ void	bubble_sort_env(char **env_array, size_t env_count)
 		j = 0;
 		while (j < env_count - i - 1)
 		{
-			if (strcmp(array[j], array[j + 1]) > 0) // написать код или подумать из либфт
+			if (ft_strcmp(array[j], array[j + 1]) > 0) // написать код или подумать из либфт
 			{
 				temp = array[j];
 				array[j] = array[j + 1];
@@ -149,7 +52,7 @@ char	**sort_env(char **export)
 	i = 0;
 	while (i < count)
 	{
-		env_array[i] = strdup(export[i]); // библиотека
+		env_array[i] = ft_strdup(export[i]); // библиотека
 		if (!env_array[i])
 		{
 			free_string_array(env_array); // выводим ошибку?
@@ -179,25 +82,19 @@ void	print_env_sort(char **export)
 	free_string_array(env_array);
 }
 
-
-int	shell_export(char **args, t_minishell *shell)
+void	ft_export_while_varable(char **args, t_minishell *shell)
 {
 	int	i;
 
 	i = 1;
-	if (!args[i])
-	{
-		print_env_sort(shell->export);
-		return (SUCCESS);
-	}
 	while (args[i])
 	{
-		if (is_valid_identifier(args[i]) == 0)
+		if (is_valid_identifier(args[i]) == 1)
 			printf("minishell: export: '%s': not a valid identifier\n",
 				args[i]);
 		else
 		{
-			if (strchr(args[i], '=')) // либфт
+			if (ft_strchr(args[i], '=')) // либфт
 			{
 				if (is_in_env(shell->env, args[i]) == FAILURE)
 					add_env(args[i], shell->env);
@@ -212,5 +109,15 @@ int	shell_export(char **args, t_minishell *shell)
 		}
 		i++;
 	}
-	return (SUCCESS);
+}
+
+int	shell_export(char **args, t_minishell *shell)
+{
+	if (!args[1])
+	{
+		print_env_sort(shell->export);
+		return (SUCCESS);
+	}
+	ft_export_while_varable(args, shell);
+	return (g_error);
 }

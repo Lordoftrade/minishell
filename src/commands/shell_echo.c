@@ -19,14 +19,17 @@ int	shell_echo(char **args)
 
 	i = 1;
 	n_line = 1;
-	if (args[i] && strncmp(args[i], "-n", 2) == 0)
+	if (args[i] && ft_strncmp(args[i], "-n", 3) == 0)
 	{
 		n_line = 0;
 		i++;
 	}
 	while (args[i] != NULL)
 	{
-		printf("%s", args[i]);
+		if (ft_strcmp(args[i], "$?") == 0)
+			printf("%d", g_error);
+		else
+			printf("%s", args[i]);
 		if (args[i + 1] != NULL)
 			printf(" ");
 		i++;
@@ -35,3 +38,12 @@ int	shell_echo(char **args)
 		printf("\n");
 	return (SUCCESS);
 }
+
+/*либо 
+while (args[i] != NULL)
+{
+	printf("%s", args[i]);
+	if (args[i + 1] != NULL) 
+		printf(" ");
+	i++;
+}*/

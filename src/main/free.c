@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/*void clean_up(t_minishell *shell)
+{
+	// Освобождение всех ресурсов, которые необходимо освободить
+}*/
+
 void	free_env_list(t_env *env)
 {
 	t_env	*cur;

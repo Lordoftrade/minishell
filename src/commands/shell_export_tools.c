@@ -12,27 +12,16 @@
 
 #include "minishell.h"
 
-//либфт
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	size_t	src_len;
-	size_t	i;
-
-	if (!dst || !src)
-		return (0);
-
-	src_len = strlen(src);
-	if (size > 0)
-	{
-		for (i = 0; i < size - 1 && src[i] != '\0'; i++)
-		{
-			dst[i] = src[i];
-		}
-		dst[i] = '\0';
-	}
-	return (src_len);
+	size_t i;
+	
+	i  = 0;
+	while (s1[i] != '\0' && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)(s1[i]) - (unsigned char)(s2[i]));
 }
-/////
 
 void	copy_array(char **dest, char **src)
 {
@@ -43,7 +32,7 @@ void	copy_array(char **dest, char **src)
 	i = 0;
 	while (src[i])
 	{
-		dest[i] = strdup(src[i]);
+		dest[i] = ft_strdup(src[i]);
 		i++;
 	}
 	dest[i] = NULL;
@@ -68,8 +57,8 @@ char	*add_quotes_to_value(const char *name, const char *value)
 
 	if (!name || !value)
 		return (NULL);
-	name_len = strlen(name);
-	value_len = strlen(value);
+	name_len = ft_strlen(name);
+	value_len = ft_strlen(value);
 	total_len = name_len + value_len + 4;
 	quoted_value = (char *)malloc(total_len);
 	if (!quoted_value)
@@ -89,12 +78,20 @@ int	is_valid_identifier(const char *str)
 
 	i = 0;
 	if (!str || !str[0] || ft_isdigit(str[0]))
-		return (0);
+	{
+		g_error = 1;
+		printf("g_error = %d \n", g_error);
+		return (1);
+	}
 	while (str[i])
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_' && (i != 0 && str[i] != '='))
-			return (0);
+		{
+			g_error = 1;
+			return (1);
+		}
 		i++;
 	}
-	return (1);
+	g_error = 0;
+	return (0);
 }
