@@ -6,24 +6,11 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/02 15:04:53 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:55:46 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void free_env(t_env *env)
-// {
-// 	t_env *tmp;
-
-// 	while (env)
-// 	{
-// 		tmp = env;
-// 		env = env->next;
-// 		free(tmp->value);
-// 		free(tmp);
-// 	}
-// }
 
 // Очистка памяти для структуры t_lexer
 void free_lexer(t_lexer *lexer)
@@ -52,14 +39,24 @@ void free_minishell(t_minishell *shell)
 		free_lexer(shell->lexer);
 	if(shell->commands)
 		free_command_list(shell->commands);
+	if(shell->export)
+		free_export(shell->export);
 	free(shell);
 }
 
-void	ft_error(char *error_message)
+void	errors_memory(t_minishell *shell, int error_code)
 {
-	write(2, "Error\n", 6);
-	ft_putstr_fd(error_message, 2);
-	exit(1);
+	free_minishell(shell);
+	printf("Error: Unable to allocate memory.\n");
+	exit(error_code);
+}
+
+void ft_error(t_minishell *shell, int error_code, char *errmsg)
+{
+	shell->exit_code = error_code;
+	write(2, "minishell: ", 12);
+	ft_putstr_fd(errmsg, 2);
+	// free(errmsg);
 }
 
 void free_command(t_command *command)

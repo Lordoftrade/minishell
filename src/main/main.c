@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/05 13:02:47 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/08 15:27:33 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,12 @@ void	init_minishell(t_minishell *shell, char **env_in)
 void	init_data(t_minishell *shell)
 {
 	shell->lexer = NULL;
+	shell->commands = NULL;
 	shell->exit_code = 0;
+	shell->len = 0;
 	shell->stdin = dup(STDIN_FILENO);
 	shell->stdout = dup(STDOUT_FILENO); 
+	shell->f_success = 1;
 }
 
 char	*ft_readline(void)
@@ -53,7 +56,10 @@ char	*ft_readline(void)
 
 	line = readline("minishell$ ");
 	if(line == NULL)
-		exit(0);
+	{
+		free(line);
+		exit(1); // подумать какой код и как запишется 
+	}
 	add_history(line);
 	return(line);
 }
@@ -95,7 +101,7 @@ void	minishell(t_minishell *shell)
 	int	res;
 
 	res = 0;
-	if(check_redirect(shell->commands) && shell->len == 1) // добавить проверку что нет пайпов 
+	if(check_redirect(shell->commands) && shell->len == 1)
 	{
 		res = handling_redir(&shell);
 		if (check_argv(shell->commands) && list_size(shell->commands) && !res)
@@ -120,13 +126,10 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argv;
 	if(argc > 1)
-	{
-		printf("ошибка в количестве аргументов");
-		exit(1);
-	}
+		exit (1);
 	shell = (t_minishell *)malloc(sizeof(t_minishell));
 		if(!shell)
-		ft_error("Memory allocation error");
+			exit (1);
 	init_minishell(shell, env);
 	while(1)
 	{
@@ -140,12 +143,12 @@ int	main(int argc, char **argv, char **env)
     //     tem = tem->next;
     // }
 		create_commands_from_tokens(&shell);
-		print_commands(shell);
+		// print_commands(shell);
 		minishell(shell);
 		// print_commands(shell);
 		free_lexer(shell->lexer);
 		free_command_list(shell->commands);
-		// system("leaks minishell");
+		system("leaks minishell");
 	}
 	// free_env_list(shell.env);
 	// free_export(shell.export);

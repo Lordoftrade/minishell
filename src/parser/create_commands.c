@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:58:06 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/04 23:25:38 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:29:35 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,5 +154,4 @@ void create_commands_from_tokens(t_minishell **shell)
 	}
 	(*shell)->commands = cmd_list;
     (*shell)->len = list_size((*shell)->commands);
-    printf("LEN = %d\n", (*shell)->len);
 }

@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:54:23 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/01 14:26:42 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:49:18 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,21 +131,24 @@ void	symbol_dollar(t_lexer **token, t_minishell *shell)
 
 void	parser(t_lexer **tokens, t_minishell **shell)
 {
-	t_lexer	*tmp;
-
-	tmp = *tokens;
-	while(tmp != NULL)
+	if((*shell)->f_success == 1)
 	{
-		if(tmp->type == DOLLAR)
-			symbol_dollar(&tmp, *shell);
-		if(tmp->type == D_QUOTE)
-			symbol_d_quote(&tmp, *shell);
-		tmp = tmp->next;
+		t_lexer	*tmp;
+
+		tmp = *tokens;
+		while(tmp != NULL)
+		{
+			if(tmp->type == DOLLAR)
+				symbol_dollar(&tmp, *shell);
+			if(tmp->type == D_QUOTE)
+				symbol_d_quote(&tmp, *shell);
+			tmp = tmp->next;
+		}
+		tmp = *tokens;
+		connect_tokens(&tmp, shell);
+		tmp = *tokens;
+		free_empty_token(&tmp, shell);
+		tmp = *tokens;
+		free_space(&tmp, shell);
 	}
-	tmp = *tokens;
-	connect_tokens(&tmp, shell);
-	tmp = *tokens;
-	free_empty_token(&tmp, shell);
-	tmp = *tokens;
-	free_space(&tmp, shell);
 }

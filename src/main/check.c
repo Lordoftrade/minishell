@@ -6,25 +6,28 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:10:42 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/04 18:15:33 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:26:48 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	check_pipe(char *str)
-// {
-// 	int	i;
+int	check_pipe_syntax(char *str)
+{
+	int	i;
 
-// 	i = 0;
-// 	while(str[i])
-// 	{
-// 		if(str[i] && str[i] == '|' && str[i + 1] == '\0')
-// 			return(0);
-// 		i++;
-// 	}
-// 	return(1);
-// }
+	i = 0;
+	if (str[i] == '|')
+		return (0);
+	while(str[i])
+	{
+		if(str[i] && str[i] == '|' && str[i + 1] == '\0')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	check_quote(char *str)
 {
 	int	single_quote_open;
@@ -47,15 +50,15 @@ int	check_quote(char *str)
 
 int	check_symbol(char *str)
 {
-	// int		i;
+	int		i;
 	int		j;
 
-	// i = 2;
+	i = 2;
 	j = 2;
 
-	// i = check_pipe(str);
+	i = check_pipe_syntax(str);
 	j = check_quote(str);
-	if(j == 0)
-		return(0);
-	return(1);
+	if(j == 0 || i == 0)
+		return(1);
+	return(0);
 }

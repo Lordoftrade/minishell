@@ -6,26 +6,46 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:33:17 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/04 23:28:44 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/08 15:59:11 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	previous(t_command **previous, t_command **command)
-// {
-// 	if (!(*previous || *command))
-// 		return ;
-// 	*previous = *command;
-// 	*command = (*command)->next;
-// }
 
-// void	start(t_command **s, t_command **c, t_command **prev, t_minishell **sh)
-// {
-// 	*s = (*sh)->commands;
-// 	while ((*sh)->commands->type == D_LT)
-// 		previous(prev, c);
-// }
+int redir_heredoc_pipe(t_command *cmd, int i)
+{
+    int fd;
+
+    cmd->heredoc = create_heredoc_filename(i);
+
+    fd = open(cmd->heredoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0) {
+        perror("Failed to open heredoc file");
+        return (1);
+    }
+    execute_heredoc(fd, cmd->delimiter);
+    close(fd);
+    return (0);
+}
+
+char	*create_heredoc_filename(int i)
+{
+	char	*res;
+	char	*tmp;
+	
+	tmp = ft_itoa(i);
+	if(!tmp)
+		return (NULL);
+	res = ft_strjoin("/tmp/minishell-heredoc-", tmp);
+	if(!res)
+	{
+		free(tmp);
+		return (NULL);
+	}
+	free(tmp);
+	return (res);
+}
 
 int	check_argv(t_command *cmd)
 {
@@ -77,6 +97,7 @@ int	do_redir(t_command **c)
 void	delete_heredoc(t_command *command)
 {
 		free(command->delimiter);
+		free(command->heredoc);
 		command->D_LT = 0;
 		command->delimiter = NULL;
 		command->heredoc = NULL;
@@ -91,10 +112,7 @@ void	execute_heredoc(int i, char *delimiter)
 	{
 		input = readline("> ");
 		if (input == NULL) // Проверка на случай, если readline возвращает NULL
-        {
-            // perror("readline");
-            break ;
-        }
+			break ;
 		if (strcmp(input, delimiter) == 0) //написать функцию 
 			break ;
 		write(i, input, ft_strlen(input));
@@ -110,7 +128,7 @@ int redir_heredoc(t_command **command)
 	int fd;
 	t_command *cmd = *command;
 
-	cmd->heredoc = "here_doc";
+	cmd->heredoc = create_heredoc_filename(0);
 	fd = open(cmd->heredoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
@@ -125,6 +143,7 @@ int redir_heredoc(t_command **command)
 		// error(": No such file or directory\n", shell, 2);
 		return (1);
 	}
+	unlink(cmd->heredoc);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	delete_heredoc(cmd);
