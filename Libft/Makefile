@@ -22,7 +22,7 @@ bonus : $(OBJB)
 	$(AR) rcs $(NAME) $(OBJB)
 
 %.o : %.c $(HDRS)
-	$(CC) $(FLAGS) -I $(HDRS) -c $< -o $@
+	$(CC) $(FLAGS) -I. -c $< -o $@
 
 clean :
 	rm -f $(OBJ) $(OBJB)

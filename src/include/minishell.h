@@ -55,7 +55,7 @@ enum token_type
 	LT, //< 
 	D_GT, //>> 
 	D_LT, // << 
-	SPACE,
+	MY_SPACE,
 	DOLLAR,
 };
 
