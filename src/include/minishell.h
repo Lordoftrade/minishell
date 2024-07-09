@@ -22,7 +22,7 @@
 # include <ctype.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include <limits.h> // PATH_MAX
+# include <limits.h>
 # include <stddef.h>
 # include <dirent.h>
 # include <sys/types.h>
@@ -33,15 +33,21 @@
 # define PATH_SIZE 1024
 # define BUFF_SIZE 2048
 
+# define GREEN "\033[1;32m"
+# define RED "\033[1;31m"
+# define RESET "\033[0m"
+
+extern int	g_error;
+
 typedef struct s_env
 {
 	char			*value;
 	struct s_env	*next;
-}				t_env;
+}					t_env;
 
 enum token_type
 {
-	STRING, //строка
+	STRING,
 	PIPE,
 	S_QUOTE, //'
 	D_QUOTE, //"
@@ -55,17 +61,16 @@ enum token_type
 
 typedef struct s_token_lexer
 {
-	enum token_type	type;
-	char			*content;
+	enum token_type			type;
+	char					*content;
 	struct s_token_lexer	*next;
 }					t_lexer;
 
 typedef struct s_command
 {
-    //enum				token_type	type;    // Тип команды или оператора (например, "command", ">", ">>", "|")
-    char                **argv;   // Аргументы команды
-    char                *input;   // Файл для перенаправления ввода (если есть)
-    char                *output;  // Файл для перенаправления вывода (если есть)
+	char				**argv;   // Аргументы команды
+	char				*input;   // Файл для перенаправления ввода (если есть)
+	char				*output;  // Файл для перенаправления вывода (если есть)
 	char				*delimiter;
 	char				*heredoc;
 	int					LT;
@@ -73,8 +78,8 @@ typedef struct s_command
 	int					D_GT;
 	int					D_LT;
 	int					pipe;
-	struct s_command	*next;    // Указатель на следующую команду в пайпе
-} t_command;
+	struct s_command	*next;
+}					t_command;
 
 typedef struct s_minishell
 {
@@ -90,6 +95,9 @@ typedef struct s_minishell
 	int				f_success;
 }					t_minishell;
 
+
+void		handle_sigint(int sig);
+void		do_sigint_fork(int signal);
 
 void		change_lvl(t_env *env);
 
@@ -107,7 +115,6 @@ int 		is_valid_identifier(const char *str);
 int			ft_unsetenv(const char *name, t_env **env);
 char		**env_list_to_array(t_env *env_list);
 
-
 int			shell_cd(char **args, t_minishell *shell);
 int			shell_pwd(void);
 int			shell_echo(char **args);
@@ -117,6 +124,12 @@ int			shell_env(t_env *env);
 void		shell_exit(char **args);
 
 int			execute_command(t_minishell *shell);
+int			start_execve(char *path_bin, char **args, t_env *env_list);
+char		*check_path_bin(char *bin, char *command);
+char		*join_path_com(const char *bin, const char *com);
+int			execute_bin(char **args, t_minishell *shell);
+int			fork_and_execute(char *path_bin, char **args, char **env);
+void		run_execve(char *path_bin, char **args, char **env);
 
 void		*ft_free_chr(void *ptr);
 void		free_string_array(char **array);
@@ -127,15 +140,20 @@ void		add_to_export(char ***export, char *value);
 char		*add_quotes_to_value(const char *name, const char *value);
 int			count_elements(char **array);
 void		copy_array(char **dest, char **src);
+int			update_export_var(char ***export, char *env_name, char *quoted_value, char *env_value_str);
 
-t_env *create_env_node(char *value);
-void	init_minishell(t_minishell *shell, char **env_in);
-void	init_data(t_minishell *shell);
+void		do_exit(long value);
+
+int			ft_strcmp(const char *s1, const char *s2);
+
+t_env		*create_env_node(char *value);
+void		init_minishell(t_minishell *shell, char **env_in);
+void		init_data(t_minishell *shell);
 
 void	free_env(t_env *env); // ?? наверное то же самое что и фри енв лист
 void	free_lexer(t_lexer *lexer);
 void	free_minishell(t_minishell *shell);
-void ft_error(t_minishell *shell, int error_code, char *errmsg);
+voidft_error(t_minishell *shell, int error_code, char *errmsg);
 
 char	*ft_readline(void);
 void	to_array(char *str, t_minishell *info);
@@ -215,51 +233,7 @@ void	errors_memory(t_minishell *shell, int error_code);
 void print_commands(t_minishell *shell);
 
 #endif
-# define GREEN "\033[1;32m"
-# define RED "\033[1;31m"
-# define RESET "\033[0m"
-extern int	g_error;
 
-void		handle_sigint(int sig);
-void		do_sigint_fork(int signal);
-
-void		change_lvl(t_env *env);
-
-size_t		count_env(t_env *env);
-void		add_env_node(t_env **env, char *value);
-int			is_in_env(t_env *env, char *args);
-int			is_in_env_array(char ***export, char *args);
-char		*get_env_value(char *arg, t_env *env);
-char		*env_value(char *value);
-int			len_env_value(const char *env);
-char		*getenv_name(char *dest, const char *src);
-int			add_env(const char *value, t_env *env);
-void		bubble_sort_env(char **env_array, size_t env_count);
-int 		is_valid_identifier(const char *str);
-int			ft_unsetenv(const char *name, t_env **env);
-char		**env_list_to_array(t_env *env_list);
-
-
-int			shell_cd(char **args, t_minishell *shell);
-int			shell_pwd(void);
-int			shell_echo(char **args);
-int			shell_export(char **args, t_minishell *shell);
-int			shell_unset(char **args, t_minishell *shell);
-int			shell_env(t_env *env);
-void		shell_exit(char **args);
-
-int			execute_command(t_minishell *shell);
-int			start_execve(char *path_bin, char **args, t_env *env_list);
-char		*check_path_bin(char *bin, char *command);
-char		*join_path_com(const char *bin, const char *com);
-int			execute_bin(char **args, t_minishell *shell);
-int			fork_and_execute(char *path_bin, char **args, char **env);
-void		run_execve(char *path_bin, char **args, char **env);
-
-void		*ft_free_chr(void *ptr);
-void		free_string_array(char **array);
-void		free_export(char **export);
-void		free_env_list(t_env *env);
 
 void		add_to_export(char ***export, char *value);
 char		*add_quotes_to_value(const char *name, const char *value);

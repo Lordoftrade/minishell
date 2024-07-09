@@ -6,11 +6,13 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/08 15:27:33 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:26:37 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_error;
 
 void	init_minishell(t_minishell *shell, char **env_in)
 {
@@ -20,9 +22,9 @@ void	init_minishell(t_minishell *shell, char **env_in)
 	if (!shell || !env_in)
 		return ;
 	i = 0;
+	g_error = 0;
 	shell->env = NULL;
 	shell->export = NULL;
-
 	while (env_in[i] != NULL)
 	{
 		add_env_node(&(shell->env), env_in[i]);
@@ -50,19 +52,19 @@ void	init_data(t_minishell *shell)
 	shell->f_success = 1;
 }
 
-char	*ft_readline(void)
-{
-	char	*line;
+// char	*ft_readline(void)
+// {
+// 	char	*line;
 
-	line = readline("minishell$ ");
-	if(line == NULL)
-	{
-		free(line);
-		exit(1); // подумать какой код и как запишется 
-	}
-	add_history(line);
-	return(line);
-}
+// 	line = readline("minishell$ ");
+// 	if(line == NULL)
+// 	{
+// 		free(line);
+// 		exit(1); // подумать какой код и как запишется 
+// 	}
+// 	add_history(line);
+// 	return(line);
+// }
 void print_commands(t_minishell *shell)
 {
     t_command *cmd = shell->commands;
@@ -119,29 +121,26 @@ void	minishell(t_minishell *shell)
 		execute_command(shell);
 }
 
-int	main(int argc, char **argv, char **env)
+void	display_prompt(t_minishell *shell)
 {
-	t_minishell *shell;
 	char	*line;
 
-	(void)argv;
-	if(argc > 1)
-		exit (1);
-	shell = (t_minishell *)malloc(sizeof(t_minishell));
-		if(!shell)
-			exit (1);
-	init_minishell(shell, env);
-	while(1)
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+	while (1)
 	{
 		init_data(shell);
-		line = ft_readline();
+		line = readline(RESET GREEN "minishell" RED "$ " RESET);
+		if (line == NULL)
+		{
+			printf("exit\n");
+			//очистка всего  clean_up
+			exit(g_error);
+		}
+		add_history(line);
+		// line = ft_readline();
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
-	// t_lexer *tem = shell->lexer;
-    // while (tem) {
-    //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
-    //     tem = tem->next;
-    // }
 		create_commands_from_tokens(&shell);
 		// print_commands(shell);
 		minishell(shell);
@@ -150,6 +149,36 @@ int	main(int argc, char **argv, char **env)
 		free_command_list(shell->commands);
 		system("leaks minishell");
 	}
-	// free_env_list(shell.env);
-	// free_export(shell.export);
+}
+
+
+int	main(int argc, char **argv, char **env)
+{
+	t_minishell *shell;
+
+	(void)argv;
+	if(argc > 1)
+		exit (1);
+	shell = (t_minishell *)malloc(sizeof(t_minishell));
+		if(!shell)
+			exit (1);
+	init_minishell(shell, env);
+	display_prompt(shell);
+	// while(1)
+	// {
+	// 	init_data(shell);
+	// 	line = ft_readline();
+	// 	ft_lexer(line, &shell);
+	// 	parser(&(shell->lexer), &shell);
+	// 	create_commands_from_tokens(&shell);
+	// 	// print_commands(shell);
+	// 	minishell(shell);
+	// 	// print_commands(shell);
+	// 	free_lexer(shell->lexer);
+	// 	free_command_list(shell->commands);
+	// 	system("leaks minishell");
+	// }
+	free_env_list(shell->env);
+	free_export(shell->export);
+	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/05 14:55:46 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:13:54 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void free_lexer(t_lexer *lexer)
 // Очистка памяти для основной структуры t_minishell
 void free_minishell(t_minishell *shell)
 {
-	if (shell == NULL)
+	if (shell == NULL) // добавить еще под что Миша выделяет память 
 		return;
 	if(shell->env)
 		free_env_list(shell->env);
@@ -66,8 +66,6 @@ void free_command(t_command *command)
 	i = 0;
 	if(command)
 	{
-		// if (command->type)
-		// 	free(command->type);
 		if (command->argv)
 		{
 			while (command->argv[i])

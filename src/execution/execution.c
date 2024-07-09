@@ -29,19 +29,19 @@ int	execute_implemented(char **args, t_minishell *shell)
 
 	result = 0;
 	if (ft_strcmp(args[0], "cd") == 0)
-		result = shell_cd(shell->args, shell); // но может возвращен быть и - 1 елси чдир не откроет (0 и 1 )
+		result = shell_cd(shell->commands->argv, shell); // но может возвращен быть и - 1 елси чдир не откроет (0 и 1 )
 	if (ft_strcmp(args[0], "pwd") == 0)
 		result = shell_pwd();
 	if (ft_strcmp(args[0], "echo") == 0)
-		result = shell_echo(shell->args);
+		result = shell_echo(shell->commands->argv);
 	if (ft_strcmp(args[0], "export") == 0)
-		result = shell_export(shell->args, shell);
+		result = shell_export(shell->commands->argv, shell);
 	if (ft_strcmp(args[0], "unset") == 0)
-		result = shell_unset(shell->args, shell);
+		result = shell_unset(shell->commands->argv, shell);
 	if (ft_strcmp(args[0], "env") == 0)
 		result = shell_env(shell->env);
 	if (ft_strcmp(args[0], "exit") == 0)
-		shell_exit(shell->args);
+		shell_exit(shell->commands->argv);
 	g_error = result;
 	return (result);
 }
@@ -93,14 +93,14 @@ int	execute_command(t_minishell *shell)
 {
 	int	result;
 
-	if (shell->args[0] && is_command_implemented(shell->args[0]))
-		result = execute_implemented(shell->args, shell); // что вернуть должно
+	if (shell->commands->argv[0] && is_command_implemented(shell->commands->argv[0]))
+		result = execute_implemented(shell->commands->argv, shell); // что вернуть должно
 	else
 	{
-		if (shell->args[0][0] == '/' || shell->args[0][0] == '.' 
-			|| ft_strchr(shell->args[0], '/') != NULL)
-			return (ft_execve_file_and_path(shell->args, shell));
-		result = execute_bin(shell->args, shell);
+		if (shell->commands->argv[0][0] == '/' || shell->commands->argv[0][0] == '.' 
+			|| ft_strchr(shell->commands->argv[0], '/') != NULL)
+			return (ft_execve_file_and_path(shell->commands->argv, shell));
+		result = execute_bin(shell->commands->argv, shell);
 	}
 	return (result);
 }
