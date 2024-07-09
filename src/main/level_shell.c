@@ -11,8 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//убрать когда добавлю либфт
+/*
 static int	nbr_len(int nbr)
 {
 	int	len;
@@ -65,7 +64,7 @@ char	*itoa(int n)
 		ft_from_nbr_to_str(str, n, len);
 	return (str);
 }
-// //убрать когда добавлю либфт по сюда
+*/
 
 void	change_lvl(t_env *env)
 {
@@ -77,16 +76,16 @@ void	change_lvl(t_env *env)
 
 	var_name_len = 0;
 	shlvl_value = get_env_value("SHLVL", env);
-	level = atoi(shlvl_value) + 1; // изменить на либфт
+	level = ft_atoi(shlvl_value) + 1; // изменить на либфт
 	ft_free_chr(shlvl_value);
 	while (env)
 	{
 		getenv_name(env_name, env->value);
-		var_name_len = strlen(env_name);
-		if (strncmp("SHLVL", env_name, var_name_len) == 0) // SHLVL && SHLVLA
+		var_name_len = ft_strlen(env_name);
+		if (ft_strncmp("SHLVL", env_name, var_name_len) == 0) // SHLVL && SHLVLA
 		{
 			ft_free_chr(env->value);
-			new_lvl = itoa(level);
+			new_lvl = ft_itoa(level);
 			env->value = ft_strjoin("SHLVL=", new_lvl);  // либфт не не забыть
 			ft_free_chr(new_lvl);
 			return ;

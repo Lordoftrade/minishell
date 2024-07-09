@@ -14,10 +14,10 @@
 
 char	**env_list_to_array(t_env *env_list)
 {
-	char **env_array;
-    size_t count;
-    t_env *current;
-	size_t i; 
+	char	**env_array;
+	size_t	count;
+	t_env	*current;
+	size_t	i; 
 
 	count = count_env(env_list);
 	current = env_list;
@@ -28,7 +28,7 @@ char	**env_list_to_array(t_env *env_list)
 	i = 0;
 	while (i < count)
 	{
-		env_array[i++] = strdup(current->value);
+		env_array[i++] = ft_strdup(current->value);
 		// если не сработало нало ли осовбождать!
 		current = current->next;
 	}
@@ -46,7 +46,7 @@ t_env	*create_env_node(char *value)
 		perror("Failed to allocate memory");
 		exit(EXIT_FAILURE);
 	}
-	new_node->value = strdup(value); // заменить на либфт
+	new_node->value = ft_strdup(value); // заменить на либфт
 	if (!new_node->value)
 	{
 		perror("Failed to duplicate string");

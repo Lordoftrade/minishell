@@ -75,12 +75,12 @@ char	*get_env_value(char *arg, t_env *env)
 	char	*value;
 	size_t	arg_len;
 
-	arg_len = strlen(arg);
+	arg_len = ft_strlen(arg);
 	value = NULL;
 	while (env && env->value)
 	{
 		getenv_name(env_name, env->value);
-		if (strncmp(arg, env_name, arg_len) == 0
+		if (ft_strncmp(arg, env_name, arg_len) == 0
 			&& env->value[arg_len] == '=') // либфт!!
 		{
 			value = env_value(env->value);
@@ -88,6 +88,6 @@ char	*get_env_value(char *arg, t_env *env)
 		}
 		env = env->next;
 	}
-	return (strdup(""));
+	return (ft_strdup(""));
 }
 

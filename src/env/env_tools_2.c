@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 //удалить и добавить либфт!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-int	ft_isdigit(int c)
+/*int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
@@ -26,9 +26,9 @@ int	ft_isalnum(int c)
 		|| (c >= '0' && c <= '9'))
 		return (1);
 	return (0);
-}
+}*/
 
-char *ft_strjoin(char const *s1, char const *s2)
+/*char *ft_strjoin(char const *s1, char const *s2)
 {
     if (s1 == NULL || s2 == NULL)
         return NULL;
@@ -45,7 +45,7 @@ char *ft_strjoin(char const *s1, char const *s2)
 
     return new;
 }
-/// удалсить и добавить либфт
+/// удалсить и добавить либфт*/
 
 int	add_env(const char *value, t_env *env)
 {
@@ -56,13 +56,13 @@ int	add_env(const char *value, t_env *env)
 		return (FAILURE);
 	if (env && env->value == NULL)
 	{
-		env->value = strdup(value); // надо ли добавлять код если функция не выделила память?
+		env->value = ft_strdup(value); // надо ли добавлять код если функция не выделила память?
 		return (SUCCESS);
 	}
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (-1); // вывод ошибки и что делать, раз память не выделена?
-	new->value = strdup(value); // надо ли добавлять код если функция не выделила память?
+	new->value = ft_strdup(value); // надо ли добавлять код если функция не выделила память?
 	new->next = NULL;
 	cur = env;
 	while (cur->next != NULL)
@@ -76,7 +76,7 @@ char	*getenv_name(char *dest, const char *src)
 	int		i;
 
 	i = 0;
-	while (src[i] && src[i] != '=' && strlen(src) < BUFF_SIZE)
+	while (src[i] && src[i] != '=' && ft_strlen(src) < BUFF_SIZE)
 	{
 		dest[i] = src[i];
 		i++;
@@ -91,15 +91,15 @@ int	is_in_env(t_env *env, char *args)
 	size_t	var_name_len;
 
 	getenv_name(var_name, args);
-	var_name_len = strlen(var_name);
+	var_name_len = ft_strlen(var_name);
 	while (env)
 	{
-		if (strncmp(env->value, var_name, var_name_len) == 0
+		if (ft_strncmp(env->value, var_name, var_name_len) == 0
 			&& (env->value[var_name_len] == '='
 				|| env->value[var_name_len] == '\0'))
 		{
 			ft_free_chr(env->value);
-			env->value = strdup(args);
+			env->value = ft_strdup(args);
 			if (!env->value)
 				return (FAILURE); // или жругая ошибка?
 			return (SUCCESS);
