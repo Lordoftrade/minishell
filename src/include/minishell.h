@@ -153,7 +153,7 @@ void		init_data(t_minishell *shell);
 void	free_env(t_env *env); // ?? наверное то же самое что и фри енв лист
 void	free_lexer(t_lexer *lexer);
 void	free_minishell(t_minishell *shell);
-voidft_error(t_minishell *shell, int error_code, char *errmsg);
+void	ft_error(t_minishell *shell, int error_code, char *errmsg);
 
 char	*ft_readline(void);
 void	to_array(char *str, t_minishell *info);
@@ -233,15 +233,3 @@ void	errors_memory(t_minishell *shell, int error_code);
 void print_commands(t_minishell *shell);
 
 #endif
-
-
-void		add_to_export(char ***export, char *value);
-char		*add_quotes_to_value(const char *name, const char *value);
-int			count_elements(char **array);
-void		copy_array(char **dest, char **src);
-int			update_export_var(char ***export, char *env_name, char *quoted_value, char *env_value_str);
-
-void		do_exit(long value);
-
-
-int			ft_strcmp(const char *s1, const char *s2);
