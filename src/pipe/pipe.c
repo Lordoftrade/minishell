@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:39:32 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/05 13:12:07 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/08 15:53:16 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,31 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell)
 
 int	create_and_execute_child(t_command *curr, int prev_fd, int fd[2], t_minishell *shell)
 {
-	int pid;
-	pid = fork();
+	int	pid;
+	int	heredoc_fd;
 	
+	pid = fork();
 	if (pid == 0)
 	{
 		setup_child_pipes(prev_fd, fd, curr);
-		// if (check_redirect(curr))
-		if(curr->GT || curr->LT || curr->D_GT || curr->D_LT)
+		if (curr->D_LT)
+		{
+			heredoc_fd = open(curr->heredoc, O_RDONLY);
+			 if (heredoc_fd < 0) {
+                perror("Failed to open heredoc file");
+                exit(1);
+            }
+			unlink(curr->heredoc);
+            dup2(heredoc_fd, STDIN_FILENO);
+            close(heredoc_fd);
+		}
+		if(curr->GT || curr->LT || curr->D_GT)
 			execute_redirect_pipe(curr);
 		execute_command_for_pipe(curr, shell); //добавить проверку что команда выполнилась
 		exit(0); 
 	}
 	return (pid);
 }
-
 
 int	create_pipe(int fd[2])
 {
@@ -97,10 +107,22 @@ void execute_pipeline_one_by_one(t_minishell *shell)
 	curr = shell->commands;
 	prev_fd = -1;
 	last_pid = -1;
+	int j = 0;
+	while (curr) {
+        if (curr->D_LT) {
+            if (redir_heredoc_pipe(curr, j))
+			{
+                ft_error(shell, 258, "Heredoc error\n");
+            }
+			j++;
+        }
+        curr = curr->next;
+    }
+    curr = shell->commands;
 	while (curr)
 	{
-		if (curr->D_LT)
-			redir_heredoc(&curr);
+		// if (curr->D_LT)
+		// 	redir_heredoc(&curr);
 		if(curr->next)
 		{
 			if (create_pipe(fd) == -1)

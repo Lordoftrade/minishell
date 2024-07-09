@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:44:21 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/01 14:26:10 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/05 15:02:49 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,8 @@ void	lt_token(char *str, int *i, t_minishell *shell)
 	else 
 		(*i)++;
 	content = ft_strndup(str + start, *i - start);
-	// if(!content)
-	// {
-	// 	//free_list (info);
-	// 	//free_list(lexer);
-	// }
+	if(!content)
+		errors_memory(shell, 1);
 	if (str[start] && str[start + 1] == '<')
 		new_token = create_new_token(D_LT, content);
 	else
@@ -49,11 +46,8 @@ void	gt_token(char *str, int *i, t_minishell *shell)
 	else 
 		(*i)++;
 	content = ft_strndup(str + start, *i - start);
-	// if(!content)
-	// {
-	// 	//free_list (info);
-	// 	//free_list(lexer);
-	// }
+	if(!content)
+		errors_memory(shell, 1);
 	if (str[start] && str[start + 1] == '>')
 		new_token = create_new_token(D_GT, content);
 	else
@@ -72,11 +66,8 @@ void	dollar_token(char *str, int *i, t_minishell *shell)
 	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'|| str[*i] == '?' || str[*i] == '$'))
 		(*i)++;
 	content = ft_strndup(str + start, *i - start);
-	// if(!content)
-	// {
-	// 	//free_list (info);
-	// 	//free_list(lexer);
-	// }
+	if(!content)
+		errors_memory(shell, 1);
 	new_token = create_new_token(DOLLAR, content);
 	add_token_to_list(&(shell->lexer), new_token);
 	free(content);
@@ -92,11 +83,8 @@ void	pipe_token(char *str, int *i, t_minishell *shell)
 	while (str[*i] && str[*i] == '|')
 		(*i)++;
 	content = ft_strndup(str + start, *i - start);
-	// if(!content)
-	// {
-	// 	//free_list (info);
-	// 	//free_list(lexer);
-	// }
+	if(!content)
+		errors_memory(shell, 1);
 	new_token = create_new_token(PIPE, content);
 	add_token_to_list(&(shell->lexer), new_token);
 	free(content);

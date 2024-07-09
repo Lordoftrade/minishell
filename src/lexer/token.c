@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:00 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/01 14:49:32 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:49:02 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,14 @@ void	to_list_lexer(char *str, t_minishell *shell)
 
 void	ft_lexer(char *line, t_minishell **shell)
 {
-	if(check_symbol(line) == 0)
+	if (check_symbol(line))
 	{
-			printf("Errors quote\n"); // написать функцию для ошибки
-			// free_minishell(shell);
+		ft_error(*shell, 258, "Syntax error\n");
+		free(line);
+		(*shell)->f_success = 0;
+		return;
 	}
 	to_list_lexer(line, *shell);
-	// t_lexer *temp = (*shell)->lexer;
-    // while (temp) {
-    //     printf("Token type: %d, content: %s\n", temp->type, temp->content);
-    //     temp = temp->next;
-    // }
 	free(line); // не знаю нужно ли чистить строку в которую ридлайн читал
 	// parser((&(*shell)->lexer), shell);
 	// t_lexer *tem = (*shell)->lexer;

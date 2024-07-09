@@ -78,7 +78,6 @@ typedef struct s_command
 
 typedef struct s_minishell
 {
-	//t_token			*array;
 	t_env			*env;
 	t_lexer			*lexer;
 	t_command		*commands;
@@ -88,6 +87,7 @@ typedef struct s_minishell
 	int				stdout;
 	int				len;
 	int				exit_code;
+	int				f_success;
 }					t_minishell;
 
 
@@ -135,12 +135,12 @@ void	init_data(t_minishell *shell);
 void	free_env(t_env *env); // ?? наверное то же самое что и фри енв лист
 void	free_lexer(t_lexer *lexer);
 void	free_minishell(t_minishell *shell);
-void	ft_error(char *error_message);
+void ft_error(t_minishell *shell, int error_code, char *errmsg);
 
 char	*ft_readline(void);
 void	to_array(char *str, t_minishell *info);
 void	ft_lexer(char *line, t_minishell **shell);
-// int	check_pipe(char *str);
+int	check_pipe_syntax(char *str);
 int	check_quote(char *str);
 int	check_symbol(char *str);
 t_lexer	*create_new_token(enum token_type type, char *content);
@@ -204,6 +204,12 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell);
 int	is_command_implemented(char *cmd);
 int	execute_implemented(char **args, t_minishell *shell);
 int	execute_bin(char **args, t_minishell *shell);
+
+int redir_heredoc_pipe(t_command *cmd, int i);
+char	*create_heredoc_filename(int i);
+
+
+void	errors_memory(t_minishell *shell, int error_code);
 
 
 void print_commands(t_minishell *shell);
