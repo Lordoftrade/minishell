@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:10:42 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/05 14:26:48 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:38:31 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,29 @@ int	check_symbol(char *str)
 	if(j == 0 || i == 0)
 		return(1);
 	return(0);
+}
+int	check_argv(t_command *cmd)
+{
+	if(cmd == NULL)
+		return (0);
+	if(cmd->argv[0] == NULL)
+		return(0);
+	return(1);
+}
+void	check_sintax_redir(t_lexer *lexer)
+{
+	t_lexer *current = lexer;
+	t_lexer *next;
+
+	while (current && current->next)
+	{
+		next = current->next;
+		if ((current->type == GT || current->type == D_GT || current->type == LT || current->type == D_LT) &&
+			(next->type == GT || next->type == D_GT || next->type == LT || next->type == D_LT))
+		{
+			ft_error(258, "syntax error near unexpected token\n");
+			return;
+		}
+		current = next; // Переходим к следующему токену
+	}
 }

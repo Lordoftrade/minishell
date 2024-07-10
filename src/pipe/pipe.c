@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:39:32 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/08 15:53:16 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:16:26 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void execute_pipeline_one_by_one(t_minishell *shell)
         if (curr->D_LT) {
             if (redir_heredoc_pipe(curr, j))
 			{
-                ft_error(shell, 258, "Heredoc error\n");
+                ft_error(258, "Heredoc error\n");
             }
 			j++;
         }

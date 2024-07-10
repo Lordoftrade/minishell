@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   connection.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:32:36 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/01 14:26:34 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/09 20:13:57 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	copy_over(t_lexer *current, t_lexer *new)
-{
-	t_lexer *tmp;
-
-	tmp = current->next;
-	// free(current->content);
-	current->content = ft_strdup(new->content);
-	current->next = new->next;
-	free(new->content);
-	free(new);
-	free(tmp->content);
-	free(tmp);
-}
 
 void concatenate_nodes(t_lexer *current, t_minishell **shell)
 {
@@ -105,7 +91,7 @@ void	free_space(t_lexer **token, t_minishell **shell)
 	previous = NULL;
 	while (current != NULL)
 	{
-		if (current->type == SPACE)
+		if (current->type == MY_SPACE)
 		{
 			tmp = current;
 			current = current->next;

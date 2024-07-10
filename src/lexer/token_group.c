@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_group.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:44:21 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/05 15:02:49 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/09 18:11:29 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ void	lt_token(char *str, int *i, t_minishell *shell)
 	if(!content)
 		errors_memory(shell, 1);
 	if (str[start] && str[start + 1] == '<')
-		new_token = create_new_token(D_LT, content);
+		new_token = create_new_token(D_LT, content, shell);
 	else
-		new_token = create_new_token(LT, content);
+		new_token = create_new_token(LT, content, shell);
 	add_token_to_list(&(shell->lexer), new_token);
 	free(content);
 }
@@ -49,9 +49,9 @@ void	gt_token(char *str, int *i, t_minishell *shell)
 	if(!content)
 		errors_memory(shell, 1);
 	if (str[start] && str[start + 1] == '>')
-		new_token = create_new_token(D_GT, content);
+		new_token = create_new_token(D_GT, content, shell);
 	else
-		new_token = create_new_token(GT, content);
+		new_token = create_new_token(GT, content, shell);
 	add_token_to_list(&(shell->lexer), new_token);
 	free(content);
 }
@@ -68,7 +68,7 @@ void	dollar_token(char *str, int *i, t_minishell *shell)
 	content = ft_strndup(str + start, *i - start);
 	if(!content)
 		errors_memory(shell, 1);
-	new_token = create_new_token(DOLLAR, content);
+	new_token = create_new_token(DOLLAR, content, shell);
 	add_token_to_list(&(shell->lexer), new_token);
 	free(content);
 }
@@ -85,7 +85,7 @@ void	pipe_token(char *str, int *i, t_minishell *shell)
 	content = ft_strndup(str + start, *i - start);
 	if(!content)
 		errors_memory(shell, 1);
-	new_token = create_new_token(PIPE, content);
+	new_token = create_new_token(PIPE, content, shell);
 	add_token_to_list(&(shell->lexer), new_token);
 	free(content);
 }

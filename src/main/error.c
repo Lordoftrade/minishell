@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/09 14:13:54 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:13:49 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ void	errors_memory(t_minishell *shell, int error_code)
 	exit(error_code);
 }
 
-void ft_error(t_minishell *shell, int error_code, char *errmsg)
+void ft_error(int error_code, char *errmsg)
 {
-	shell->exit_code = error_code;
+	g_error = error_code;
 	write(2, "minishell: ", 12);
 	ft_putstr_fd(errmsg, 2);
 	// free(errmsg);

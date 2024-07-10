@@ -3,33 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 19:01:06 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/01 14:26:13 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/10 18:10:47 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_lexer	*create_new_token(enum token_type type, char *content)
+t_lexer	*create_new_token(enum token_type type, char *content, t_minishell *sh)
 {
 	t_lexer *new_token;
 
 	new_token = (t_lexer *)malloc(sizeof(t_lexer));
 	if(!new_token)
-	{
-		perror("Failed to allocate memory for token"); //написать функцию с очисткой и выходом
-        exit(EXIT_FAILURE);
-	}
+		errors_memory(sh, 1);
 	new_token->type = type;
 	new_token->content = ft_strdup(content);
-	// if (!new_token->content)
-	// {
-    //     free(new_token);
-    //     perror("Failed to allocate memory for content");
-    //     exit(EXIT_FAILURE);
-    // }
+	if (!new_token->content)
+		errors_memory(sh, 1);
 	new_token->next = NULL;
 	return (new_token);
 }

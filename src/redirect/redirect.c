@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:33:17 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/08 15:59:11 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/10 18:28:25 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,6 @@ char	*create_heredoc_filename(int i)
 	}
 	free(tmp);
 	return (res);
-}
-
-int	check_argv(t_command *cmd)
-{
-	if(cmd->argv[0] == NULL)
-		return(0);
-	return(1);
 }
 
 int	list_size(t_command *cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/09 14:26:37 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:19:39 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	minishell(t_minishell *shell)
 		dup2(shell->stdout, STDOUT_FILENO);
 		dup2(shell->stdin, STDIN_FILENO);
 	}
-	else
+	else if (check_argv(shell->commands) && !check_pipe(shell))
 		execute_command(shell);
 }
 
@@ -141,13 +141,22 @@ void	display_prompt(t_minishell *shell)
 		// line = ft_readline();
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
-		create_commands_from_tokens(&shell);
+	// t_lexer *tem = shell->lexer;
+    // while (tem) {
+    //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
+    //     tem = tem->next;
+    // }
+		check_sintax_redir(shell->lexer);
+		if(g_error == 0)
+		{
+			create_commands_from_tokens(&shell);
 		// print_commands(shell);
-		minishell(shell);
+			minishell(shell);
+		}
 		// print_commands(shell);
 		free_lexer(shell->lexer);
 		free_command_list(shell->commands);
-		system("leaks minishell");
+		// system("leaks minishell");
 	}
 }
 

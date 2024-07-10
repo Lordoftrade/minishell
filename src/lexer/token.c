@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:00 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/05 14:49:02 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:15:04 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ void	ft_lexer(char *line, t_minishell **shell)
 {
 	if (check_symbol(line))
 	{
-		ft_error(*shell, 258, "Syntax error\n");
+		ft_error(258, "Syntax error\n");
 		free(line);
 		(*shell)->f_success = 0;
 		return;
 	}
 	to_list_lexer(line, *shell);
-	free(line); // не знаю нужно ли чистить строку в которую ридлайн читал
+	free(line);
 	// parser((&(*shell)->lexer), shell);
 	// t_lexer *tem = (*shell)->lexer;
     // while (tem) {

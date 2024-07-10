@@ -153,7 +153,7 @@ void		init_data(t_minishell *shell);
 void	free_env(t_env *env); // ?? наверное то же самое что и фри енв лист
 void	free_lexer(t_lexer *lexer);
 void	free_minishell(t_minishell *shell);
-void	ft_error(t_minishell *shell, int error_code, char *errmsg);
+void	ft_error(int error_code, char *errmsg);
 
 char	*ft_readline(void);
 void	to_array(char *str, t_minishell *info);
@@ -161,7 +161,7 @@ void	ft_lexer(char *line, t_minishell **shell);
 int	check_pipe_syntax(char *str);
 int	check_quote(char *str);
 int	check_symbol(char *str);
-t_lexer	*create_new_token(enum token_type type, char *content);
+t_lexer	*create_new_token(enum token_type type, char *content, t_minishell *sh);
 void	add_token_to_list(t_lexer **head, t_lexer *new_token);
 char	*ft_strndup(const char *src, size_t n);
 void	single_quote_token(char *str, int *i, t_minishell *shell);
@@ -203,8 +203,6 @@ int	execute_redirects(t_command **command);
 int lt(t_command **command);
 int	d_gt(t_command **command);
 int	gt(t_command **command);
-// void	start(t_command **s, t_command **c, t_command **prev, t_minishell **sh);
-// void	previous(t_command **previous, t_command **command);
 void	delete_redirect(t_command **command);
 void	execute_heredoc(int i, char *delimiter);
 int redir_heredoc(t_command **command);
@@ -222,12 +220,19 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell);
 int	is_command_implemented(char *cmd);
 int	execute_implemented(char **args, t_minishell *shell);
 int	execute_bin(char **args, t_minishell *shell);
+void	check_sintax_redir(t_lexer *lexer);
 
 int redir_heredoc_pipe(t_command *cmd, int i);
 char	*create_heredoc_filename(int i);
 
 
 void	errors_memory(t_minishell *shell, int error_code);
+
+void	handle_input_redirection(t_command *new_cmd, t_lexer **current);
+void	handle_output_redirection(t_command *new_cmd, t_lexer **current);
+void	handle_append_redirection(t_command *new_cmd, t_lexer **current);
+void	handle_redirections(t_command *new_cmd, t_lexer **current);
+void	handle_redirections_and_heredoc(t_command *new_cmd, t_lexer **current);
 
 
 void print_commands(t_minishell *shell);
