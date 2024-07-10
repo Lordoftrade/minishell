@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:21:50 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/10 19:01:52 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/10 22:30:35 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,34 @@ void	handle_redirections(t_command *new_cmd, t_lexer **current)
 		handle_append_redirection(new_cmd, current);
 }
 
-void	handle_redirections_and_heredoc(t_command *new_cmd, t_lexer **current)
+
+void handle_redirections_and_heredoc(t_command *new_cmd, t_lexer **current)
 {
-	while (*current && (*current)->type != STRING)
-	{
-		if (strcmp((*current)->content, "|") == 0) //написать функцию если нет в либе
-		{
-			*current = (*current)->next;
-			break;
-		}
-		handle_redirections(new_cmd, current);
+	if ((*current)->type == LT)
+		handle_input_redirection(new_cmd, current);
+	else if ((*current)->type == GT)
+		handle_output_redirection(new_cmd, current);
+	else if ((*current)->type == D_GT)
+		handle_append_redirection(new_cmd, current);
+	else if ((*current)->type == D_LT)
 		handle_here_document(new_cmd, current);
-	}
 }
+
+// void handle_redirections_and_heredoc(t_command *new_cmd, t_lexer **current)
+// {
+// 	while (*current && (*current)->type != STRING)
+// 	{
+// 		// if (strcmp((*current)->content, "|") == 0)
+// 		// {
+// 		// 	*current = (*current)->next;
+// 		// 	break;
+// 		// }
+// 		if (strcmp((*current)->content, "<<") == 0)
+// 			handle_here_document(new_cmd, current);
+// 		else
+// 			handle_redirections(new_cmd, current);
+// 	}
+// }
 
 void	copy_over(t_lexer *current, t_lexer *new)
 {

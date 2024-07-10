@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:54:23 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/10 18:55:53 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/10 22:47:03 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ int	is_breaking_character(char	c)
 		return (1);
 	return (0);
 }
+char	*open_dollar_question(void)
+{
+	char *error_code_str;
+
+	error_code_str = ft_itoa(g_error);
+	return error_code_str;
+}
 
 void	symbol_dollar(t_lexer **token, t_minishell *shell)
 {
@@ -64,8 +71,16 @@ void	symbol_dollar(t_lexer **token, t_minishell *shell)
 
 	string = ft_strdup((*token)->content);
 	i = 1;
-	// if (string[i] == '?')
-	// 	написать функцию по знаку вопроса
+	if (string[i] == '?')
+	{
+		new_string = open_dollar_question();
+		if (new_string)
+		{
+			(*token)->type = STRING;
+			free((*token)->content);
+			(*token)->content = new_string;
+		}
+	}
 	if (is_breaking_character(string[i]) || string[i] == '\0')
 		(*token)->type = STRING;
 	else

@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:19:18 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/09 18:19:55 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/10 22:48:22 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*open_dollar(char *str, int *i, t_minishell *shell)
 	char *var_name;
 	char *env_value;
 
-	// if (str[*i] == '$' && str[*i + 1] == '?')
+		// if (str[*i] == '$' && str[*i + 1] == '?')
 	// 	вызвать функцию для знака вопроса
 	
 		start = *i;

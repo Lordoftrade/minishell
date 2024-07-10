@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/10 20:19:39 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/11 00:12:57 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,57 @@ void	minishell(t_minishell *shell)
 		execute_command(shell);
 }
 
+// echo >> file hello
+
+// echo->next = hello
+
+// >> file echo hi
+
+void handle_token_redirections(t_lexer **input_tokens, t_command *command) {
+	t_lexer *next_token;
+
+	t_lexer **tokens = input_tokens;
+
+	while (*tokens) {
+		if ((*tokens)->type == D_GT) {
+			next_token = (*tokens)->next;
+			if (next_token && (next_token->type == STRING || next_token->type == S_QUOTE)) {
+				command->D_GT = 1;
+				command->output = ft_strdup(next_token->content);
+
+				(*tokens)->next = next_token->next;
+
+				free(next_token->content);
+				free(next_token);
+
+				free((*tokens)->content);
+				free(*tokens);
+			}
+			else
+				;
+				// ft_error();
+		}
+		tokens = &(*tokens)->next;
+	}
+}
+
+t_command *tokens_command_into_command(t_lexer *tokens) {
+	t_command *command;
+
+	command = create_new_command();
+
+	handle_token_redirections(&tokens, command);
+
+	t_lexer *tem = tokens;
+	while (tem) {
+		printf("Token type after removing redirections new: %d, content new: %s\n", tem->type, tem->content);
+		tem = tem->next;
+	}
+	printf("\n");
+
+	return command;
+}
+
 void	display_prompt(t_minishell *shell)
 {
 	char	*line;
@@ -141,20 +192,46 @@ void	display_prompt(t_minishell *shell)
 		// line = ft_readline();
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
-	// t_lexer *tem = shell->lexer;
-    // while (tem) {
-    //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
-    //     tem = tem->next;
-    // }
-		check_sintax_redir(shell->lexer);
-		if(g_error == 0)
-		{
-			create_commands_from_tokens(&shell);
-		// print_commands(shell);
-			minishell(shell);
+		t_lexer *tem = shell->lexer;
+		while (tem) {
+			printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
+			tem = tem->next;
 		}
+
+		printf("\n");
+
+		while (shell->lexer) {
+			split_by_pipe_result result = split_by_pipe(shell->lexer);
+
+			t_lexer *tem = result.command;
+			while (tem) {
+				printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
+				tem = tem->next;
+			}
+			printf("\n");
+
+			// a | b | c
+
+			// a
+			// b | c
+
+			t_command *command = tokens_command_into_command(tem);
+			(void)command;
+
+			shell->lexer = result.rest;
+		}
+
+		// check_sintax_redir(shell->lexer);
+		// create_commands_from_tokens(&shell);
 		// print_commands(shell);
-		free_lexer(shell->lexer);
+		// if(g_error == 0)
+		// {
+		// 	create_commands_from_tokens(&shell);
+		// print_commands(shell);
+		// minishell(shell);
+		// }
+		// print_commands(shell);
+		// free_lexer(shell->lexer);
 		free_command_list(shell->commands);
 		// system("leaks minishell");
 	}

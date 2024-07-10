@@ -39,6 +39,9 @@
 
 extern int	g_error;
 
+
+
+
 typedef struct s_env
 {
 	char			*value;
@@ -65,6 +68,11 @@ typedef struct s_token_lexer
 	char					*content;
 	struct s_token_lexer	*next;
 }					t_lexer;
+
+typedef struct {
+	t_lexer *command;
+	t_lexer *rest;
+} split_by_pipe_result;
 
 typedef struct s_command
 {
@@ -96,6 +104,7 @@ typedef struct s_minishell
 }					t_minishell;
 
 
+split_by_pipe_result split_by_pipe(t_lexer *tokens);
 void		handle_sigint(int sig);
 void		do_sigint_fork(int signal);
 
