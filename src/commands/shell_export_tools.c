@@ -16,7 +16,7 @@
 int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t i;
-	
+
 	i  = 0;
 	while (s1[i] != '\0' && s1[i] == s2[i])
 		i++;
@@ -77,10 +77,9 @@ int	is_valid_identifier(const char *str)
 	int	i;
 
 	i = 0;
-	if (!str || !str[0] || ft_isdigit(str[0]))
+	if (!str || !str[0] || str[0] == '=' || ft_isdigit(str[0]))
 	{
 		g_error = 1;
-		printf("g_error = %d \n", g_error);
 		return (1);
 	}
 	while (str[i])
