@@ -31,7 +31,7 @@ PACKAGE_TARNAME = readline
 srcdir = .
 
 top_srcdir = .
-BUILD_DIR = /Users/lelichik/Desktop/TEST2CHECK/readline_main
+BUILD_DIR = /Users/opanikov/Desktop/minishell/readline_main
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -48,7 +48,7 @@ MV = mv
 
 SHELL = /bin/sh
 
-prefix = /Users/lelichik/Desktop/TEST2CHECK/readline_main/../read_lib
+prefix = /Users/opanikov/Desktop/minishell/readline_main/../read_lib
 exec_prefix = ${prefix}
 
 datarootdir = ${prefix}/share

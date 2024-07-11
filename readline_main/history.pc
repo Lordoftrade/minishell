@@ -1,4 +1,4 @@
-prefix=/Users/lelichik/Desktop/TEST2CHECK/readline_main/../read_lib
+prefix=/Users/opanikov/Desktop/minishell/readline_main/../read_lib
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

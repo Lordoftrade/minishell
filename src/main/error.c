@@ -6,19 +6,18 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/10 20:13:49 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/11 19:16:05 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Очистка памяти для структуры t_lexer
 void free_lexer(t_lexer *lexer)
 {
 	t_lexer *tmp;
 	
 	if (lexer == NULL)
-		return;
+		return ;
 	while (lexer != NULL)
 	{
 		tmp = lexer;
@@ -28,18 +27,17 @@ void free_lexer(t_lexer *lexer)
 	}
 }
 
-// Очистка памяти для основной структуры t_minishell
 void free_minishell(t_minishell *shell)
 {
 	if (shell == NULL) // добавить еще под что Миша выделяет память 
-		return;
-	if(shell->env)
+		return ;
+	if (shell->env)
 		free_env_list(shell->env);
-	if(shell->lexer)
+	if (shell->lexer)
 		free_lexer(shell->lexer);
-	if(shell->commands)
+	if (shell->commands)
 		free_command_list(shell->commands);
-	if(shell->export)
+	if (shell->export)
 		free_export(shell->export);
 	free(shell);
 }
@@ -51,7 +49,7 @@ void	errors_memory(t_minishell *shell, int error_code)
 	exit(error_code);
 }
 
-void ft_error(int error_code, char *errmsg)
+void	ft_error(int error_code, char *errmsg)
 {
 	g_error = error_code;
 	write(2, "minishell: ", 12);
@@ -59,12 +57,12 @@ void ft_error(int error_code, char *errmsg)
 	// free(errmsg);
 }
 
-void free_command(t_command *command)
+void	free_command(t_command *command)
 {
 	int	i;
 
 	i = 0;
-	if(command)
+	if (command)
 	{
 		if (command->argv)
 		{
@@ -82,7 +80,7 @@ void free_command(t_command *command)
 	}
 }
 
-void free_command_list(t_command *command_list)
+void	free_command_list(t_command *command_list)
 {
 	t_command *tmp;
 	

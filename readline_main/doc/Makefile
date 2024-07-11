@@ -22,7 +22,7 @@ topdir = ..
 srcdir = .
 
 
-prefix = /Users/lelichik/Desktop/TEST2CHECK/readline_main/../read_lib
+prefix = /Users/opanikov/Desktop/minishell/readline_main/../read_lib
 
 datarootdir = ${prefix}/share
 
@@ -49,7 +49,7 @@ RM = rm -f
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 
-BUILD_DIR = /Users/lelichik/Desktop/TEST2CHECK/readline_main
+BUILD_DIR = /Users/opanikov/Desktop/minishell/readline_main
 TEXINPUTDIR = $(srcdir)
 
 MAKEINFO    = LANGUAGE= makeinfo

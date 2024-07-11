@@ -193,7 +193,7 @@ void	copy_over(t_lexer *current, t_lexer *new);
 void	change_current(t_lexer **current, t_lexer **previous);
 void	free_empty_token(t_lexer **token, t_minishell **shell);
 void	free_space(t_lexer **token, t_minishell **shell);
-void add_command_to_list(t_command **cmd_list, t_command **last_cmd, t_command *new_cmd);
+void add_command_to_list(t_command **list, t_command *new_command);
 void handle_redirections_and_here_document(t_command *new_cmd, t_lexer **current);
 void fill_command_argv(t_command *cmd, t_lexer **current);
 t_command *create_new_command();

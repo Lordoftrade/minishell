@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/11 14:10:11 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/11 18:35:51 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,44 +65,45 @@ void	init_data(t_minishell *shell)
 // 	add_history(line);
 // 	return(line);
 // }
-void print_commands(t_minishell *shell)
-{
-    t_command *cmd = shell->commands;
-    while (cmd)
-    {
-        // printf("Command: %d\n", cmd->type);
-        printf("Arguments:\n");
-        char **arg = cmd->argv;
-        while (*arg)
-        {
-            printf("  %s\n", *arg);
-            arg++;
-        }
-        if (cmd->input)
-            printf("Input redirection: %s\n", cmd->input);
-        if (cmd->output)
-            printf("Output redirection: %s\n", cmd->output);
-		if (cmd->delimiter)
-            printf("Delimetr: %s\n", cmd->delimiter);
-		if (cmd->LT)
-			printf("LT: %d\n", cmd->LT);
-		if (cmd->GT)
-			printf("GT: %d\n", cmd->GT);
-		if (cmd->D_LT)
-			printf("D_LT: %d\n", cmd->D_LT);
-		if (cmd->D_GT)
-			printf("D_GT: %d\n", cmd->D_GT);
-        printf("\n");
+// void print_commands(t_minishell *shell)
+// {
+//     t_command *cmd = shell->commands;
+//     while (cmd)
+//     {
+//         // printf("Command: %d\n", cmd->type);
+//         printf("Arguments:\n");
+//         char **arg = cmd->argv;
+//         while (*arg)
+//         {
+//             printf("  %s\n", *arg);
+//             arg++;
+//         }
+//         if (cmd->input)
+//             printf("Input redirection: %s\n", cmd->input);
+//         if (cmd->output)
+//             printf("Output redirection: %s\n", cmd->output);
+// 		if (cmd->delimiter)
+//             printf("Delimetr: %s\n", cmd->delimiter);
+// 		if (cmd->LT)
+// 			printf("LT: %d\n", cmd->LT);
+// 		if (cmd->GT)
+// 			printf("GT: %d\n", cmd->GT);
+// 		if (cmd->D_LT)
+// 			printf("D_LT: %d\n", cmd->D_LT);
+// 		if (cmd->D_GT)
+// 			printf("D_GT: %d\n", cmd->D_GT);
+//         printf("\n");
 
-        cmd = cmd->next;
-    }
-}
+//         cmd = cmd->next;
+//     }
+// }
 
 void	minishell(t_minishell *shell)
 {
 	int	res;
 
 	res = 0;
+	// printf("LEN = %d\n", shell->len);
 	if(check_redirect(shell->commands) && shell->len == 1)
 	{
 		res = handling_redir(&shell);
@@ -149,12 +150,12 @@ void	display_prompt(t_minishell *shell)
 		// check_sintax_redir(shell->lexer);
 		// if(g_error == 0)
 		// {
-			create_commands_from_tokens(shell);
+		create_commands_from_tokens(shell);
 		// print_commands(shell);
-			minishell(shell);
+		minishell(shell);
 		// }
 		// print_commands(shell);
-		free_lexer(shell->lexer);
+		// free_lexer(shell->lexer);
 		free_command_list(shell->commands);
 		// system("leaks minishell");
 	}

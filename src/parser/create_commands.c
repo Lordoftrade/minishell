@@ -3,14 +3,113 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:58:06 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/11 14:11:33 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/11 18:54:14 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void print_tokens(t_lexer *tokens) {
+    while (tokens) {
+        printf("Token: %s\n", tokens->content);
+        tokens = tokens->next;
+    }
+}
+
+void print_command(t_command *command) {
+    printf("Arguments:\n");
+    for (int i = 0; command->argv[i] != NULL; i++) {
+        printf("\t%s\n", command->argv[i]);
+    }
+    if (command->input) {
+        printf("Input: %s\n", command->input);
+    }
+    if (command->output) {
+        printf("Output: %s\n", command->output);
+    }
+    if (command->delimiter) {
+        printf("Delimiter: %s\n", command->delimiter);
+	if (command->LT)
+		printf("LT: %d\n", command->LT);
+	if (command->GT)
+		printf("GT: %d\n", command->GT);
+	if (command->D_LT)
+		printf("D_LT: %d\n", command->D_LT);
+	if (command->D_GT)
+		printf("D_GT: %d\n", command->D_GT);
+        printf("\n");
+    }
+}
+
+
+// void print_command(t_command *cmd)
+// {
+// 	// printf("Command: %d\n", cmd->type);
+// 	printf("Arguments:\n");
+// 	char **arg = cmd->argv;
+// 	while (*arg)
+// 	{
+// 	    printf("  %s\n", *arg);
+// 	    arg++;
+// 	}
+// 	if (cmd->input)
+// 	    printf("Input redirection: %s\n", cmd->input);
+// 	if (cmd->output)
+// 	    printf("Output redirection: %s\n", cmd->output);
+// 		if (cmd->delimiter)
+// 	    printf("Delimetr: %s\n", cmd->delimiter);
+// 		if (cmd->LT)
+// 			printf("LT: %d\n", cmd->LT);
+// 		if (cmd->GT)
+// 			printf("GT: %d\n", cmd->GT);
+// 		if (cmd->D_LT)
+// 			printf("D_LT: %d\n", cmd->D_LT);
+// 		if (cmd->D_GT)
+// 			printf("D_GT: %d\n", cmd->D_GT);
+// 	printf("\n");
+// }
+// void print_commands(t_minishell *shell)
+// {
+//     t_command *cmd = shell->commands;
+//     while (cmd)
+//     {
+// 	    print_command(cmd);
+// 	    cmd = cmd->next;
+//     }
+// }
+
+// char *token_type_to_string(enum token_type type) {
+// 	if (type == STRING) return "string";
+// 	else if (type == PIPE) return "pipe";
+// 	else if (type == S_QUOTE) return "single_quote";
+// 	else if (type == D_QUOTE) return "double_quote";
+// 	else if (type == GT) return "greater_than";
+// 	else if (type == LT) return "less_than";
+// 	else if (type == D_GT) return "double_greater_than";
+// 	else if (type == D_LT) return "double_less_than";
+// 	else if (type == MY_SPACE) return "space";
+// 	else if (type == DOLLAR) return "dollar";
+// 	else {
+// 		printf("bug: unhandled token type: %d\n", type);
+// 		exit(1);
+// 	}
+// }
+
+// void print_token(t_lexer *token) {
+// 	printf("%s(%s) ", token_type_to_string(token->type), token->content);
+// }
+
+// void print_tokens(t_lexer *tokens) {
+// 	while (tokens) {
+// 		print_token(tokens);
+// 		tokens = tokens->next;
+// 	}
+// 	printf("\n");
+// }
+
 
 
 split_by_pipe_result	split_by_pipe(t_lexer *tokens)
@@ -107,7 +206,7 @@ void handle_argv_tokens_sanity_check(t_lexer *tokens)
 	while (tokens)
 	{
 		if (tokens->type != STRING)
-			printf("ошибка\n");
+			printf("ошибка\n"); // надо написать чтобы выходил обратно в цикл 
 		tokens = tokens->next;
 	}
 }
@@ -180,46 +279,67 @@ t_command	*tokens_into_command(t_lexer *tokens)
 	handle_redirection_tokens(&tokens, command);
 	handle_argv_tokens(&tokens, command);
 
+	
+	// printf("Command after processing:\n\t");
+    // print_tokens(tokens);
+	// printf("\n");
+    // print_command(command);
+	// printf("\n");
 	// printf("Command after processing:\n\t");
 	// print_tokens(tokens);
-	// print_command(command);
+	//print_command(command);
 
 	return command;
 }
 
-void create_commands_from_tokens(t_minishell *shell)
-{
-	while (shell->lexer)
-	{
-		split_by_pipe_result result = split_by_pipe(shell->lexer);
+// void create_commands_from_tokens(t_minishell *shell)
+// {
+// 	while (shell->lexer)
+// 	{
+// 		split_by_pipe_result result = split_by_pipe(shell->lexer);
 
-		// printf("Command before processing:\n\t");
-		// print_tokens(result.command);
-		t_command *command = tokens_into_command(result.command);
-		(void)command;
-		shell->lexer = result.rest;
-	}
+// 		// printf("Command before processing:\n\t");
+// 		// print_tokens(result.command);
+// 		shell->commands = tokens_into_command(result.command);
+// 		// (void)command;
+// 		shell->lexer = result.rest;
+// 	}
+// 	printf("COMMANDS = \n");
+//     print_command(shell->commands);
+// 	shell->len = list_size(shell->commands);
+// }
+
+
+void add_command_to_list(t_command **list, t_command *new_command) {
+    if (*list == NULL) {
+        *list = new_command;
+    } else {
+        t_command *current = *list;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = new_command;
+    }
 }
 
+void create_commands_from_tokens(t_minishell *shell) {
+    shell->commands = NULL;
+    while (shell->lexer) {
+        split_by_pipe_result result = split_by_pipe(shell->lexer);
 
+        t_command *command = tokens_into_command(result.command);
+        add_command_to_list(&shell->commands, command);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        shell->lexer = result.rest;
+    }
+    // printf("COMMANDS = \n");
+    // t_command *current_command = shell->commands;
+    // while (current_command) {
+    //     // print_command(current_command);
+    //     current_command = current_command->next;
+    // }
+    shell->len = list_size(shell->commands);
+}
 
 
 // void add_command_to_list(t_command **cmd_list, t_command **last_cmd, t_command *new_cmd)
