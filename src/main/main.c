@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/11 18:35:51 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:09:41 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	init_data(t_minishell *shell)
 	shell->exit_code = 0;
 	shell->len = 0;
 	shell->stdin = dup(STDIN_FILENO);
-	shell->stdout = dup(STDOUT_FILENO); 
+	shell->stdout = dup(STDOUT_FILENO);
 	shell->f_success = 1;
 }
 
@@ -60,7 +60,7 @@ void	init_data(t_minishell *shell)
 // 	if(line == NULL)
 // 	{
 // 		free(line);
-// 		exit(1); // подумать какой код и как запишется 
+// 		exit(1); // подумать какой код и как запишется
 // 	}
 // 	add_history(line);
 // 	return(line);
@@ -169,6 +169,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	if(argc > 1)
 		exit (1);
+	rl_catch_signals = 0;
 	shell = (t_minishell *)malloc(sizeof(t_minishell));
 		if(!shell)
 			exit (1);
