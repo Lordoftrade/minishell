@@ -104,18 +104,18 @@ static int	follow_path(int choice, t_minishell *shell)
 
 int	shell_cd(char **args, t_minishell *shell)
 {
-	if (args[1] == NULL  || ft_strncmp(args[1], "~", 2) == 0)
+	if (args[1] == NULL || ft_strncmp(args[1], "~", 2) == 0)
 		return (follow_path(0, shell));
 	if (ft_strncmp(args[1], "-", 2) == 0)
-		return (follow_path(1, shell)); // 0 если ок, и -1 если не успешно
+		return (follow_path(1, shell));
 	else
 	{
 		if (change_oldpwd(shell) == FAILURE)
 			return (FAILURE);
 		if (chdir(args[1]) == -1)
 		{
-			//print_error(args); ???????
-			printf("cd: no such file or directory: %s\n", args[1]);
+			write(STDERR_FILENO, "minishell: cd: ", 15);
+			perror(args[1]);
 			return (FAILURE);
 		}
 		change_pwd(shell);
