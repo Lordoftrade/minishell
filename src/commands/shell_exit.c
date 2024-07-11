@@ -114,7 +114,6 @@ int	ft_is_num(const char *str)
 
 void	do_exit(long value)
 {
-	printf("EXIT FINISH, value = %d\n", (int)((unsigned char)value % 256)); // удалить по заверешению
 	exit((int)((unsigned char)value % 256));
 }
 
