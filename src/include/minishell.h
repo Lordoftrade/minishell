@@ -66,6 +66,12 @@ typedef struct s_token_lexer
 	struct s_token_lexer	*next;
 }					t_lexer;
 
+typedef struct
+{
+	t_lexer	*command;
+	t_lexer	*rest;
+} 			split_by_pipe_result;
+
 typedef struct s_command
 {
 	char				**argv;   // Аргументы команды
@@ -187,7 +193,6 @@ void	copy_over(t_lexer *current, t_lexer *new);
 void	change_current(t_lexer **current, t_lexer **previous);
 void	free_empty_token(t_lexer **token, t_minishell **shell);
 void	free_space(t_lexer **token, t_minishell **shell);
-void	create_commands_from_tokens(t_minishell **shell);
 void add_command_to_list(t_command **cmd_list, t_command **last_cmd, t_command *new_cmd);
 void handle_redirections_and_here_document(t_command *new_cmd, t_lexer **current);
 void fill_command_argv(t_command *cmd, t_lexer **current);
@@ -233,6 +238,18 @@ void	handle_output_redirection(t_command *new_cmd, t_lexer **current);
 void	handle_append_redirection(t_command *new_cmd, t_lexer **current);
 void	handle_redirections(t_command *new_cmd, t_lexer **current);
 void	handle_redirections_and_heredoc(t_command *new_cmd, t_lexer **current);
+
+
+void create_commands_from_tokens(t_minishell *shell);
+t_command	*tokens_into_command(t_lexer *tokens);
+void handle_argv_tokens(t_lexer **tokens, t_command *command);
+int count_argc(t_lexer *tokens);
+void handle_argv_tokens_sanity_check(t_lexer *tokens);
+void turn_single_quotes_into_strings(t_lexer *tokens);
+void handle_redirection_tokens(t_lexer **tokens, t_command *command);
+void handle_redirection_token(enum token_type type, t_command *command, t_lexer **tokens);
+void handle_redirection_token_helper(enum token_type type, char *string, t_command *command);
+split_by_pipe_result	split_by_pipe(t_lexer *tokens);
 
 
 void print_commands(t_minishell *shell);

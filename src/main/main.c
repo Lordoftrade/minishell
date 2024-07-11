@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/10 20:19:39 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:10:11 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,13 @@ void	display_prompt(t_minishell *shell)
     //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
     //     tem = tem->next;
     // }
-		check_sintax_redir(shell->lexer);
-		if(g_error == 0)
-		{
-			create_commands_from_tokens(&shell);
+		// check_sintax_redir(shell->lexer);
+		// if(g_error == 0)
+		// {
+			create_commands_from_tokens(shell);
 		// print_commands(shell);
 			minishell(shell);
-		}
+		// }
 		// print_commands(shell);
 		free_lexer(shell->lexer);
 		free_command_list(shell->commands);
