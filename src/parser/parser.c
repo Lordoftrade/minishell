@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:54:23 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/10 18:55:53 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:32:26 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	symbol_d_quote(t_lexer **token, t_minishell *shell)
 	free(string);
 }
 
-int	is_breaking_character(char	c)
+int	is_breaking_character(char c)
 {
 	if (c == ' ' || c == '\t' || c == '\n' || c == '$')
 		return (1);
@@ -64,8 +64,14 @@ void	symbol_dollar(t_lexer **token, t_minishell *shell)
 
 	string = ft_strdup((*token)->content);
 	i = 1;
-	// if (string[i] == '?')
-	// 	написать функцию по знаку вопроса
+	if (string[i] == '?') // $?
+	{
+		free((*token)->content);
+		(*token)->content = ft_itoa(g_error);
+		(*token)->type = STRING;
+		free(string);
+		return ;
+	}
 	if (is_breaking_character(string[i]) || string[i] == '\0')
 		(*token)->type = STRING;
 	else

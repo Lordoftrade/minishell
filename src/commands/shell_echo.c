@@ -42,10 +42,7 @@ int	shell_echo(char **args)
 	}
 	while (args[i] != NULL)
 	{
-		if (ft_strcmp(args[i], "$?") == 0)
-			printf("%d", g_error);
-		else
-			printf("%s", args[i]);
+		printf("%s", args[i]);
 		if (args[i + 1] != NULL)
 			printf(" ");
 		i++;
