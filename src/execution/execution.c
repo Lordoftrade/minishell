@@ -29,7 +29,7 @@ int	execute_implemented(char **args, t_minishell *shell)
 
 	result = 0;
 	if (ft_strcmp(args[0], "cd") == 0)
-		result = shell_cd(shell->commands->argv, shell); // но может возвращен быть и - 1 елси чдир не откроет (0 и 1 )
+		result = shell_cd(shell->commands->argv, shell);
 	if (ft_strcmp(args[0], "pwd") == 0)
 		result = shell_pwd();
 	if (ft_strcmp(args[0], "echo") == 0)
@@ -41,7 +41,10 @@ int	execute_implemented(char **args, t_minishell *shell)
 	if (ft_strcmp(args[0], "env") == 0)
 		result = shell_env(shell->env);
 	if (ft_strcmp(args[0], "exit") == 0)
+	{
 		shell_exit(shell->commands->argv);
+		result = 1;
+	}
 	g_error = result;
 	return (result);
 }
@@ -97,7 +100,7 @@ int	execute_command(t_minishell *shell)
 		result = execute_implemented(shell->commands->argv, shell); // что вернуть должно
 	else
 	{
-		if (shell->commands->argv[0][0] == '/' || shell->commands->argv[0][0] == '.' 
+		if (shell->commands->argv[0][0] == '/' || shell->commands->argv[0][0] == '.'
 			|| ft_strchr(shell->commands->argv[0], '/') != NULL)
 			return (ft_execve_file_and_path(shell->commands->argv, shell));
 		result = execute_bin(shell->commands->argv, shell);

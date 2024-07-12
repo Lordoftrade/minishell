@@ -6,7 +6,7 @@
 /*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/12 20:04:55 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/12 21:34:31 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_error_put(int code, char *com, char *arg, char *mesg)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(com, 2);
-	ft_putstr_fd(": `", 2);
+	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd(mesg, 2);
 	g_error = code;

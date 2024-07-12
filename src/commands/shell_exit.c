@@ -121,25 +121,25 @@ void	shell_exit(char **args) // добавляем ? t_minishell shell
 {
 	printf("exit\n");
 	if (!args[1])
-		do_exit(g_error); // или возврат текущей ошибки программы? но возвращает код текущей ошибки если есть? g_error ?
+		do_exit(g_error);
 	if (args[2])
 	{
 		if (ft_is_num(args[1]))
 		{
-			printf("minishell: exit: too many arguments\n"); // не выходит из программы НО установить ошибку на 1 ?
+			ft_error_put(1, args[0], "", "too many arguments\n");
 			g_error = 1;
 			return ;
 		}
 		else
 		{
-			printf("minishell: exit: %s: numeric argument required\n", args[1]); // выходит из программы
+			printf("minishell: exit: %s: numeric argument required\n", args[1]);
 			do_exit(2);
 		}
 	}
 	if (!ft_is_num(args[1]))
 	{
-		printf("minishell: exit: %s: numeric argument required\n", args[1]);
-		do_exit(2);
+		ft_error_put(1, args[0], args[1], ": numeric argument required\n");
+		do_exit(255);
 	}
 	check_long(args[1]);
 	do_exit(exit_atol(args[1]));
