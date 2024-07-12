@@ -52,7 +52,7 @@ char	**sort_env(char **export)
 	i = 0;
 	while (i < count)
 	{
-		env_array[i] = ft_strdup(export[i]); // библиотека
+		env_array[i] = ft_strdup(export[i]);
 		if (!env_array[i])
 		{
 			free_string_array(env_array); // выводим ошибку?
@@ -89,7 +89,7 @@ void	ft_export_while_varable(char **args, t_minishell *shell)
 	i = 1;
 	while (args[i])
 	{
-		if (is_valid_identifier(args[i]) == 1)
+		if (!is_valid_identifier(args[i]))
 			ft_error_put(1, args[0], args[i], "': not a valid identifier\n");
 		else
 		{

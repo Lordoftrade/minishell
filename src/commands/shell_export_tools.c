@@ -62,7 +62,7 @@ char	*add_quotes_to_value(const char *name, const char *value)
 	total_len = name_len + value_len + 4;
 	quoted_value = (char *)malloc(total_len);
 	if (!quoted_value)
-		return (NULL); // выход и статус - 1 ?
+		return (NULL);
 	ft_strlcpy(quoted_value, name, name_len + 1);
 	quoted_value[name_len] = '=';
 	quoted_value[name_len + 1] = '"';
@@ -80,17 +80,17 @@ int	is_valid_identifier(const char *str)
 	if (!str || !str[0] || str[0] == '=' || ft_isdigit(str[0]))
 	{
 		g_error = 1;
-		return (1);
+		return (0);
 	}
-	while (str[i])
+	while (str[i] && str[i] != '=')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_' && (i != 0 && str[i] != '='))
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 		{
 			g_error = 1;
-			return (1);
+			return (0);
 		}
 		i++;
 	}
 	g_error = 0;
-	return (0);
+	return (1);
 }
