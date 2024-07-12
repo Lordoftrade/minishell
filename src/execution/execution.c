@@ -96,8 +96,9 @@ int	execute_command(t_minishell *shell)
 {
 	int	result;
 
+	g_error = 0;
 	if (shell->commands->argv[0] && is_command_implemented(shell->commands->argv[0]))
-		result = execute_implemented(shell->commands->argv, shell); // что вернуть должно
+		result = execute_implemented(shell->commands->argv, shell);
 	else
 	{
 		if (shell->commands->argv[0][0] == '/' || shell->commands->argv[0][0] == '.'

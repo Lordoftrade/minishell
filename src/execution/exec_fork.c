@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_fork.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 23:21:00 by mgreshne          #+#    #+#             */
-/*   Updated: 2024/07/12 18:07:51 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/12 22:06:59 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ int	fork_and_execute(char *path_bin, char **args, char **env)
 	{
 		waitpid(pid, &status, 0);
 		signal(SIGINT, handle_sigint);
-		g_error = WEXITSTATUS(status);
+		if (WIFEXITED(status))
+			g_error = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_error = 128 + WTERMSIG(status);
 	}
-	return (SUCCESS);
+	return (g_error);
 }

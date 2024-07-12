@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_bin.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:21:00 by mgreshne          #+#    #+#             */
-/*   Updated: 2024/07/12 18:07:34 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/12 22:03:15 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	start_execve(char *path_bin, char **args, t_env *env_list)
 	if (!env)
 	{
 		perror("malloc");
-		return FAILURE;
+		return (FAILURE);
 	}
-	result =  fork_and_execute(path_bin, args, env);
+	result = fork_and_execute(path_bin, args, env);
 	free_string_array(env);
 	return (result);
 }
@@ -33,7 +33,7 @@ char *check_path_bin(char *bin, char *command)
 {
 	DIR				*dir;
 	struct dirent	*file;
-	char 			*path_bin;
+	char			*path_bin;
 
 	path_bin = NULL;
 	dir = opendir(bin);
@@ -55,8 +55,8 @@ char *check_path_bin(char *bin, char *command)
 
 char	**get_bin_paths(t_minishell *shell)
 {
-	char *path;;
-	char **bin_paths;
+	char	*path;;
+	char	**bin_paths;
 
 	path = get_env_value("PATH", shell->env);
 	bin_paths = ft_split(path, ':');
@@ -103,6 +103,7 @@ int	execute_bin(char **args, t_minishell *shell)
 	else
 	{
 		printf("minishell: %s: command not found\n", args[0]);
+		g_error = 127;
 		result = FAILURE;
 	}
 	free_string_array(bin);
