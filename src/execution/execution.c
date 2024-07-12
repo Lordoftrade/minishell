@@ -68,8 +68,8 @@ int	ft_execve_file_and_path(char **args, t_minishell *shell)
 	}
 	else
 	{
-		printf("minishell: %s: command not found\n", args[0]);
-		return (FAILURE);
+		ft_error_put(127, args[0], "", "command not found\n");
+		return (127);
 	}
 }
 
@@ -96,7 +96,7 @@ int	execute_command(t_minishell *shell)
 {
 	int	result;
 
-	g_error = 0;
+	//g_error = 0;
 	if (shell->commands->argv[0] && is_command_implemented(shell->commands->argv[0]))
 		result = execute_implemented(shell->commands->argv, shell);
 	else

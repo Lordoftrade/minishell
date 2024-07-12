@@ -6,7 +6,7 @@
 /*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:21:00 by mgreshne          #+#    #+#             */
-/*   Updated: 2024/07/12 22:03:15 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/12 23:09:56 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ int	execute_bin(char **args, t_minishell *shell)
 	}
 	else
 	{
-		printf("minishell: %s: command not found\n", args[0]);
+		ft_error_put(127, args[0], "", "command not found\n");
 		g_error = 127;
-		result = FAILURE;
+		result = 127;
 	}
 	free_string_array(bin);
 	return (result);
