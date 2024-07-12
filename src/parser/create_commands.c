@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:58:06 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/11 18:54:14 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:27:41 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void handle_redirection_token_helper(enum token_type type, char *string, t_comma
 void handle_redirection_token(enum token_type type, t_command *command, t_lexer **tokens)
 {
 	t_lexer *next_token = (*tokens)->next;
-	if (next_token == 0 || next_token->type != STRING)
+	if (next_token == 0)
 		printf("ошибка\n"); // замнеить на вывод ошибки 
 	char *string = next_token->content;
 	handle_redirection_token_helper(type, string, command);
@@ -335,7 +335,7 @@ void create_commands_from_tokens(t_minishell *shell) {
     // printf("COMMANDS = \n");
     // t_command *current_command = shell->commands;
     // while (current_command) {
-    //     // print_command(current_command);
+    //     print_command(current_command);
     //     current_command = current_command->next;
     // }
     shell->len = list_size(shell->commands);

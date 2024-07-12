@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:33:17 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/11 18:52:56 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:57:58 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,19 @@
 
 int redir_heredoc_pipe(t_command *cmd, int i)
 {
-    int fd;
+	int fd;
 
-    cmd->heredoc = create_heredoc_filename(i);
+	cmd->heredoc = create_heredoc_filename(i);
 
-    fd = open(cmd->heredoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd < 0) {
-        perror("Failed to open heredoc file");
-        return (1);
-    }
-    execute_heredoc(fd, cmd->delimiter);
-    close(fd);
-    return (0);
+	fd = open(cmd->heredoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		perror("Failed to open heredoc file");
+		return (1);
+	}
+	execute_heredoc(fd, cmd->delimiter);
+	close(fd);
+	return (0);
 }
 
 char	*create_heredoc_filename(int i)
@@ -104,7 +105,7 @@ void	execute_heredoc(int i, char *delimiter)
 	while (1)
 	{
 		input = readline("> ");
-		if (input == NULL) // Проверка на случай, если readline возвращает NULL
+		if (input == NULL)
 			break ;
 		if (strcmp(input, delimiter) == 0) //написать функцию 
 			break ;
@@ -125,7 +126,7 @@ int redir_heredoc(t_command **command)
 	fd = open(cmd->heredoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		// error(": No such file or directory\n", shell, 2); //
+		ft_error(1, ": No such file or directory\n");
 		return (1);
 	}
 	execute_heredoc(fd, cmd->delimiter);
@@ -133,7 +134,7 @@ int redir_heredoc(t_command **command)
 	fd = open(cmd->heredoc, O_RDONLY);
 	if (fd < 0)
 	{
-		// error(": No such file or directory\n", shell, 2);
+		ft_error(1, ": No such file or directory\n");
 		return (1);
 	}
 	unlink(cmd->heredoc);
@@ -155,18 +156,13 @@ int	run_redirect(t_command **current) // потом добавить t_minishell
 	return (0);
 }
 
-int	handling_redir(t_minishell **shell) // потом добавить t_command *commands,
+int	handling_redir(t_minishell **shell)
 {
 	t_command	*current;
 	int			res;
 
 	res = 0;
 	current = (*shell)->commands;
-	// if (bad_redirect_syntax(t))
-	// {
-	// 	pr_err(mh, 258, gemsg("", mh->emsg[15], "")); написать функцию для проверки синтаксиса и вывода ошибки
-	// 	return (258);
-	// }
 	while (check_redirect(current))
 	{
 		res = run_redirect(&current);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/11 21:09:41 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:24:52 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,6 @@ void	init_data(t_minishell *shell)
 	shell->f_success = 1;
 }
 
-// char	*ft_readline(void)
-// {
-// 	char	*line;
-
-// 	line = readline("minishell$ ");
-// 	if(line == NULL)
-// 	{
-// 		free(line);
-// 		exit(1); // подумать какой код и как запишется
-// 	}
-// 	add_history(line);
-// 	return(line);
-// }
 // void print_commands(t_minishell *shell)
 // {
 //     t_command *cmd = shell->commands;
@@ -103,12 +90,12 @@ void	minishell(t_minishell *shell)
 	int	res;
 
 	res = 0;
-	// printf("LEN = %d\n", shell->len);
 	if(check_redirect(shell->commands) && shell->len == 1)
 	{
 		res = handling_redir(&shell);
+		g_error = res;
 		if (check_argv(shell->commands) && list_size(shell->commands) && !res)
-			execute_command(shell);
+			g_error = execute_command(shell);
 		dup2(shell->stdout, STDOUT_FILENO);
 		dup2(shell->stdin, STDIN_FILENO);
 	}
@@ -118,8 +105,8 @@ void	minishell(t_minishell *shell)
 		dup2(shell->stdout, STDOUT_FILENO);
 		dup2(shell->stdin, STDIN_FILENO);
 	}
-	else if (check_argv(shell->commands) && !check_pipe(shell))
-		execute_command(shell);
+	else if (check_argv(shell->commands) && !check_pipe(shell) && !res)
+		g_error = execute_command(shell);
 }
 
 void	display_prompt(t_minishell *shell)
@@ -142,21 +129,21 @@ void	display_prompt(t_minishell *shell)
 		// line = ft_readline();
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
-	// t_lexer *tem = shell->lexer;
-    // while (tem) {
-    //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
-    //     tem = tem->next;
-    // }
-		// check_sintax_redir(shell->lexer);
-		// if(g_error == 0)
-		// {
+	// // t_lexer *tem = shell->lexer;
+    // // while (tem) {
+    // //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
+    // //     tem = tem->next;
+    // // }
+	// 	// check_sintax_redir(shell->lexer);
+	// 	// if(g_error == 0)
+	// 	// {
 		create_commands_from_tokens(shell);
-		// print_commands(shell);
+	// 	// // // print_commands(shell);
 		minishell(shell);
-		// }
-		// print_commands(shell);
-		// free_lexer(shell->lexer);
-		free_command_list(shell->commands);
+	// 	// // }
+	// 	// // print_commands(shell);
+	// 	// // free_lexer(shell->lexer);
+	free_command_list(shell->commands);
 		// system("leaks minishell");
 	}
 }
@@ -175,20 +162,6 @@ int	main(int argc, char **argv, char **env)
 			exit (1);
 	init_minishell(shell, env);
 	display_prompt(shell);
-	// while(1)
-	// {
-	// 	init_data(shell);
-	// 	line = ft_readline();
-	// 	ft_lexer(line, &shell);
-	// 	parser(&(shell->lexer), &shell);
-	// 	create_commands_from_tokens(&shell);
-	// 	// print_commands(shell);
-	// 	minishell(shell);
-	// 	// print_commands(shell);
-	// 	free_lexer(shell->lexer);
-	// 	free_command_list(shell->commands);
-	// 	system("leaks minishell");
-	// }
 	free_env_list(shell->env);
 	free_export(shell->export);
 	return (SUCCESS);

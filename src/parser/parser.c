@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:54:23 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/11 21:32:26 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/12 14:46:45 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	symbol_d_quote(t_lexer **token, t_minishell *shell)
 		errors_memory(shell, 1);
 	while (string[i])
 	{
-		if (string[i] == '$')
+		if (string[i] == '$' && string[i + 1] != ' ' && string[i + 1] != '\0')
 			process_dollar(string, &i, shell, &result);
 		else
 			process_other_chars(string, &i, &result);

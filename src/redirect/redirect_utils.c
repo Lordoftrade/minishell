@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 16:02:03 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/04 23:40:01 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:28:54 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,16 @@ int	gt(t_command **command)
 	
 	fd = open((*command)->output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		return(1);
+	{
+		perror((*command)->output);
+		return (1);
+	}
 	if ((i = dup2(fd, STDOUT_FILENO)) < 0)
-		return(1);
+	{
+		perror("dup2");
+		close(fd);
+		return (1);
+	}
 	return (0);
 }
 
@@ -33,14 +40,14 @@ int	d_gt(t_command **command)
 	fd = open((*command)->output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{
-		// perror("Failed to open output file");
-		return(1);
+		perror((*command)->output);
+		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) < 0)
 	{
-		// perror("Failed to redirect stdout");
+		perror("dup2");
 		close(fd);
-		return(1);
+		return (1);
 	}
 	return (0);
 }
@@ -56,7 +63,6 @@ int lt(t_command **command)
 	}
 	if (dup2(fd, STDIN_FILENO) < 0)
 	{
-		// perror("Failed to redirect stdin");
 		close(fd);
 		return (1);
 	}

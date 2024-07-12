@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:39:32 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/11 18:52:39 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:14:30 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,13 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell)
 {
 
 	if (curr->argv[0] && is_command_implemented(curr->argv[0]))
+	{
 		execute_implemented(curr->argv, shell); // что вернуть должно
+	}
 	else
+	{
 		execute_bin(curr->argv, shell);
+	}
 	return (0);
 }
 
@@ -67,17 +71,20 @@ int	create_and_execute_child(t_command *curr, int prev_fd, int fd[2], t_minishel
 		if (curr->D_LT)
 		{
 			heredoc_fd = open(curr->heredoc, O_RDONLY);
-			 if (heredoc_fd < 0) {
-                perror("Failed to open heredoc file");
-                exit(1);
-            }
+			 if (heredoc_fd < 0)
+				ft_error(1, "Failed to open heredoc file");
 			unlink(curr->heredoc);
-            dup2(heredoc_fd, STDIN_FILENO);
-            close(heredoc_fd);
+			dup2(heredoc_fd, STDIN_FILENO);
+			close(heredoc_fd);
 		}
 		if(curr->GT || curr->LT || curr->D_GT)
+		{
 			execute_redirect_pipe(curr);
-		execute_command_for_pipe(curr, shell); //добавить проверку что команда выполнилась
+		}
+		if(execute_command_for_pipe(curr, shell))
+		{
+
+		}
 		exit(0); 
 	}
 	return (pid);
@@ -108,21 +115,21 @@ void execute_pipeline_one_by_one(t_minishell *shell)
 	prev_fd = -1;
 	last_pid = -1;
 	int j = 0;
-	while (curr) {
-        if (curr->D_LT) {
-            if (redir_heredoc_pipe(curr, j))
-			{
-                ft_error(258, "Heredoc error\n");
-            }
-			j++;
-        }
-        curr = curr->next;
-    }
-    curr = shell->commands;
 	while (curr)
 	{
-		// if (curr->D_LT)
-		// 	redir_heredoc(&curr);
+		if (curr->D_LT)
+		{
+			if (redir_heredoc_pipe(curr, j))
+			{
+				ft_error(258, "Heredoc error\n");
+			}
+			j++;
+		}
+		curr = curr->next;
+	}
+	curr = shell->commands;
+	while (curr)
+	{
 		if(curr->next)
 		{
 			if (create_pipe(fd) == -1)
@@ -131,12 +138,6 @@ void execute_pipeline_one_by_one(t_minishell *shell)
 		last_pid = create_and_execute_child(curr, prev_fd, fd, shell);
 		handle_parent_process(&prev_fd, fd, &curr);
 	}
-	// while(i < shell->len)
-	// {
-	// 	wait(&(shell->exit_code));
-	// 	shell->exit_code = WEXITSTATUS(shell->exit_code);
-	// 	i++;
-	// }
 	while (i < shell->len)
 	{
 		pid = wait(&status);

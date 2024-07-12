@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:44:21 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/09 18:11:29 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:06:27 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,15 @@ void	dollar_token(char *str, int *i, t_minishell *shell)
 	t_lexer *new_token;
 
 	start = (*i);
-	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'|| str[*i] == '?' || str[*i] == '$'))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'|| str[*i] == '?'||  str[*i] == '$'))
+	{
+		if(str[*i] == '?')
+		{
+			(*i)++;
+			break;
+		}
 		(*i)++;
+	}
 	content = ft_strndup(str + start, *i - start);
 	if(!content)
 		errors_memory(shell, 1);

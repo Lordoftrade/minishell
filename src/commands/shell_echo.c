@@ -52,11 +52,3 @@ int	shell_echo(char **args)
 	return (SUCCESS);
 }
 
-/*либо
-while (args[i] != NULL)
-{
-	printf("%s", args[i]);
-	if (args[i + 1] != NULL)
-		printf(" ");
-	i++;
-}*/
