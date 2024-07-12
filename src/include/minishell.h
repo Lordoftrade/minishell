@@ -51,10 +51,10 @@ enum token_type
 	PIPE,
 	S_QUOTE, //'
 	D_QUOTE, //"
-	GT, //> 
-	LT, //< 
-	D_GT, //>> 
-	D_LT, // << 
+	GT, //>
+	LT, //<
+	D_GT, //>>
+	D_LT, // <<
 	MY_SPACE,
 	DOLLAR,
 };
@@ -160,6 +160,7 @@ void	free_env(t_env *env); // ?? наверное то же самое что и
 void	free_lexer(t_lexer *lexer);
 void	free_minishell(t_minishell *shell);
 void	ft_error(int error_code, char *errmsg);
+void	ft_error_put(int code, char *com, char *arg, char *mesg);
 
 char	*ft_readline(void);
 void	to_array(char *str, t_minishell *info);

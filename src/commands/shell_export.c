@@ -90,11 +90,10 @@ void	ft_export_while_varable(char **args, t_minishell *shell)
 	while (args[i])
 	{
 		if (is_valid_identifier(args[i]) == 1)
-			printf("minishell: export: '%s': not a valid identifier\n",
-				args[i]);
+			ft_error_put(1, args[0], args[i], "': not a valid identifier\n");
 		else
 		{
-			if (ft_strchr(args[i], '=')) // либфт
+			if (ft_strchr(args[i], '='))
 			{
 				if (is_in_env(shell->env, args[i]) == FAILURE)
 					add_env(args[i], shell->env);
@@ -113,6 +112,7 @@ void	ft_export_while_varable(char **args, t_minishell *shell)
 
 int	shell_export(char **args, t_minishell *shell)
 {
+	g_error = 0;
 	if (!args[1])
 	{
 		print_env_sort(shell->export);
