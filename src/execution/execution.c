@@ -29,20 +29,20 @@ int	execute_implemented(char **args, t_minishell *shell)
 
 	result = 0;
 	if (ft_strcmp(args[0], "cd") == 0)
-		result = shell_cd(shell->commands->argv, shell);
+		result = shell_cd(args, shell);
 	if (ft_strcmp(args[0], "pwd") == 0)
 		result = shell_pwd();
 	if (ft_strcmp(args[0], "echo") == 0)
-		result = shell_echo(shell->commands->argv);
+		result = shell_echo(args);
 	if (ft_strcmp(args[0], "export") == 0)
-		result = shell_export(shell->commands->argv, shell);
+		result = shell_export(args, shell);
 	if (ft_strcmp(args[0], "unset") == 0)
-		result = shell_unset(shell->commands->argv, shell);
+		result = shell_unset(args, shell);
 	if (ft_strcmp(args[0], "env") == 0)
 		result = shell_env(shell->env);
 	if (ft_strcmp(args[0], "exit") == 0)
 	{
-		shell_exit(shell->commands->argv);
+		shell_exit(args);
 		result = 1;
 	}
 	g_error = result;

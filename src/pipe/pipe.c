@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:39:32 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/12 18:14:30 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/13 02:00:56 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,22 @@
 int	execute_redirect_pipe(t_command *curr)
 {
 	if (curr && (curr->GT || curr->LT || curr->D_GT))
-		if(execute_redirects(&curr) == 0)
+		if(execute_redirects(&curr) == 1)
 			return(1);
 	return(0);
 }
 
-void	handle_parent_process(int *prev_fd, int fd[2], t_command **curr)
+void	handle_parent_process(int *prev_fd, int read, int write, t_command **curr)
 {
 	if (*prev_fd != -1)
 		close(*prev_fd);
-	*prev_fd = fd[0];
+	*prev_fd = read;
 	if ((*curr)->next)
-		close(fd[1]);
+		close(write);
 	*curr = (*curr)->next;
 }
 
-void	setup_child_pipes(int prev_fd, int fd[2], t_command *curr)
+void	setup_child_pipes(int prev_fd, int read, int write, t_command *curr)
 {
 	if (prev_fd != -1)
 	{
@@ -39,9 +39,9 @@ void	setup_child_pipes(int prev_fd, int fd[2], t_command *curr)
 	}
 	if (curr->next)
 	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
+		close(read);
+		dup2(write, STDOUT_FILENO);
+		close(write);
 	}
 }
 
@@ -54,7 +54,10 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell)
 	}
 	else
 	{
-		execute_bin(curr->argv, shell);
+		if (ft_strchr(curr->argv[0], '/') != NULL)
+			ft_execve_file_and_path(shell->commands->argv, shell);
+		else
+			execute_bin(curr->argv, shell);
 	}
 	return (0);
 }
@@ -67,7 +70,7 @@ int	create_and_execute_child(t_command *curr, int prev_fd, int fd[2], t_minishel
 	pid = fork();
 	if (pid == 0)
 	{
-		setup_child_pipes(prev_fd, fd, curr);
+		setup_child_pipes(prev_fd, fd[0], fd[1], curr);
 		if (curr->D_LT)
 		{
 			heredoc_fd = open(curr->heredoc, O_RDONLY);
@@ -79,7 +82,8 @@ int	create_and_execute_child(t_command *curr, int prev_fd, int fd[2], t_minishel
 		}
 		if(curr->GT || curr->LT || curr->D_GT)
 		{
-			execute_redirect_pipe(curr);
+			if (execute_redirect_pipe(curr) == 1)
+				exit(1);
 		}
 		if(execute_command_for_pipe(curr, shell))
 		{
@@ -136,7 +140,7 @@ void execute_pipeline_one_by_one(t_minishell *shell)
 				exit(EXIT_FAILURE); //подумать как должно выходить 
 		}
 		last_pid = create_and_execute_child(curr, prev_fd, fd, shell);
-		handle_parent_process(&prev_fd, fd, &curr);
+		handle_parent_process(&prev_fd, fd[0], fd[1], &curr);
 	}
 	while (i < shell->len)
 	{

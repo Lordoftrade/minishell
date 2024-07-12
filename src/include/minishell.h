@@ -219,8 +219,8 @@ int	check_pipe(t_minishell *shell);
 void execute_pipeline_one_by_one(t_minishell *shell);
 int	create_pipe(int fd[2]);
 int	create_and_execute_child(t_command *curr, int prev_fd, int fd[2], t_minishell *shell);
-void	setup_child_pipes(int prev_fd, int fd[2], t_command *curr);
-void	handle_parent_process(int *prev_fd, int fd[2], t_command **curr);
+void	setup_child_pipes(int prev_fd, int read, int write, t_command *curr);
+void	handle_parent_process(int *prev_fd, int read, int write, t_command **curr);
 int	execute_redirect_pipe(t_command *curr);
 int	execute_command_for_pipe(t_command *curr, t_minishell *shell);
 int	is_command_implemented(char *cmd);
@@ -251,6 +251,7 @@ void handle_redirection_tokens(t_lexer **tokens, t_command *command);
 void handle_redirection_token(enum token_type type, t_command *command, t_lexer **tokens);
 void handle_redirection_token_helper(enum token_type type, char *string, t_command *command);
 split_by_pipe_result	split_by_pipe(t_lexer *tokens);
+int	ft_execve_file_and_path(char **args, t_minishell *shell);
 
 
 void print_commands(t_minishell *shell);
