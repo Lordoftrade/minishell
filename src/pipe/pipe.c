@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:39:32 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/13 02:00:56 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/13 17:35:50 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,21 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell)
 
 	if (curr->argv[0] && is_command_implemented(curr->argv[0]))
 	{
-		execute_implemented(curr->argv, shell); // что вернуть должно
+		if(execute_implemented(curr->argv, shell))
+			return (1);
 	}
 	else
 	{
 		if (ft_strchr(curr->argv[0], '/') != NULL)
-			ft_execve_file_and_path(shell->commands->argv, shell);
+		{
+			if(ft_execve_file_and_path(shell->commands->argv, shell))
+				return(1);
+		}
 		else
-			execute_bin(curr->argv, shell);
+		{
+			if(execute_bin(curr->argv, shell))
+				return (1);
+		}
 	}
 	return (0);
 }
@@ -87,7 +94,7 @@ int	create_and_execute_child(t_command *curr, int prev_fd, int fd[2], t_minishel
 		}
 		if(execute_command_for_pipe(curr, shell))
 		{
-
+			exit(1);
 		}
 		exit(0); 
 	}
@@ -146,7 +153,7 @@ void execute_pipeline_one_by_one(t_minishell *shell)
 	{
 		pid = wait(&status);
 		if (pid == last_pid)
-			shell->exit_code = WEXITSTATUS(status);
+			g_error = WEXITSTATUS(status);
 		i++;
 	}
 }
