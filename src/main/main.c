@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 01:39:25 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/14 02:27:44 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	display_prompt(t_minishell *shell)
 		}
 	// 	// // print_commands(shell);
 		free_command_list(shell->commands);
-		system("leaks minishell");
+		// system("leaks minishell");
 	}
 }
 

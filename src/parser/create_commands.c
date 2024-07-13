@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:58:06 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/14 01:38:27 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/14 02:25:58 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,16 +143,22 @@ void handle_redirection_token_helper(enum token_type type, char *string, t_comma
 	if (type == GT)
 	{
 		command->GT = 1;
+		if(command->output)
+			free(command->output);
 		command->output = string;
 	}
 	else if (type == LT)
 	{
 		command->LT = 1;
+		if(command->input)
+			free(command->input);
 		command->input = string;
 	}
 	else if (type == D_GT)
 	{
 		command->D_GT = 1;
+		if(command->output)
+			free(command->output);
 		command->output = string;
 	}
 	else if (type == D_LT)
@@ -160,21 +166,37 @@ void handle_redirection_token_helper(enum token_type type, char *string, t_comma
 		command->D_LT = 1;
 		command->delimiter = string;
 	}
-	else
-	{
-		printf("bug: unhandled token type: %d\n", type);
-		exit(1); // заменить на ретерн
-	}
 }
 
+// void handle_redirection_token(enum token_type type, t_command *command, t_lexer **tokens)
+// {
+// 	t_lexer *next_token = (*tokens)->next;
+// 	if (next_token == 0)
+// 		printf("ошибка\n"); // замнеить на вывод ошибки 
+// 	char *string = next_token->content;
+// 	handle_redirection_token_helper(type, string, command);
+// 	*tokens = next_token->next;
+// }
 void handle_redirection_token(enum token_type type, t_command *command, t_lexer **tokens)
 {
-	t_lexer *next_token = (*tokens)->next;
-	if (next_token == 0)
-		printf("ошибка\n"); // замнеить на вывод ошибки 
-	char *string = next_token->content;
-	handle_redirection_token_helper(type, string, command);
-	*tokens = next_token->next;
+    t_lexer *current_token = *tokens;
+    t_lexer *next_token = current_token->next;
+    
+    if (next_token == NULL)
+    {
+        printf("ошибка\n"); // заменить на вывод ошибки 
+        return;
+    }
+    
+    char *string = next_token->content;
+    handle_redirection_token_helper(type, string, command);
+
+    *tokens = next_token->next;
+    
+    // Освобождаем память для текущего и следующего токенов, но не для их содержимого
+    free(current_token->content);
+    free(current_token);
+    free(next_token);
 }
 
 void handle_redirection_tokens(t_lexer **tokens, t_command *command)
@@ -232,7 +254,7 @@ void handle_argv_tokens(t_lexer **tokens, t_command *command)
 
 	int argc = count_argc(*tokens);
 
-	command->argv = malloc(sizeof(command->argv) * (argc + 1));
+	command->argv = malloc(sizeof(char *) * (argc + 1));
 	command->argv[argc] = NULL;
 
 	int i = 0;
