@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	check_long_max(const char *str)
+int	check_long_max(const char *str, t_minishell *shell)
 {
 	unsigned long long	result;
 	int					i;
@@ -28,7 +28,7 @@ int	check_long_max(const char *str)
 		if (result > 9223372036854775807)
 		{
 			printf("minishell: exit: %s: numeric argument required\n", str);
-			do_exit(2);
+			do_exit(2, shell);
 		}
 	}
 	return (0);
@@ -43,7 +43,7 @@ int	check_long_min(const char *str)
 
 	line = ft_strdup(str);
 	if (!line)
-		return (1); // Если strdup не удался, вернем ошибку
+		return (1);
 	tmp = line;
 	if (*tmp == '-')
 		tmp++;
@@ -60,14 +60,14 @@ int	check_long_min(const char *str)
 		return (0);
 }
 
-int	check_long(const char *str)
+int	check_long(const char *str, t_minishell *shell)
 {
 	int	overflow;
 
 	if (str[0] == '-')
 		overflow = check_long_min(str);
 	else
-		overflow = check_long_max(str);
+		overflow = check_long_max(str, shell);
 	return (overflow);
 }
 
@@ -112,16 +112,18 @@ int	ft_is_num(const char *str)
 	return (1);
 }
 
-void	do_exit(long value)
+void	do_exit(long value, t_minishell *shell)
 {
+	free_minishell(shell);
+	//system("leaks minishell");
 	exit((int)((unsigned char)value % 256));
 }
 
-void	shell_exit(char **args) // добавляем ? t_minishell shell
+void	shell_exit(char **args, t_minishell *shell)
 {
 	printf("exit\n");
 	if (!args[1])
-		do_exit(g_error);
+		do_exit(g_error, shell);
 	if (args[2])
 	{
 		if (ft_is_num(args[1]))
@@ -133,14 +135,14 @@ void	shell_exit(char **args) // добавляем ? t_minishell shell
 		else
 		{
 			printf("minishell: exit: %s: numeric argument required\n", args[1]);
-			do_exit(2);
+			do_exit(2, shell);
 		}
 	}
 	if (!ft_is_num(args[1]))
 	{
 		ft_error_put(1, args[0], args[1], ": numeric argument required\n");
-		do_exit(255);
+		do_exit(255, shell);
 	}
-	check_long(args[1]);
-	do_exit(exit_atol(args[1]));
+	check_long(args[1], shell);
+	do_exit(exit_atol(args[1]), shell);
 }

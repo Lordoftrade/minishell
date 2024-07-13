@@ -42,7 +42,7 @@ int	execute_implemented(char **args, t_minishell *shell)
 		result = shell_env(shell->env);
 	if (ft_strcmp(args[0], "exit") == 0)
 	{
-		shell_exit(args);
+		shell_exit(args, shell);
 		result = 1;
 	}
 	g_error = result;

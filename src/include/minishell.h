@@ -128,7 +128,7 @@ int			shell_echo(char **args);
 int			shell_export(char **args, t_minishell *shell);
 int			shell_unset(char **args, t_minishell *shell);
 int			shell_env(t_env *env);
-void		shell_exit(char **args);
+void		shell_exit(char **args, t_minishell *shell);
 
 int			execute_command(t_minishell *shell);
 int			start_execve(char *path_bin, char **args, t_env *env_list);
@@ -150,7 +150,7 @@ int			count_elements(char **array);
 void		copy_array(char **dest, char **src);
 int			update_export_var(char ***export, char *env_name, char *quoted_value, char *env_value_str);
 
-void		do_exit(long value);
+void		do_exit(long value, t_minishell *shell);
 
 int			ft_strcmp(const char *s1, const char *s2);
 
