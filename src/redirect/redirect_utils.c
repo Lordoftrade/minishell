@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 16:02:03 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/13 18:17:46 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 02:37:05 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	gt(t_command **command)
 	fd = open((*command)->output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		ft_error_redir((*command)->input, "No such file or directory\n");
+		ft_error_redir((*command)->output, "No such file or directory\n");
 		return (1);
 	}
 	if ((i = dup2(fd, STDOUT_FILENO)) < 0)
@@ -40,7 +40,7 @@ int	d_gt(t_command **command)
 	fd = open((*command)->output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{
-		ft_error_redir((*command)->input, "No such file or directory\n");
+		ft_error_redir((*command)->output, "No such file or directory\n");
 		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) < 0)

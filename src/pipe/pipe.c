@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:39:32 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/13 18:49:55 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 02:46:20 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell)
 	{
 		if (ft_strchr(curr->argv[0], '/') != NULL)
 		{
-			if(ft_execve_file_and_path(shell->commands->argv, shell))
+			if(ft_execve_file_and_path(curr->argv, shell))
 				return(1);
 		}
 		else

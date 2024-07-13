@@ -6,7 +6,7 @@
 /*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/14 02:21:35 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/14 02:49:09 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ void	free_command(t_command *command)
 				free(command->argv[i++]);
 			free(command->argv);
 		}
-		// if (command->input)
-		// 	free(command->input);
-		// if (command->output)
-		// 	free(command->output);
+		if (command->input)
+			free(command->input);
+		if (command->output)
+			free(command->output);
 		if (command->delimiter)
 			free(command->delimiter);
 		free(command);
