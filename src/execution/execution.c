@@ -54,6 +54,11 @@ int	ft_execve_file_and_path(char **args, t_minishell *shell)
 	char	*path_bin;
 	int		result;
 
+	if (access(args[0], F_OK) != 0)
+	{
+		ft_error_put(127, args[0], "", "No such file or directory\n");
+		return (127);
+	}
 	if (access(args[0], X_OK) == 0)
 	{
 		if (is_directory(args[0]))
@@ -73,7 +78,7 @@ int	ft_execve_file_and_path(char **args, t_minishell *shell)
 	}
 	else
 	{
-		ft_error_put(127, args[0], "", "No such file or directory\n");
+		ft_error_put(126, args[0], "", "Permission denied\n");
 		return (g_error);
 	}
 }
