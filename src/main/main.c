@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/13 19:01:45 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 01:39:25 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,6 @@ void	display_prompt(t_minishell *shell)
     // }
 		if(check_sintax_redir(shell->lexer))
 		{
-			//free_lexer(shell->lexer);
-			free_command_list(shell->commands);
 			g_error = 1;
 		}
 		else
@@ -147,9 +145,8 @@ void	display_prompt(t_minishell *shell)
 			minishell(shell);
 		}
 	// 	// // print_commands(shell);
-	//free_lexer(shell->lexer);
-	free_command_list(shell->commands);
-		// system("leaks minishell");
+		free_command_list(shell->commands);
+		system("leaks minishell");
 	}
 }
 

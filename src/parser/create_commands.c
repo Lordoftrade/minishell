@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:58:06 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/12 18:27:41 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 01:38:27 by lelichik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,15 +233,27 @@ void handle_argv_tokens(t_lexer **tokens, t_command *command)
 	int argc = count_argc(*tokens);
 
 	command->argv = malloc(sizeof(command->argv) * (argc + 1));
-	command->argv[argc] = 0;
+	command->argv[argc] = NULL;
 
 	int i = 0;
-	while (*tokens)
-	{
-		command->argv[i] = (*tokens)->content;
-		i++;
-		tokens = &(*tokens)->next;
-	}
+	t_lexer *current_token;
+    while (*tokens)
+    {
+        current_token = *tokens;
+        command->argv[i] = current_token->content;
+        i++;
+        *tokens = current_token->next;
+
+        // Освобождение памяти для текущего токена, но не для его содержимого
+        // так как оно используется в command->argv
+        free(current_token);
+    }
+	// while (*tokens)
+	// {
+	// 	command->argv[i] = (*tokens)->content;
+	// 	i++;
+	// 	tokens = &(*tokens)->next;
+	// }
 }
 
 t_command *create_new_command()
@@ -322,22 +334,22 @@ void add_command_to_list(t_command **list, t_command *new_command) {
     }
 }
 
-void create_commands_from_tokens(t_minishell *shell) {
-    shell->commands = NULL;
-    while (shell->lexer) {
-        split_by_pipe_result result = split_by_pipe(shell->lexer);
+void create_commands_from_tokens(t_minishell *shell)
+{
+	split_by_pipe_result result;
+	t_command *command;
 
-        t_command *command = tokens_into_command(result.command);
-        add_command_to_list(&shell->commands, command);
-
-        shell->lexer = result.rest;
+	command = NULL;
+	shell->commands = NULL;
+	
+	while (shell->lexer)
+	{
+		result = split_by_pipe(shell->lexer);
+		command = tokens_into_command(result.command);
+		add_command_to_list(&shell->commands, command);
+		shell->lexer = result.rest;
     }
-    // printf("COMMANDS = \n");
-    // t_command *current_command = shell->commands;
-    // while (current_command) {
-    //     print_command(current_command);
-    //     current_command = current_command->next;
-    // }
+
     shell->len = list_size(shell->commands);
 }
 

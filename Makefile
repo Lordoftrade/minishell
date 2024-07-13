@@ -21,7 +21,7 @@ LIBS = -L$(LIBFT) -lft ./read_lib/lib/libreadline.a -lncurses
 INCLUDES = -I$(SRCDIR)/include -I$(LIBFT) -I./read_lib/include
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 RM = rm -rf
 
 all: $(NAME)

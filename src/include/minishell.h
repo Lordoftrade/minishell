@@ -94,7 +94,6 @@ typedef struct s_minishell
 	t_lexer			*lexer;
 	t_command		*commands;
 	char			**export;
-	// char			*args[1024];
 	int				stdin;
 	int				stdout;
 	int				len;
