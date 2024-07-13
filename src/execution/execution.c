@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char		*join_path_com(const char *bin, const char *com)
+char	*join_path_com(const char *bin, const char *com)
 {
 	char	*tmp;
 	char	*path;
@@ -25,7 +25,7 @@ char		*join_path_com(const char *bin, const char *com)
 
 int	execute_implemented(char **args, t_minishell *shell)
 {
-	int result;
+	int	result;
 
 	result = 0;
 	if (ft_strcmp(args[0], "cd") == 0)
@@ -56,6 +56,11 @@ int	ft_execve_file_and_path(char **args, t_minishell *shell)
 
 	if (access(args[0], X_OK) == 0)
 	{
+		if (is_directory(args[0]))
+		{
+			ft_error_put(126, args[0], "", "is a directory\n");
+			return (g_error);
+		}
 		path_bin = ft_strdup(args[0]);
 		if (path_bin == NULL)
 		{
@@ -68,8 +73,8 @@ int	ft_execve_file_and_path(char **args, t_minishell *shell)
 	}
 	else
 	{
-		ft_error_put(127, args[0], "", "command not found\n");
-		return (127);
+		ft_error_put(127, args[0], "", "No such file or directory\n");
+		return (g_error);
 	}
 }
 

@@ -6,14 +6,29 @@
 /*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 23:21:00 by mgreshne          #+#    #+#             */
-/*   Updated: 2024/07/12 22:06:59 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/13 17:00:00 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	is_directory(const char *path)
+{
+	struct stat	statbuf;
+
+	if (stat(path, &statbuf) != 0)
+		return (0);
+	return (S_ISDIR(statbuf.st_mode));
+}
+
 void	run_execve(char *path_bin, char **args, char **env)
 {
+	if (is_directory(path_bin))
+	{
+		ft_error_put(126, args[0], "", "is a directory\n");
+		free_string_array(env);
+		exit(g_error);
+	}
 	if (execve(path_bin, args, env) == -1)
 	{
 		perror("execve");

@@ -27,6 +27,7 @@
 # include <dirent.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 
 # define FAILURE 1
 # define SUCCESS 0
@@ -136,6 +137,7 @@ char		*join_path_com(const char *bin, const char *com);
 int			execute_bin(char **args, t_minishell *shell);
 int			fork_and_execute(char *path_bin, char **args, char **env);
 void		run_execve(char *path_bin, char **args, char **env);
+int			is_directory(const char *path);
 
 void		*ft_free_chr(void *ptr);
 void		free_string_array(char **array);

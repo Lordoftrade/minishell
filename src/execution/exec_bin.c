@@ -6,7 +6,7 @@
 /*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:21:00 by mgreshne          #+#    #+#             */
-/*   Updated: 2024/07/12 23:09:56 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/13 17:05:04 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	start_execve(char *path_bin, char **args, t_env *env_list)
 	return (result);
 }
 
-char *check_path_bin(char *bin, char *command)
+char	*check_path_bin(char *bin, char *command)
 {
 	DIR				*dir;
 	struct dirent	*file;
@@ -55,7 +55,7 @@ char *check_path_bin(char *bin, char *command)
 
 char	**get_bin_paths(t_minishell *shell)
 {
-	char	*path;;
+	char	*path;
 	char	**bin_paths;
 
 	path = get_env_value("PATH", shell->env);
@@ -109,4 +109,3 @@ int	execute_bin(char **args, t_minishell *shell)
 	free_string_array(bin);
 	return (result);
 }
-
