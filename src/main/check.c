@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:10:42 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/11 19:14:38 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/13 18:58:51 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	check_argv(t_command *cmd)
 	return (1);
 }
 
-void	check_sintax_redir(t_lexer *lexer)
+int	check_sintax_redir(t_lexer *lexer)
 {
 	t_lexer	*current;
 	t_lexer	*next;
@@ -84,8 +84,14 @@ void	check_sintax_redir(t_lexer *lexer)
 			(next->type == GT || next->type == D_GT || next->type == LT || next->type == D_LT))
 		{
 			ft_error(258, "syntax error near unexpected token\n");
-			return ;
+			return (1);
+		}
+		if(current->type == PIPE && next->type == PIPE)
+		{
+			ft_error(258, "syntax error near unexpected token\n");
+			return (1);
 		}
 		current = next;
 	}
+	return(0);
 }

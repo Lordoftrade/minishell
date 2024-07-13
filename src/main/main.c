@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/13 01:15:59 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/13 19:01:45 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,20 +129,25 @@ void	display_prompt(t_minishell *shell)
 		// line = ft_readline();
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
-	// // t_lexer *tem = shell->lexer;
-    // // while (tem) {
-    // //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
-    // //     tem = tem->next;
-    // // }
-	// 	// check_sintax_redir(shell->lexer);
-	// 	// if(g_error == 0)
-	// 	// {
-		create_commands_from_tokens(shell);
-		// print_commands(shell);
-		minishell(shell);
-	// 	// // }
+	// t_lexer *tem = shell->lexer;
+    // while (tem) {
+    //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
+    //     tem = tem->next;
+    // }
+		if(check_sintax_redir(shell->lexer))
+		{
+			//free_lexer(shell->lexer);
+			free_command_list(shell->commands);
+			g_error = 1;
+		}
+		else
+		{
+			create_commands_from_tokens(shell);
+			// print_commands(shell);
+			minishell(shell);
+		}
 	// 	// // print_commands(shell);
-	// 	// // free_lexer(shell->lexer);
+	//free_lexer(shell->lexer);
 	free_command_list(shell->commands);
 		// system("leaks minishell");
 	}

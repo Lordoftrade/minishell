@@ -228,7 +228,7 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell);
 int	is_command_implemented(char *cmd);
 int	execute_implemented(char **args, t_minishell *shell);
 int	execute_bin(char **args, t_minishell *shell);
-void	check_sintax_redir(t_lexer *lexer);
+int	check_sintax_redir(t_lexer *lexer);
 
 int redir_heredoc_pipe(t_command *cmd, int i);
 char	*create_heredoc_filename(int i);
@@ -254,7 +254,7 @@ void handle_redirection_token(enum token_type type, t_command *command, t_lexer 
 void handle_redirection_token_helper(enum token_type type, char *string, t_command *command);
 split_by_pipe_result	split_by_pipe(t_lexer *tokens);
 int	ft_execve_file_and_path(char **args, t_minishell *shell);
-
+void	ft_error_redir(char *arg, char *mesg);
 
 void print_commands(t_minishell *shell);
 

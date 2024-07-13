@@ -48,6 +48,13 @@ void	errors_memory(t_minishell *shell, int error_code)
 	printf("Error: Unable to allocate memory.\n");
 	exit(error_code);
 }
+void	ft_error_redir(char *arg, char *mesg)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(mesg, 2);
+}
 
 void	ft_error_put(int code, char *com, char *arg, char *mesg)
 {

@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 16:02:03 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/12 18:28:54 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/13 18:17:46 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ int	gt(t_command **command)
 	fd = open((*command)->output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		perror((*command)->output);
+		ft_error_redir((*command)->input, "No such file or directory\n");
 		return (1);
 	}
 	if ((i = dup2(fd, STDOUT_FILENO)) < 0)
 	{
-		perror("dup2");
+		ft_error_redir("dup2", "Duplication error\n");
 		close(fd);
 		return (1);
 	}
@@ -40,12 +40,12 @@ int	d_gt(t_command **command)
 	fd = open((*command)->output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 	{
-		perror((*command)->output);
+		ft_error_redir((*command)->input, "No such file or directory\n");
 		return (1);
 	}
 	if (dup2(fd, STDOUT_FILENO) < 0)
 	{
-		perror("dup2");
+		ft_error_redir("dup2", "Duplication error\n");
 		close(fd);
 		return (1);
 	}
@@ -58,11 +58,12 @@ int lt(t_command **command)
 	fd = open((*command)->input, O_RDONLY);
 	if (fd < 0)
 	{
-		perror((*command)->input);
+		ft_error_redir((*command)->input, "No such file or directory\n");
 		return (1);
 	}
 	if (dup2(fd, STDIN_FILENO) < 0)
 	{
+		ft_error_redir("dup2", "Duplication error\n");
 		close(fd);
 		return (1);
 	}
