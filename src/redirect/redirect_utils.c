@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 16:02:03 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 20:59:10 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:26:14 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,17 @@ void	delete_redirect(t_command **command)
 		{
 			free((*command)->input);
 			(*command)->input = NULL;
-			if ((*command)->LT)
-				(*command)->LT = 0;
+			if ((*command)->lt)
+				(*command)->lt = 0;
 		}
 		if ((*command)->output)
 		{
 			free((*command)->output);
 			(*command)->output = NULL;
-			if ((*command)->GT)
-				(*command)->GT = 0;
-			else if ((*command)->D_GT)
-				(*command)->D_GT = 0;
+			if ((*command)->gt)
+				(*command)->gt = 0;
+			else if ((*command)->d_gt)
+				(*command)->d_gt = 0;
 		}
 	}
 }
@@ -96,7 +96,7 @@ void	delete_heredoc(t_command *command)
 {
 	free(command->delimiter);
 	free(command->heredoc);
-	command->D_LT = 0;
+	command->d_lt = 0;
 	command->delimiter = NULL;
 	command->heredoc = NULL;
 }

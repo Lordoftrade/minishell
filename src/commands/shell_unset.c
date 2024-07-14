@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-char	**create_new_array_without_element(char **array, int remove_index, int count)
+char	**create_new_array_without_element(char **array,
+		int remove_index, int count)
 {
 	char	**new_array;
 	int		j;
@@ -50,13 +51,13 @@ int	find_element_index(char **array, const char *name)
 	len = ft_strlen(name);
 	while (array[i])
 	{
-		if (ft_strncmp(array[i], name, len) == 0 && (array[i][len] == '=' || array[i][len] == '\0'))
+		if (ft_strncmp(array[i], name, len) == 0
+			&& (array[i][len] == '=' || array[i][len] == '\0'))
 			return (i);
 		i++;
 	}
 	return (-1);
 }
-
 
 int	remove_from_export(char ***export, const char *name)
 {

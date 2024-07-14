@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/14 18:31:08 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:29:29 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ void	ft_error(int error_code, char *errmsg)
 	write(2, "minishell: ", 12);
 	ft_putstr_fd(errmsg, 2);
 }
+
 void	ft_contral_d(t_minishell *shell)
 {
-			printf("exit\n");
-			free_minishell(shell);
-			exit(g_error);
+	printf("exit\n");
+	free_minishell(shell);
+	exit(g_error);
 }

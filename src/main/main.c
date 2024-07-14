@@ -6,7 +6,7 @@
 /*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 22:27:45 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:27:36 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ void	display_prompt(t_minishell *shell)
 		add_history(line);
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
-		if (check_sintax_redir(shell->lexer) || check_syntax_redir_part2(shell->lexer))
+		if (check_sintax_redir(shell->lexer)
+			|| check_syntax_redir_part2(shell->lexer))
 			free_sintax_error(1, shell->lexer);
 		else
 		{

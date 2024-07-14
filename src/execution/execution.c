@@ -55,23 +55,16 @@ int	ft_execve_file_and_path(char **args, t_minishell *shell)
 	int		result;
 
 	if (access(args[0], F_OK) != 0)
-	{
-		ft_error_put(127, args[0], "", "No such file or directory\n");
-		return (127);
-	}
+		return (ft_error_put(127, args[0], "",
+				"No such file or directory\n"), 127);
 	if (access(args[0], X_OK) == 0)
 	{
 		if (is_directory(args[0]))
-		{
-			ft_error_put(126, args[0], "", "is a directory\n");
-			return (g_error);
-		}
+			return (ft_error_put(126, args[0], "",
+					"is a directory\n"), g_error);
 		path_bin = ft_strdup(args[0]);
 		if (path_bin == NULL)
-		{
-			perror("malloc");
-			return (FAILURE);
-		}
+			errors_memory(shell, 1);
 		result = start_execve(path_bin, args, shell->env);
 		free(path_bin);
 		return (result);
@@ -106,12 +99,13 @@ int	execute_command(t_minishell *shell)
 {
 	int	result;
 
-	//g_error = 0;
-	if (shell->commands->argv[0] && is_command_implemented(shell->commands->argv[0]))
+	if (shell->commands->argv[0]
+		&& is_command_implemented(shell->commands->argv[0]))
 		result = execute_implemented(shell->commands->argv, shell);
 	else
 	{
-		if (shell->commands->argv[0][0] == '/' || shell->commands->argv[0][0] == '.'
+		if (shell->commands->argv[0][0] == '/'
+			|| shell->commands->argv[0][0] == '.'
 			|| ft_strchr(shell->commands->argv[0], '/') != NULL)
 			return (ft_execve_file_and_path(shell->commands->argv, shell));
 		result = execute_bin(shell->commands->argv, shell);

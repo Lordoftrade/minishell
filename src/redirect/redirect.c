@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 14:33:17 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/14 20:56:38 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:26:43 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	do_redir(t_command **c)
 {
-	if ((*c) && ((*c)->GT || (*c)->LT || (*c)->D_GT))
+	if ((*c) && ((*c)->gt || (*c)->lt || (*c)->d_gt))
 	{
 		if (execute_redirects(c))
 		{
@@ -76,7 +76,7 @@ int	redir_heredoc(t_command **command)
 
 int	run_redirect(t_command **current)
 {
-	if ((*current)->D_LT)
+	if ((*current)->d_lt)
 	{
 		if (redir_heredoc(current) != 0)
 			return (1);

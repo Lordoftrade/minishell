@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands_3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 19:33:30 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 21:21:56 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:14:30 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_redirection_token(enum token_type type,
+void	handle_redirection_token(enum e_token_type type,
 		t_command *command, t_lexer **tokens)
 {
 	t_lexer	*current_token;

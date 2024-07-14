@@ -90,4 +90,3 @@ char	*get_env_value(char *arg, t_env *env)
 	}
 	return (ft_strdup(""));
 }
-

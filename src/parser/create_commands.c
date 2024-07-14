@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:58:06 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/14 19:36:20 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:22:39 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-split_by_pipe_result	split_by_pipe(t_lexer *tokens)
+t_split_pipe	split_by_pipe(t_lexer *tokens)
 {
-	split_by_pipe_result	result;
-	t_lexer					*next_token;
+	t_split_pipe	result;
+	t_lexer			*next_token;
 
 	result.command = 0;
 	result.rest = 0;
@@ -49,10 +49,10 @@ t_command	*create_new_command(t_minishell *shell)
 	new_cmd->output = NULL;
 	new_cmd->delimiter = NULL;
 	new_cmd->heredoc = NULL;
-	new_cmd->D_GT = 0;
-	new_cmd->D_LT = 0;
-	new_cmd->GT = 0;
-	new_cmd->LT = 0;
+	new_cmd->d_gt = 0;
+	new_cmd->d_lt = 0;
+	new_cmd->gt = 0;
+	new_cmd->lt = 0;
 	new_cmd->pipe = 0;
 	new_cmd->next = NULL;
 	return (new_cmd);
@@ -90,8 +90,8 @@ void	add_command_to_list(t_command **list, t_command *new_command)
 
 void	create_commands_from_tokens(t_minishell *shell)
 {
-	split_by_pipe_result	result;
-	t_command				*command;
+	t_split_pipe	result;
+	t_command		*command;
 
 	command = NULL;
 	shell->commands = NULL;

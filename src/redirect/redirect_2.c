@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 20:48:31 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 20:59:35 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:25:31 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int	check_redirect(t_command *command)
 		return (0);
 	while (command->next)
 	{
-		if (command->GT || command->LT || command->D_GT || command->D_LT)
+		if (command->gt || command->lt || command->d_gt || command->d_lt)
 			return (1);
 		command = command->next;
 	}
-	if (command->GT || command->LT || command->D_GT || command->D_LT)
+	if (command->gt || command->lt || command->d_gt || command->d_lt)
 		return (1);
 	return (0);
 }
@@ -63,11 +63,11 @@ char	*create_heredoc_filename(int i)
 
 int	execute_redirects(t_command **command)
 {
-	if ((*command)->GT)
+	if ((*command)->gt)
 		return (gt(command));
-	else if ((*command)->D_GT)
+	else if ((*command)->d_gt)
 		return (d_gt(command));
-	else if ((*command)->LT)
+	else if ((*command)->lt)
 		return (lt(command));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 19:15:25 by mgreshne          #+#    #+#             */
-/*   Updated: 2024/07/14 22:32:10 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:36:11 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@ char	*create_full_arg(char *key, char *current_value, char *new_value)
 {
 	char	*full_arg;
 
-	full_arg = malloc(ft_strlen(key) + ft_strlen(current_value) + ft_strlen(new_value) + 2);
+	full_arg = malloc(ft_strlen(key) + ft_strlen(current_value)
+			+ ft_strlen(new_value) + 2);
 	if (!full_arg)
 		return (NULL);
 	ft_strlcpy(full_arg, key, ft_strlen(key) + 1);
 	ft_strlcat(full_arg, "=", ft_strlen(key) + 2);
-	ft_strlcat(full_arg, current_value, ft_strlen(full_arg) + ft_strlen(current_value) + 1);
-	ft_strlcat(full_arg, new_value, ft_strlen(full_arg) + ft_strlen(new_value) + 1);
+	ft_strlcat(full_arg, current_value, ft_strlen(full_arg)
+		+ ft_strlen(current_value) + 1);
+	ft_strlcat(full_arg, new_value, ft_strlen(full_arg)
+		+ ft_strlen(new_value) + 1);
 	return (full_arg);
 }
 
@@ -77,4 +80,3 @@ void	export_concatenation(char *arg, t_minishell *shell)
 	add_or_update_variable(full_arg, shell);
 	free(full_arg);
 }
-

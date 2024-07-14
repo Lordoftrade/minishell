@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 19:51:08 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 20:47:43 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:24:20 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	setup_child_pipes(int prev_fd, int read, int write,
 
 int	execute_redirect_pipe(t_command *curr)
 {
-	if (curr && (curr->GT || curr->LT || curr->D_GT))
+	if (curr && (curr->gt || curr->lt || curr->d_gt))
 		if (execute_redirects(&curr) == 1)
 			return (1);
 	return (0);
@@ -72,7 +72,7 @@ int	execute_command_for_pipe(t_command *curr, t_minishell *shell)
 
 void	execute_child_command(t_command *curr, t_minishell *shell)
 {
-	if (curr->GT || curr->LT || curr->D_GT)
+	if (curr->gt || curr->lt || curr->d_lt)
 	{
 		if (execute_redirect_pipe(curr) == 1)
 			exit(1);

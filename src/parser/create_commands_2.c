@@ -3,52 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:21:50 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 21:16:34 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:23:14 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_output_redirection(enum token_type type,
+void	handle_output_redirection(enum e_token_type type,
 		char *string, t_command *command)
 {
 	if (type == GT)
 	{
-		command->GT = 1;
+		command->gt = 1;
 		if (command->output)
 			free(command->output);
 		command->output = string;
 	}
 	else if (type == D_GT)
 	{
-		command->D_GT = 1;
+		command->d_gt = 1;
 		if (command->output)
 			free(command->output);
 		command->output = string;
 	}
 }
 
-void	handle_input_redirection(enum token_type type,
+void	handle_input_redirection(enum e_token_type type,
 		char *string, t_command *command)
 {
 	if (type == LT)
 	{
-		command->LT = 1;
+		command->lt = 1;
 		if (command->input)
 			free(command->input);
 		command->input = string;
 	}
 	else if (type == D_LT)
 	{
-		command->D_LT = 1;
+		command->d_lt = 1;
 		command->delimiter = string;
 	}
 }
 
-void	handle_redirection_token_helper(enum token_type type,
+void	handle_redirection_token_helper(enum e_token_type type,
 		char *string, t_command *command)
 {
 	if (type == GT || type == D_GT)
@@ -63,8 +63,8 @@ void	handle_redirection_token_helper(enum token_type type,
 
 void	handle_argv_tokens(t_lexer **tokens, t_command *command)
 {
-	int	argc;
-	int	i;
+	int		argc;
+	int		i;
 	t_lexer	*current_token;
 
 	handle_argv_tokens_sanity_check(*tokens);

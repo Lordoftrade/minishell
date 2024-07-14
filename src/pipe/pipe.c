@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 18:39:32 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/14 20:46:58 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:24:38 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	create_and_execute_child(t_command *curr, int prev_fd,
 	if (pid == 0)
 	{
 		setup_child_pipes(prev_fd, fd[0], fd[1], curr);
-		if (curr->D_LT)
+		if (curr->d_lt)
 		{
 			heredoc_fd = open(curr->heredoc, O_RDONLY);
 			if (heredoc_fd < 0)
@@ -46,7 +46,7 @@ void	process_heredocs(t_command *commands)
 	j = 0;
 	while (curr)
 	{
-		if (curr->D_LT)
+		if (curr->d_lt)
 		{
 			if (redir_heredoc_pipe(curr, j))
 			{

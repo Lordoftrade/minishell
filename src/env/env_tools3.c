@@ -17,13 +17,13 @@ char	**env_list_to_array(t_env *env_list)
 	char	**env_array;
 	size_t	count;
 	t_env	*current;
-	size_t	i; 
+	size_t	i;
 
 	count = count_env(env_list);
 	current = env_list;
 	env_array = (char **)malloc((count + 1) * sizeof(char *));
 	if (!env_array)
-		return NULL;
+		return (NULL);
 	current = env_list;
 	i = 0;
 	while (i < count)
@@ -32,7 +32,7 @@ char	**env_list_to_array(t_env *env_list)
 		current = current->next;
 	}
 	env_array[count] = NULL;
-	return env_array;
+	return (env_array);
 }
 
 t_env	*create_env_node(char *value)

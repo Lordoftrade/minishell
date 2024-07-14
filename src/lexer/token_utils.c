@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 19:01:06 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 18:13:30 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:14:59 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_lexer	*create_new_token(enum token_type type, char *content, t_minishell *sh)
+t_lexer	*create_new_token(enum e_token_type type,
+		char *content, t_minishell *sh)
 {
 	t_lexer	*new_token;
 
