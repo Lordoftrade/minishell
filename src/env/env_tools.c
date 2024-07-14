@@ -56,7 +56,7 @@ char	*env_value(char *value)
 	len_alloc = len_env_value(value) + 1;
 	env_value = (char *)malloc(sizeof(char) * len_alloc);
 	if (!env_value)
-		return (NULL); // или меняем глобальный статус? и выходим из программы
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (value[i] && value[i] != '=')
@@ -81,7 +81,7 @@ char	*get_env_value(char *arg, t_env *env)
 	{
 		getenv_name(env_name, env->value);
 		if (ft_strncmp(arg, env_name, arg_len) == 0
-			&& env->value[arg_len] == '=') // либфт!!
+			&& env->value[arg_len] == '=')
 		{
 			value = env_value(env->value);
 			return (value);

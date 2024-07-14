@@ -51,7 +51,7 @@ int	update_export_var(char ***export, char *env_name, char *quoted_value, char *
 		{
 			free((*export)[i]);
 			if (quoted_value)
-				(*export)[i] = ft_strdup(quoted_value); // может не надо снова выделять память
+				(*export)[i] = ft_strdup(quoted_value);
 			else
 				(*export)[i] = ft_strdup(env_name);
 			free(env_value_str);

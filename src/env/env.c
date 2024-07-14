@@ -41,7 +41,7 @@ char	*env_value(char *value)
 	len_alloc = len_env_value(value) + 1;
 	env_value = malloc(sizeof(char) * len_alloc);
 	if (!env_value)
-		return (NULL); // или меняем глобальный статус? и выходим из программы
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (value[i] && value[i] != '=')
@@ -73,7 +73,7 @@ char	*getenv_name(char *dest, const char *src)
 
 char	*get_env_value(char *arg, t_env *env)
 {
-	char	env_name[BUFF_SIZE]; //1024 задано в хедере define  2048 
+	char	env_name[BUFF_SIZE];
 	char	*value;
 	size_t	arg_len;
 

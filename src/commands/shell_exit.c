@@ -101,7 +101,7 @@ int	ft_is_num(const char *str)
 	i = 0;
 	if (str == NULL)
 		return (0);
-	if (str[0] == '-' || str[0] == '+') // надо ли? или будет положительно число
+	if (str[0] == '-' || str[0] == '+')
 		i++;
 	while (str[i])
 	{
@@ -115,7 +115,7 @@ int	ft_is_num(const char *str)
 void	do_exit(long value, t_minishell *shell)
 {
 	free_minishell(shell);
-	//system("leaks minishell");
+	system("leaks minishell");
 	exit((int)((unsigned char)value % 256));
 }
 
@@ -129,7 +129,6 @@ void	shell_exit(char **args, t_minishell *shell)
 		if (ft_is_num(args[1]))
 		{
 			ft_error_put(1, args[0], "", "too many arguments\n");
-			g_error = 1;
 			return ;
 		}
 		else

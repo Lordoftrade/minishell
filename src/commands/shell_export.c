@@ -27,7 +27,7 @@ void	bubble_sort_env(char **env_array, size_t env_count)
 		j = 0;
 		while (j < env_count - i - 1)
 		{
-			if (ft_strcmp(array[j], array[j + 1]) > 0) // написать код или подумать из либфт
+			if (ft_strcmp(array[j], array[j + 1]) > 0)
 			{
 				temp = array[j];
 				array[j] = array[j + 1];
@@ -55,7 +55,7 @@ char	**sort_env(char **export)
 		env_array[i] = ft_strdup(export[i]);
 		if (!env_array[i])
 		{
-			free_string_array(env_array); // выводим ошибку?
+			free_string_array(env_array);
 			return (NULL);
 		}
 		i++;

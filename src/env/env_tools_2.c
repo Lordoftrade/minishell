@@ -12,41 +12,6 @@
 
 #include "minishell.h"
 
-//удалить и добавить либфт!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-/*int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
-int	ft_isalnum(int c)
-{
-	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
-		|| (c >= '0' && c <= '9'))
-		return (1);
-	return (0);
-}*/
-
-/*char *ft_strjoin(char const *s1, char const *s2)
-{
-    if (s1 == NULL || s2 == NULL)
-        return NULL;
-
-    size_t len1 = strlen(s1);
-    size_t len2 = strlen(s2);
-    char *new = malloc(len1 + len2 + 1);
-
-    if (!new)
-        return NULL;
-
-    strcpy(new, s1);
-    strcpy(new + len1, s2);
-
-    return new;
-}
-/// удалсить и добавить либфт*/
-
 int	add_env(const char *value, t_env *env)
 {
 	t_env	*new;
@@ -56,13 +21,13 @@ int	add_env(const char *value, t_env *env)
 		return (FAILURE);
 	if (env && env->value == NULL)
 	{
-		env->value = ft_strdup(value); // надо ли добавлять код если функция не выделила память?
+		env->value = ft_strdup(value);
 		return (SUCCESS);
 	}
 	new = malloc(sizeof(t_env));
 	if (!new)
-		return (-1); // вывод ошибки и что делать, раз память не выделена?
-	new->value = ft_strdup(value); // надо ли добавлять код если функция не выделила память?
+		return (-1);
+	new->value = ft_strdup(value);
 	new->next = NULL;
 	cur = env;
 	while (cur->next != NULL)
@@ -101,7 +66,7 @@ int	is_in_env(t_env *env, char *args)
 			ft_free_chr(env->value);
 			env->value = ft_strdup(args);
 			if (!env->value)
-				return (FAILURE); // или жругая ошибка?
+				return (FAILURE);
 			return (SUCCESS);
 		}
 		env = env->next;

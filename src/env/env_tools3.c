@@ -29,7 +29,6 @@ char	**env_list_to_array(t_env *env_list)
 	while (i < count)
 	{
 		env_array[i++] = ft_strdup(current->value);
-		// если не сработало нало ли осовбождать!
 		current = current->next;
 	}
 	env_array[count] = NULL;
@@ -46,7 +45,7 @@ t_env	*create_env_node(char *value)
 		perror("Failed to allocate memory");
 		exit(EXIT_FAILURE);
 	}
-	new_node->value = ft_strdup(value); // заменить на либфт
+	new_node->value = ft_strdup(value);
 	if (!new_node->value)
 	{
 		perror("Failed to duplicate string");

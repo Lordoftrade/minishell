@@ -22,7 +22,7 @@ char	**create_new_array_without_element(char **array, int remove_index, int coun
 	k = 0;
 	new_array = (char **)malloc(sizeof(char *) * count);
 	if (!new_array)
-		return NULL; // какую ошибку возвращать*??? perror?
+		return NULL;
 	while (array[j])
 	{
 		if (j != remove_index)
@@ -30,8 +30,6 @@ char	**create_new_array_without_element(char **array, int remove_index, int coun
 			new_array[k] = array[j];
 			k++;
 		}
-		/*else
-			free(array[j]);*/ //надо или нет???
 		j++;
 	}
 	new_array[count - 1] = NULL;
@@ -51,7 +49,7 @@ int	find_element_index(char **array, const char *name)
 			return (i);
 		i++;
 	}
-	return (-1); // Элемент не найден
+	return (-1);
 }
 
 
@@ -70,7 +68,7 @@ int	remove_from_export(char ***export, const char *name)
 	new_export = create_new_array_without_element(*export, i, count);
 	if (!new_export)
 		return (FAILURE);
-	free(*export); // не будет ли освобождаться то что уже освобождено??????
+	free(*export);
 	*export = new_export;
 	return (SUCCESS);
 }
