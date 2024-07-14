@@ -50,12 +50,12 @@ enum token_type
 {
 	STRING,
 	PIPE,
-	S_QUOTE, //'
-	D_QUOTE, //"
-	GT, //>
-	LT, //<
-	D_GT, //>>
-	D_LT, // <<
+	S_QUOTE,
+	D_QUOTE,
+	GT,
+	LT,
+	D_GT,
+	D_LT,
 	MY_SPACE,
 	DOLLAR,
 };
@@ -75,9 +75,9 @@ typedef struct
 
 typedef struct s_command
 {
-	char				**argv;   // Аргументы команды
-	char				*input;   // Файл для перенаправления ввода (если есть)
-	char				*output;  // Файл для перенаправления вывода (если есть)
+	char				**argv;
+	char				*input;
+	char				*output;
 	char				*delimiter;
 	char				*heredoc;
 	int					LT;
@@ -233,6 +233,7 @@ int	is_command_implemented(char *cmd);
 int	execute_implemented(char **args, t_minishell *shell);
 int	execute_bin(char **args, t_minishell *shell);
 int	check_sintax_redir(t_lexer *lexer);
+void	handle_dollar_question(t_lexer **token, char *string);
 
 int redir_heredoc_pipe(t_command *cmd, int i);
 char	*create_heredoc_filename(int i);
@@ -240,15 +241,15 @@ char	*create_heredoc_filename(int i);
 
 void	errors_memory(t_minishell *shell, int error_code);
 
-void	handle_input_redirection(t_command *new_cmd, t_lexer **current);
-void	handle_output_redirection(t_command *new_cmd, t_lexer **current);
+void	handle_input_redirection(enum token_type type, char *string, t_command *command);
+void	handle_output_redirection(enum token_type type, char *string, t_command *command);
 void	handle_append_redirection(t_command *new_cmd, t_lexer **current);
 void	handle_redirections(t_command *new_cmd, t_lexer **current);
 void	handle_redirections_and_heredoc(t_command *new_cmd, t_lexer **current);
 
 
 void create_commands_from_tokens(t_minishell *shell);
-t_command	*tokens_into_command(t_lexer *tokens);
+t_command	*tokens_into_command(t_lexer *tokens, t_minishell *shell);
 void handle_argv_tokens(t_lexer **tokens, t_command *command);
 int count_argc(t_lexer *tokens);
 void handle_argv_tokens_sanity_check(t_lexer *tokens);
@@ -259,6 +260,10 @@ void handle_redirection_token_helper(enum token_type type, char *string, t_comma
 split_by_pipe_result	split_by_pipe(t_lexer *tokens);
 int	ft_execve_file_and_path(char **args, t_minishell *shell);
 void	ft_error_redir(char *arg, char *mesg);
+void	ft_contral_d(t_minishell *shell);
+void	execute_child_command(t_command *curr, t_minishell *shell);
+void	free_sintax_error(int exit_code, t_lexer *lexer);
+int	check_syntax_redir_part2(t_lexer *lexer);
 
 void print_commands(t_minishell *shell);
 

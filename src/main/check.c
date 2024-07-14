@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:10:42 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/13 18:58:51 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 21:44:23 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,20 @@ int	check_sintax_redir(t_lexer *lexer)
 	while (current && current->next)
 	{
 		next = current->next;
-		if ((current->type == GT || current->type == D_GT || current->type == LT || current->type == D_LT) &&
-			(next->type == GT || next->type == D_GT || next->type == LT || next->type == D_LT))
+		if ((current->type == GT || current->type == D_GT || current->type == LT
+				|| current->type == D_LT) && (next->type == GT
+				|| next->type == D_GT || next->type == LT
+				|| next->type == D_LT))
 		{
 			ft_error(258, "syntax error near unexpected token\n");
 			return (1);
 		}
-		if(current->type == PIPE && next->type == PIPE)
+		if (current->type == PIPE && next->type == PIPE)
 		{
 			ft_error(258, "syntax error near unexpected token\n");
 			return (1);
 		}
 		current = next;
 	}
-	return(0);
+	return (0);
 }

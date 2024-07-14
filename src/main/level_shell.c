@@ -11,60 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-static int	nbr_len(int nbr)
-{
-	int	len;
-
-	len = (nbr <= 0);
-	while (nbr)
-	{
-		nbr /= 10;
-		len++;
-	}
-	return (len);
-}
-
-static char	*ft_from_nbr_to_str(char *str, int n, int len)
-{
-	long long	nbr;
-
-	nbr = n;
-	if (n < 0)
-	{
-		str[0] = '-';
-		nbr *= -1;
-	}
-	str[len] = '\0';
-	len--;
-	while (nbr)
-	{
-		str[len] = (nbr % 10) + '0';
-		nbr = nbr / 10;
-		len--;
-	}
-	return (str);
-}
-
-char	*itoa(int n)
-{
-	char	*str;
-	int		len;
-
-	len = nbr_len(n);
-	str = (char *)malloc(sizeof(char) * (len + 1));
-	if (!str)
-		return (NULL);
-	if (n == 0)
-	{
-		str[len--] = '\0';
-		str[len] = '0';
-	}
-	else
-		ft_from_nbr_to_str(str, n, len);
-	return (str);
-}
-*/
 
 void	change_lvl(t_env *env)
 {
@@ -76,20 +22,36 @@ void	change_lvl(t_env *env)
 
 	var_name_len = 0;
 	shlvl_value = get_env_value("SHLVL", env);
-	level = ft_atoi(shlvl_value) + 1; // изменить на либфт
+	level = ft_atoi(shlvl_value) + 1;
 	ft_free_chr(shlvl_value);
 	while (env)
 	{
 		getenv_name(env_name, env->value);
 		var_name_len = ft_strlen(env_name);
-		if (ft_strncmp("SHLVL", env_name, var_name_len) == 0) // SHLVL && SHLVLA
+		if (ft_strncmp("SHLVL", env_name, var_name_len) == 0)
 		{
 			ft_free_chr(env->value);
 			new_lvl = ft_itoa(level);
-			env->value = ft_strjoin("SHLVL=", new_lvl);  // либфт не не забыть
+			env->value = ft_strjoin("SHLVL=", new_lvl);
 			ft_free_chr(new_lvl);
 			return ;
 		}
 		env = env->next;
 	}
+}
+
+int	check_syntax_redir_part2(t_lexer *lexer)
+{
+	t_lexer	*current;
+
+	current = lexer;
+	while (current && current->next)
+		current = current->next;
+	if (current && (current->type == GT || current->type == D_GT
+			|| current->type == LT || current->type == D_LT))
+	{
+		ft_error(258, "syntax error near unexpected token `newline'\n");
+		return (1);
+	}
+	return (0);
 }

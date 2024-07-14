@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 18:02:02 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/14 21:41:22 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,45 +52,12 @@ void	init_data(t_minishell *shell)
 	shell->f_success = 1;
 }
 
-void print_commands(t_minishell *shell)
-{
-    t_command *cmd = shell->commands;
-    while (cmd)
-    {
-        // printf("Command: %d\n", cmd->type);
-        printf("Arguments:\n");
-        char **arg = cmd->argv;
-        while (*arg)
-        {
-            printf("  %s\n", *arg);
-            arg++;
-        }
-        if (cmd->input)
-            printf("Input redirection: %s\n", cmd->input);
-        if (cmd->output)
-            printf("Output redirection: %s\n", cmd->output);
-		if (cmd->delimiter)
-            printf("Delimetr: %s\n", cmd->delimiter);
-		if (cmd->LT)
-			printf("LT: %d\n", cmd->LT);
-		if (cmd->GT)
-			printf("GT: %d\n", cmd->GT);
-		if (cmd->D_LT)
-			printf("D_LT: %d\n", cmd->D_LT);
-		if (cmd->D_GT)
-			printf("D_GT: %d\n", cmd->D_GT);
-        printf("\n");
-
-        cmd = cmd->next;
-    }
-}
-
 void	minishell(t_minishell *shell)
 {
 	int	res;
 
 	res = 0;
-	if(check_redirect(shell->commands) && shell->len == 1)
+	if (check_redirect(shell->commands) && shell->len == 1)
 	{
 		res = handling_redir(&shell);
 		g_error = res;
@@ -120,50 +87,33 @@ void	display_prompt(t_minishell *shell)
 		init_data(shell);
 		line = readline(RESET GREEN "minishell" RED "$ " RESET);
 		if (line == NULL)
-		{
-			printf("exit\n");
-			free_minishell(shell);
-			//system("leaks minishell");
-			//очистка всего  clean_up
-			exit(g_error);
-		}
+			ft_contral_d(shell);
 		add_history(line);
-		// line = ft_readline();
 		ft_lexer(line, &shell);
 		parser(&(shell->lexer), &shell);
-	// t_lexer *tem = shell->lexer;
-    // while (tem) {
-    //     printf("Token type new: %d, content new: %s\n", tem->type, tem->content);
-    //     tem = tem->next;
-    // }
-		if(check_sintax_redir(shell->lexer))
-		{
-			g_error = 1;
-		}
+		if (check_sintax_redir(shell->lexer) || check_syntax_redir_part2(shell->lexer))
+			free_sintax_error(1, shell->lexer);
 		else
 		{
 			create_commands_from_tokens(shell);
-			// print_commands(shell);
 			minishell(shell);
 		}
-	// 	// // print_commands(shell);
 		free_command_list(shell->commands);
-		//system("leaks minishell");
+		system("leaks minishell");
 	}
 }
 
-
 int	main(int argc, char **argv, char **env)
 {
-	t_minishell *shell;
+	t_minishell	*shell;
 
 	(void)argv;
-	if(argc > 1)
+	if (argc > 1)
 		exit (1);
 	rl_catch_signals = 0;
 	shell = (t_minishell *)malloc(sizeof(t_minishell));
-		if(!shell)
-			exit (1);
+	if (!shell)
+		exit(1);
 	init_minishell(shell, env);
 	display_prompt(shell);
 	free_env_list(shell->env);

@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:54:23 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/12 14:46:45 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 19:44:11 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	process_other_chars(char *string, int *i, char **result)
 {
-	char *temp;
+	char	*temp;
 
 	temp = ft_strndup(&string[*i], 1);
 	*result = ft_mystrjoin(*result, temp);
@@ -32,7 +32,7 @@ void	symbol_d_quote(t_lexer **token, t_minishell *shell)
 	string = ft_strdup((*token)->content);
 	if (!string)
 		errors_memory(shell, 1);
-	result = ft_strdup(""); // Инициализируем пустой результат
+	result = ft_strdup("");
 	if (!result)
 		errors_memory(shell, 1);
 	while (string[i])
@@ -64,14 +64,8 @@ void	symbol_dollar(t_lexer **token, t_minishell *shell)
 
 	string = ft_strdup((*token)->content);
 	i = 1;
-	if (string[i] == '?') // $?
-	{
-		free((*token)->content);
-		(*token)->content = ft_itoa(g_error);
-		(*token)->type = STRING;
-		free(string);
-		return ;
-	}
+	if (string[i] == '?')
+		handle_dollar_question(token, string);
 	if (is_breaking_character(string[i]) || string[i] == '\0')
 		(*token)->type = STRING;
 	else
@@ -88,18 +82,18 @@ void	symbol_dollar(t_lexer **token, t_minishell *shell)
 	free(string);
 }
 
-
 void	parser(t_lexer **tokens, t_minishell **shell)
 {
-	if((*shell)->f_success == 1)
+	t_lexer	*tmp;
+
+	if ((*shell)->f_success == 1)
 	{
-		t_lexer	*tmp;
 		tmp = *tokens;
-		while(tmp != NULL)
+		while (tmp != NULL)
 		{
-			if(tmp->type == DOLLAR)
+			if (tmp->type == DOLLAR)
 				symbol_dollar(&tmp, *shell);
-			if(tmp->type == D_QUOTE)
+			if (tmp->type == D_QUOTE)
 				symbol_d_quote(&tmp, *shell);
 			tmp = tmp->next;
 		}

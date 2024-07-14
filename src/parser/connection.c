@@ -6,23 +6,21 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:32:36 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/09 20:13:57 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 20:05:08 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void concatenate_nodes(t_lexer *current, t_minishell **shell)
+void	concatenate_nodes(t_lexer *current, t_minishell **shell)
 {
-	t_lexer *new;
-	int i = 0;
+	t_lexer	*new;
+	int		i;
 
+	i = 0;
 	new = (t_lexer *)malloc(sizeof(t_lexer));
 	if (!new)
-	{
-		perror("Failed to allocate memory for token"); // написать функцию с очисткой и выходом
-		exit(EXIT_FAILURE);
-	}
+		errors_memory((*shell), 1);
 	new->type = STRING;
 	new->content = ft_mystrjoin(current->content, current->next->content);
 	if (current == (*shell)->lexer)
@@ -38,17 +36,20 @@ void concatenate_nodes(t_lexer *current, t_minishell **shell)
 
 void	connect_tokens(t_lexer **token, t_minishell **shell)
 {
-	t_lexer *current;
+	t_lexer	*current;
 
 	current = *token;
 	while (current != NULL && current->next != NULL)
 	{
-		if ((current->type == STRING || current->type == S_QUOTE) && (current->next->type == STRING || current->next->type == S_QUOTE))
+		if ((current->type == STRING || current->type == S_QUOTE)
+			&& (current->next->type == STRING
+				|| current->next->type == S_QUOTE))
 			concatenate_nodes(current, shell);
 		else
 			current = current->next;
 	}
 }
+
 void	change_current(t_lexer **current, t_lexer **previous)
 {
 	*previous = *current;
@@ -57,10 +58,10 @@ void	change_current(t_lexer **current, t_lexer **previous)
 
 void	free_empty_token(t_lexer **token, t_minishell **shell)
 {
-	t_lexer *current;
-	t_lexer *previous;
-	t_lexer *tmp;
-	 
+	t_lexer	*current;
+	t_lexer	*previous;
+	t_lexer	*tmp;
+
 	current = *token;
 	previous = NULL;
 	while (current != NULL)
@@ -83,10 +84,10 @@ void	free_empty_token(t_lexer **token, t_minishell **shell)
 
 void	free_space(t_lexer **token, t_minishell **shell)
 {
-	t_lexer *current;
-	t_lexer *previous;
-	t_lexer *tmp;
-	 
+	t_lexer	*current;
+	t_lexer	*previous;
+	t_lexer	*tmp;
+
 	current = *token;
 	previous = NULL;
 	while (current != NULL)

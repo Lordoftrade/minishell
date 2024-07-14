@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 18:19:18 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/11 21:35:17 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/14 19:48:42 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 char	*open_dollar(char *str, int *i, t_minishell *shell)
 {
-	int	start;
-	char *var_name;
-	char *env_value;
+	int		start;
+	char	*var_name;
+	char	*env_value;
 
-	if (str[*i + 1] == '?') //  $?
+	if (str[*i + 1] == '?')
 	{
 		(*i) += 2;
 		env_value = ft_itoa(g_error);
@@ -48,3 +48,10 @@ void	process_dollar(char *string, int *i, t_minishell *shell, char **result)
 	}
 }
 
+void	handle_dollar_question(t_lexer **token, char *string)
+{
+	free((*token)->content);
+	(*token)->content = ft_itoa(g_error);
+	(*token)->type = STRING;
+	free(string);
+}

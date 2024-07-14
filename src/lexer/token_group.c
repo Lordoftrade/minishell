@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:44:21 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/12 15:06:27 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:12:18 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ void	lt_token(char *str, int *i, t_minishell *shell)
 {
 	int		start;
 	char	*content;
-	t_lexer *new_token;
+	t_lexer	*new_token;
 
 	start = (*i);
-	if(str[*i] && str[*i + 1] == '<')
+	if (str[*i] && str[*i + 1] == '<')
 		(*i) += 2;
-	else 
+	else
 		(*i)++;
 	content = ft_strndup(str + start, *i - start);
-	if(!content)
+	if (!content)
 		errors_memory(shell, 1);
 	if (str[start] && str[start + 1] == '<')
 		new_token = create_new_token(D_LT, content, shell);
@@ -38,15 +38,15 @@ void	gt_token(char *str, int *i, t_minishell *shell)
 {
 	int		start;
 	char	*content;
-	t_lexer *new_token;
+	t_lexer	*new_token;
 
 	start = (*i);
-	if(str[*i] && str[*i + 1] == '>')
+	if (str[*i] && str[*i + 1] == '>')
 		(*i) += 2;
-	else 
+	else
 		(*i)++;
 	content = ft_strndup(str + start, *i - start);
-	if(!content)
+	if (!content)
 		errors_memory(shell, 1);
 	if (str[start] && str[start + 1] == '>')
 		new_token = create_new_token(D_GT, content, shell);
@@ -60,20 +60,21 @@ void	dollar_token(char *str, int *i, t_minishell *shell)
 {
 	int		start;
 	char	*content;
-	t_lexer *new_token;
+	t_lexer	*new_token;
 
 	start = (*i);
-	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'|| str[*i] == '?'||  str[*i] == '$'))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'
+			|| str[*i] == '?' || str[*i] == '$'))
 	{
-		if(str[*i] == '?')
+		if (str[*i] == '?')
 		{
 			(*i)++;
-			break;
+			break ;
 		}
 		(*i)++;
 	}
 	content = ft_strndup(str + start, *i - start);
-	if(!content)
+	if (!content)
 		errors_memory(shell, 1);
 	new_token = create_new_token(DOLLAR, content, shell);
 	add_token_to_list(&(shell->lexer), new_token);
@@ -84,16 +85,15 @@ void	pipe_token(char *str, int *i, t_minishell *shell)
 {
 	int		start;
 	char	*content;
-	t_lexer *new_token;
+	t_lexer	*new_token;
 
 	start = (*i);
 	while (str[*i] && str[*i] == '|')
 		(*i)++;
 	content = ft_strndup(str + start, *i - start);
-	if(!content)
+	if (!content)
 		errors_memory(shell, 1);
 	new_token = create_new_token(PIPE, content, shell);
 	add_token_to_list(&(shell->lexer), new_token);
 	free(content);
 }
-

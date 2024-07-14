@@ -6,7 +6,7 @@
 /*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 19:01:06 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/10 18:10:47 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:13:30 by opanikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 t_lexer	*create_new_token(enum token_type type, char *content, t_minishell *sh)
 {
-	t_lexer *new_token;
+	t_lexer	*new_token;
 
 	new_token = (t_lexer *)malloc(sizeof(t_lexer));
-	if(!new_token)
+	if (!new_token)
 		errors_memory(sh, 1);
 	new_token->type = type;
 	new_token->content = ft_strdup(content);
@@ -27,24 +27,24 @@ t_lexer	*create_new_token(enum token_type type, char *content, t_minishell *sh)
 	return (new_token);
 }
 
-
 void	add_token_to_list(t_lexer **head, t_lexer *new_token)
 {
 	t_lexer	*tmp;
 
-	if(*head == NULL)
+	if (*head == NULL)
 		*head = new_token;
 	else
 	{
 		tmp = *head;
-		while(tmp->next != NULL)
+		while (tmp->next != NULL)
 			tmp = tmp->next;
 		tmp->next = new_token;
 	}
 }
+
 char	*ft_strndup(const char *src, size_t n)
 {
-	char	*res;
+	char		*res;
 	size_t		len;
 	size_t		i;
 
