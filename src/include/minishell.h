@@ -152,6 +152,8 @@ void		copy_array(char **dest, char **src);
 int			update_export_var(char ***export, char *env_name, char *quoted_value, char *env_value_str);
 
 void		do_exit(long value, t_minishell *shell);
+int			check_long_min(const char *str);
+int			check_long_max(const char *str, t_minishell *shell);
 
 int			ft_strcmp(const char *s1, const char *s2);
 
