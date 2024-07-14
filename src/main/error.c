@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 13:43:45 by lelichik          #+#    #+#             */
-/*   Updated: 2024/07/14 02:49:09 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/14 17:20:32 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void free_minishell(t_minishell *shell)
 	if (shell->commands)
 		free_command_list(shell->commands);
 	if (shell->export)
-		free_export(shell->export);
+		free_string_array(shell->export);
 	free(shell);
 }
 

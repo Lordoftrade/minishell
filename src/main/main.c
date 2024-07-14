@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelichik <lelichik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:10:52 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 02:44:35 by lelichik         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:02:02 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ void	display_prompt(t_minishell *shell)
 		if (line == NULL)
 		{
 			printf("exit\n");
+			free_minishell(shell);
+			//system("leaks minishell");
 			//очистка всего  clean_up
 			exit(g_error);
 		}
@@ -146,7 +148,7 @@ void	display_prompt(t_minishell *shell)
 		}
 	// 	// // print_commands(shell);
 		free_command_list(shell->commands);
-		system("leaks minishell");
+		//system("leaks minishell");
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 11:21:27 by mgreshne          #+#    #+#             */
-/*   Updated: 2024/07/06 11:21:27 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:00:59 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	is_in_env_array(char ***export, char *args)
 {
-	char var_name[PATH_SIZE];
-	size_t len;
-	int i;
+	char	var_name[PATH_SIZE];
+	size_t	len;
+	int		i;
 
 	i = 0;
 	getenv_name(var_name, args);
@@ -34,10 +34,11 @@ int	is_in_env_array(char ***export, char *args)
 	return (FAILURE);
 }
 
-int	update_export_var(char ***export, char *env_name, char *quoted_value, char *env_value_str)
+int	update_export_var(char ***export, char *env_name, \
+	char *quoted_value, char *env_value_str)
 {
-	int i;
-	size_t len;
+	int		i;
+	size_t	len;
 
 	if (export == NULL || *export == NULL)
 		return (0);
@@ -65,11 +66,11 @@ int	update_export_var(char ***export, char *env_name, char *quoted_value, char *
 
 char	*process_env_value(char *value, char *env_name, char **env_value_str)
 {
-	char *quoted_value;
+	char	*quoted_value;
 
 	quoted_value = NULL;
 	if (ft_strchr(value, '='))
-    {
+	{
 		*env_value_str = env_value(value);
 		if (*env_value_str == NULL)
 			return (NULL);
@@ -85,11 +86,11 @@ char	*process_env_value(char *value, char *env_name, char **env_value_str)
 
 char	**create_new_export(char **export, char *env_name, char *quoted_value, int count)
 {
-    char **new_export;
-	
+	char	**new_export;
+
 	new_export = (char **)malloc(sizeof(char *) * (count + 2));
 	if (!new_export)
-		return NULL;
+		return (NULL);
 	copy_array(new_export, export);
 	if (quoted_value)
 		new_export[count] = quoted_value;
@@ -105,7 +106,7 @@ void	add_to_export(char ***export, char *value)
 	char	**new_export;
 	char	env_name[BUFF_SIZE];
 	char	*quoted_value;
-	char 	*env_value_str;
+	char	*env_value_str;
 
 	env_value_str = NULL;
 	i = 0;
@@ -119,7 +120,7 @@ void	add_to_export(char ***export, char *value)
 	new_export = create_new_export(*export, env_name, quoted_value, i);
 	if (!new_export)
 	{
-		free(env_value_str); // решить что делать тут
+		free(env_value_str);
 		free(quoted_value);
 		return ;
 	}

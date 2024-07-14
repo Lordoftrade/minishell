@@ -22,12 +22,17 @@ char	**create_new_array_without_element(char **array, int remove_index, int coun
 	k = 0;
 	new_array = (char **)malloc(sizeof(char *) * count);
 	if (!new_array)
-		return NULL;
+		return (NULL);
 	while (array[j])
 	{
 		if (j != remove_index)
 		{
-			new_array[k] = array[j];
+			new_array[k] = ft_strdup(array[j]);
+			if (!new_array[k])
+			{
+				free_string_array(new_array);
+				return (NULL);
+			}
 			k++;
 		}
 		j++;

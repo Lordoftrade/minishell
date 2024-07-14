@@ -149,7 +149,8 @@ void		add_to_export(char ***export, char *value);
 char		*add_quotes_to_value(const char *name, const char *value);
 int			count_elements(char **array);
 void		copy_array(char **dest, char **src);
-int			update_export_var(char ***export, char *env_name, char *quoted_value, char *env_value_str);
+int			update_export_var(char ***export, char *env_name, \
+				char *quoted_value, char *env_value_str);
 
 void		do_exit(long value, t_minishell *shell);
 int			check_long_min(const char *str);
