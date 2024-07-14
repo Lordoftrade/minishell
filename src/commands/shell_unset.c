@@ -55,9 +55,9 @@ int	find_element_index(char **array, const char *name)
 
 int	remove_from_export(char ***export, const char *name)
 {
-	int i;
-	char **new_export;
-	int count;
+	int		i;
+	char	**new_export;
+	int		count;
 
 	i = find_element_index(*export, name);
 	if (i == -1)
@@ -68,7 +68,7 @@ int	remove_from_export(char ***export, const char *name)
 	new_export = create_new_array_without_element(*export, i, count);
 	if (!new_export)
 		return (FAILURE);
-	free(*export);
+	free_string_array(*export);
 	*export = new_export;
 	return (SUCCESS);
 }
@@ -77,7 +77,7 @@ int	ft_unsetenv(const char *name, t_env **env)
 {
 	t_env	*prev;
 	t_env	*current;
-	int	len;
+	int		len;
 
 	len = ft_strlen(name);
 	prev = NULL;
