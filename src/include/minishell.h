@@ -122,6 +122,7 @@ int			is_valid_identifier(const char *str);
 int			ft_unsetenv(const char *name, t_env **env);
 char		**env_list_to_array(t_env *env_list);
 int			change_pwd(t_minishell *shell);
+void		add_or_update_variable(char *arg, t_minishell *shell);
 
 int			shell_cd(char **args, t_minishell *shell);
 int			shell_pwd(void);
@@ -151,6 +152,7 @@ int			count_elements(char **array);
 void		copy_array(char **dest, char **src);
 int			update_export_var(char ***export, char *env_name, \
 				char *quoted_value, char *env_value_str);
+void		export_concatenation(char *arg, t_minishell *shell);
 
 void		do_exit(long value, t_minishell *shell);
 int			check_long_min(const char *str);
@@ -162,11 +164,12 @@ t_env		*create_env_node(char *value);
 void		init_minishell(t_minishell *shell, char **env_in);
 void		init_data(t_minishell *shell);
 
-void	free_env(t_env *env); // ?? наверное то же самое что и фри енв лист
-void	free_lexer(t_lexer *lexer);
-void	free_minishell(t_minishell *shell);
-void	ft_error(int error_code, char *errmsg);
-void	ft_error_put(int code, char *com, char *arg, char *mesg);
+void		free_env(t_env *env); // ?? наверное то же самое что и фри енв лист
+void		free_lexer(t_lexer *lexer);
+void		free_minishell(t_minishell *shell);
+void		ft_error(int error_code, char *errmsg);
+void		ft_error_put(int code, char *com, char *arg, char *mesg);
+void		free_multiple(char *ptr1, char *ptr2, char *ptr3);
 
 char	*ft_readline(void);
 void	to_array(char *str, t_minishell *info);

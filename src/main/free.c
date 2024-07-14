@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+void	free_multiple(char *ptr1, char *ptr2, char *ptr3)
+{
+	free(ptr1);
+	free(ptr2);
+	free(ptr3);
+}
+
 void	free_env_list(t_env *env)
 {
 	t_env	*cur;

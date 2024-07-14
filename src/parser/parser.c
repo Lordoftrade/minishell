@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: opanikov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:54:23 by opanikov          #+#    #+#             */
-/*   Updated: 2024/07/14 19:44:11 by opanikov         ###   ########.fr       */
+/*   Updated: 2024/07/14 22:47:12 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	symbol_dollar(t_lexer **token, t_minishell *shell)
 	string = ft_strdup((*token)->content);
 	i = 1;
 	if (string[i] == '?')
-		handle_dollar_question(token, string);
+		return (handle_dollar_question(token, string));
 	if (is_breaking_character(string[i]) || string[i] == '\0')
 		(*token)->type = STRING;
 	else

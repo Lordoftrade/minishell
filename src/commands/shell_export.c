@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 void	bubble_sort_env(char **env_array, size_t env_count)
 {
 	char	*temp;
@@ -84,7 +83,8 @@ void	print_env_sort(char **export)
 
 void	ft_export_while_varable(char **args, t_minishell *shell)
 {
-	int	i;
+	int		i;
+	char	*plus_sign;
 
 	i = 1;
 	while (args[i])
@@ -93,13 +93,11 @@ void	ft_export_while_varable(char **args, t_minishell *shell)
 			ft_error_put(1, args[0], args[i], "': not a valid identifier\n");
 		else
 		{
-			if (ft_strchr(args[i], '='))
-			{
-				if (is_in_env(shell->env, args[i]) == FAILURE)
-					add_env(args[i], shell->env);
-				if (is_in_env_array(&(shell->export), args[i]) == FAILURE)
-					add_to_export(&(shell->export), args[i]);
-			}
+			plus_sign = ft_strchr(args[i], '+');
+			if (plus_sign && plus_sign[1] == '=')
+				export_concatenation(args[i], shell);
+			else if (ft_strchr(args[i], '='))
+				add_or_update_variable(args[i], shell);
 			else
 			{
 				if (is_in_env_array(&(shell->export), args[i]) == FAILURE)

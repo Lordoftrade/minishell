@@ -6,7 +6,7 @@
 /*   By: mgreshne <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 11:21:27 by mgreshne          #+#    #+#             */
-/*   Updated: 2024/07/14 18:00:59 by mgreshne         ###   ########.fr       */
+/*   Updated: 2024/07/14 22:22:30 by mgreshne         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ char	*process_env_value(char *value, char *env_name, char **env_value_str)
 	return (quoted_value);
 }
 
-char	**create_new_export(char **export, char *env_name, char *quoted_value, int count)
+char	**create_new_export(char **export, char *env_name,
+	char *quoted_value, int count)
 {
 	char	**new_export;
 
