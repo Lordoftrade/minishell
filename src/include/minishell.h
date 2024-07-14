@@ -115,11 +115,13 @@ char		*get_env_value(char *arg, t_env *env);
 char		*env_value(char *value);
 int			len_env_value(const char *env);
 char		*getenv_name(char *dest, const char *src);
+char		*get_env_path(t_env *env, const char *var, size_t len);
 int			add_env(const char *value, t_env *env);
 void		bubble_sort_env(char **env_array, size_t env_count);
-int 		is_valid_identifier(const char *str);
+int			is_valid_identifier(const char *str);
 int			ft_unsetenv(const char *name, t_env **env);
 char		**env_list_to_array(t_env *env_list);
+int			change_pwd(t_minishell *shell);
 
 int			shell_cd(char **args, t_minishell *shell);
 int			shell_pwd(void);

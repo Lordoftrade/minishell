@@ -115,7 +115,7 @@ int	ft_is_num(const char *str)
 void	do_exit(long value, t_minishell *shell)
 {
 	free_minishell(shell);
-	system("leaks minishell");
+	//system("leaks minishell");
 	exit((int)((unsigned char)value % 256));
 }
 
